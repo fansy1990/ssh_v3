@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.enable.DynamicMethodInvocation" value="true" />
+	<!--设置编码形式为UTF-8-->
+    <constant name="struts.i18n.encoding" value="UTF-8"/>
+    <!-- 添加spring管理 -->
+    <constant name="struts.objectFactory" value="spring"/>
+
+<!-- 添加test action测试 -->
+	<package name="test" extends="struts-default" namespace="/test">
+		<action name="user" class="demo.action.UserAction">
+			<result>/success.jsp</result>
+		</action>
+	</package> 
+
+</struts>
