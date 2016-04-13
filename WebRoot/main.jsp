@@ -16,66 +16,49 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <meta http-equiv="expires" content="0">
 <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 <meta http-equiv="description" content="This is my page">
-<!--
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	-->
+
 <link rel="stylesheet" type="text/css" href="themes/default/easyui.css">
 <link rel="stylesheet" type="text/css" href="themes/icon.css">
 <link rel="stylesheet" type="text/css" href="css/demo.css">
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="js/utils.js"></script>
 </head>
 
-<body>
-	
-	<!-- <div style="margin:20px 0;">
-	
-	</div>
-	 -->
-	<div class="easyui-layout" style="width:100%;height:100%;">
+	<body class="easyui-layout" style="width:100%;height:100%;">
 		<div data-options="region:'north'" style="height:50px">
 			<h2 align="center">Hadoop Ecosystem </h2>	
 		</div>
 		<div data-options="region:'south',split:true" style="height:50px;"></div>
 		<div data-options="region:'east',split:true" title="East"
 			style="width:180px;">
-			<ul class="easyui-tree"
-				data-options="url:'json/tree_data1.json',method:'get',animate:true,dnd:true"></ul>
+			<ul class="easyui-tree" id="eastTree"
+				data-options="url:'json/hdfsManager.json',method:'get',animate:true,dnd:true"></ul>
 		</div>
-		<div data-options="region:'west',split:true" title="West"
+		<div data-options="region:'west',split:true" title="项目"
 			style="width:100px;">
 			<div class="easyui-accordion" data-options="fit:true,border:false">
-				<div title="Title1" style="padding:10px;">content1</div>
-				<div title="Title2" data-options="selected:true"
-					style="padding:10px;">content2</div>
+				<div title="HDFS" style="padding:10px;">
+					<a onclick="update_project('HDFS文件管理','json/hdfsManager.json')" 
+						class="easyui-linkbutton">HDFS文件管理系统</a>
+				</div>
+				<div title="Other" data-options="selected:true"
+					style="padding:10px;">
+					<div title="HDFS" style="padding:10px;">
+					<a onclick="update_project('Other','json/tree_data1.json')" 
+						class="easyui-linkbutton">Other</a>
+				</div>
+				</div>
 				<div title="Title3" style="padding:10px">content3</div>
 			</div>
 		</div>
-		<div
-			data-options="region:'center',title:'Main Title',iconCls:'icon-ok'">
-			<div class="easyui-tabs"
+		<div id="centerId"
+			data-options="region:'center',title:'HDFS文件管理',iconCls:'icon-ok'">
+			<div id="centerTab" class="easyui-tabs" 
 				data-options="fit:true,border:false,plain:true">
-				<div title="About" data-options="href:'_content.html'"
+				<div title="HE简介" data-options="href:'about.jsp'"
 					style="padding:10px"></div>
-				<div title="DataGrid" style="padding:5px">
-					<table class="easyui-datagrid"
-						data-options="url:'datagrid_data1.json',method:'get',singleSelect:true,fit:true,fitColumns:true">
-						<thead>
-							<tr>
-								<th data-options="field:'itemid'" width="80">Item ID</th>
-								<th data-options="field:'productid'" width="100">Product ID</th>
-								<th data-options="field:'listprice',align:'right'" width="80">List
-									Price</th>
-								<th data-options="field:'unitcost',align:'right'" width="80">Unit
-									Cost</th>
-								<th data-options="field:'attr1'" width="150">Attribute</th>
-								<th data-options="field:'status',align:'center'" width="50">Status</th>
-							</tr>
-						</thead>
-					</table>
-				</div>
 			</div>
 		</div>
-	</div>
 </body>
 </html>
