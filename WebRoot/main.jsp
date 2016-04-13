@@ -27,11 +27,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </head>
 
 <body>
-	<h2>Complex Layout</h2>
-	<p>This sample shows how to create a complex layout.</p>
-	<div style="margin:20px 0;"></div>
-	<div class="easyui-layout" style="width:700px;height:350px;">
-		<div data-options="region:'north'" style="height:50px"></div>
+	
+	<!-- <div style="margin:20px 0;">
+	
+	</div>
+	 -->
+	<div class="easyui-layout" style="width:100%;height:100%;">
+		<div data-options="region:'north'" style="height:50px">
+			<h2 align="center">Hadoop Ecosystem </h2>	
+		</div>
 		<div data-options="region:'south',split:true" style="height:50px;"></div>
 		<div data-options="region:'east',split:true" title="East"
 			style="width:180px;">
