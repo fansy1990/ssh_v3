@@ -42,17 +42,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<a onclick="update_project('HDFS文件管理','json/hdfsManager.json')" 
 						class="easyui-linkbutton">HDFS文件管理系统</a>
 				</div>
-				<div title="Other" data-options="selected:true"
+				<div title="博客推荐系统" data-options="selected:true"
 					style="padding:10px;">
 					<div title="HDFS" style="padding:10px;">
-					<a onclick="update_project('Other','json/tree_data1.json')" 
-						class="easyui-linkbutton">Other</a>
+					<a onclick="update_project('博客推荐系统','json/tree_data1.json')" 
+						class="easyui-linkbutton">博客推荐系统</a>
 				</div>
 				</div>
 				<div title="Title3" style="padding:10px">content3</div>
 			</div>
 		</div>
-		<div id="centerId"
+		<div id="centerTitleId"
 			data-options="region:'center',title:'HDFS文件管理',iconCls:'icon-ok'">
 			<div id="centerTab" class="easyui-tabs" 
 				data-options="fit:true,border:false,plain:true">

@@ -19,7 +19,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<!--
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
-
+	<script type="text/javascript" src="js/utils.js"></script>
   </head>
   
   <body>
@@ -28,6 +28,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			Hadoop EcoSystem 大杂烩！
 			</h2>
 		</p>    	
+		<div id="project_about_id">
+			HDFS文件系统
+		</div>
     
     </div> <br>
   </body>

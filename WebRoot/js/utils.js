@@ -1,13 +1,17 @@
 
 /**
  * 更新项目
- * @param title
+ * @param title_
  * @param data
  */
-function update_project(title,data){
-	$('#centerId').val(title);
-	console.info(title);
-//	$('#eastTree').tree('reload',data);
+function update_project(title_,data){
+//	更新中间显示
+	$('#centerTitleId').panel({ title: title_ });
+	document.getElementById("project_about_id").innerHTML=title_;
+	removePanel();
+	// 更新east 树导航
+	$('#eastTree').tree({'url':data});
+			
 	
 }
 
@@ -24,6 +28,20 @@ function layout_center_addTabFun(opts) {
 			t.tabs('add', opts);
 		}
 		console.info("打开页面："+opts.title);
+}
+/**
+ * 移除tab页
+ */
+function removePanel(){
+    var tab = $('#centerTab').tabs('getSelected');
+    if(tab){
+        var index = $('#centerTab').tabs('getTabIndex',tab);
+        if(index!=0){
+//        	$('#centerTab').tabs('close',index);
+        	console.info(index);
+        }
+    }
+//    console.info(tab);
 }
 
 $(function(){
