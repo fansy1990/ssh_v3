@@ -30,18 +30,26 @@ function layout_center_addTabFun(opts) {
 		console.info("打开页面："+opts.title);
 }
 /**
- * 移除tab页
+ * 移除所有tab页，除了第一个
  */
 function removePanel(){
-    var tab = $('#centerTab').tabs('getSelected');
-    if(tab){
-        var index = $('#centerTab').tabs('getTabIndex',tab);
-        if(index!=0){
-//        	$('#centerTab').tabs('close',index);
-        	console.info(index);
-        }
-    }
-//    console.info(tab);
+//    var tab = $('#centerTab').tabs('tabs');
+//    console.info(tab.length);
+//    var index=0;
+//    for(var i=0;i<tab.length;i++){
+//    	 index= $('#centerTab').tabs('getTabIndex',tab[i]);
+//    	console.info(index);
+//    }
+    
+	$('#centerTab ul.tabs li').each(function(index, v) {
+	    if(index!=0){
+	    	
+	    	var elTitle = $('.tabs-title', v);
+		    var title = elTitle.html();
+	    	console.info('Tab: ' + title + ' ,index: ' + index+' closing');
+	    	$("#centerTab").tabs("close", title);
+	    }
+	});
 }
 
 $(function(){
