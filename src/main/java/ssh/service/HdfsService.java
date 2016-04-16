@@ -5,29 +5,35 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.LocatedFileStatus;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.fs.RemoteIterator;
 import org.springframework.stereotype.Service;
 
 import ssh.model.HdfsResponseProperties;
 import ssh.util.HadoopUtils;
+import ssh.util.Utils;
 
-@Service(value = "hdfsService")
+@Service
 public class HdfsService {
 
-	public String listFolder(String folder) throws FileNotFoundException,
-			IllegalArgumentException, IOException {
+	public List<HdfsResponseProperties> listFolder(String folder)
+			throws FileNotFoundException, IllegalArgumentException, IOException {
 		List<HdfsResponseProperties> files = new ArrayList<>();
 		FileSystem fs = HadoopUtils.getFs();
-		RemoteIterator<LocatedFileStatus> children = fs.listFiles(new Path(
-				folder), false);
-		// 需返回文件的属性？
-		while (children.hasNext()) {
-			// files.add(children.)
+		FileStatus[] filesStatus = fs.listStatus(new Path(folder));
+		// RemoteIterator<LocatedFileStatus> children = fs.listFiles(new Path(
+		// folder), false);// 递归设置为flase，不需要对子文件夹再次递归
+		// // 需返回文件的属性？
+		// while (children.hasNext()) {
+		// files.add(Utils.getDataFromLocatedFileStatus(children.next()));
+		// }
+
+		for (FileStatus file : filesStatus) {
+			files.add(Utils.getDataFromLocatedFileStatus(file));
 		}
-		return null;
+
+		return files;
 	}
 
 	public String removeFolder() {

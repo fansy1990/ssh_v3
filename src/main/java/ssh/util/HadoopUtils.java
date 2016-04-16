@@ -14,9 +14,23 @@ import org.slf4j.LoggerFactory;
 
 public class HadoopUtils {
 	public static final Logger log = LoggerFactory.getLogger(HadoopUtils.class);
+
 	private static Configuration conf;
 	private static Map<String, String> confMap = new HashMap<>();
 	public static final String hadoop_properties = "hadoop.properties";
+	private static FileSystem fs;
+
+	public void initFs() {
+		try {
+
+			fs = FileSystem.get(getConf());
+			log.info("Hadoop文件系统FS被初始化！");
+		} catch (IOException e) {
+			e.printStackTrace();
+			log.info("获取Hadoop文件系统异常!");
+			fs = null;
+		}
+	}
 
 	private static void init() {
 		Properties props = new Properties();
@@ -67,12 +81,7 @@ public class HadoopUtils {
 	}
 
 	public static FileSystem getFs() {
-		try {
-			return FileSystem.get(getConf());
-		} catch (IOException e) {
-			e.printStackTrace();
-			log.info("获取Hadoop文件系统异常!");
-		}
-		return null;
+
+		return fs;
 	}
 }

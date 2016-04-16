@@ -16,6 +16,7 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 	<!-- 自动加载Annotation bean -->  
 	<context:annotation-config />
 	<context:component-scan base-package="demo" />
+	<context:component-scan base-package="ssh" />
 
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -38,6 +39,7 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 		<property name="packagesToScan">
 			<list>
 				<value>demo.model</value>
+				<value>ssh.model</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
@@ -73,6 +75,8 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 			<tx:method name="*" propagation="REQUIRED"/>
 		</tx:attributes>
 	</tx:advice> 
+
+    <bean id="hadoopUtils" class="ssh.util.HadoopUtils" init-method="initFs"/>
 
 
 </beans>

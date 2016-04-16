@@ -16,7 +16,7 @@
 			"text":"目录浏览",
 			"attributes":{
 				"folder":"0",
-				"url":"hdfsManager/folder/read.jsp"
+				"url":"hdfsManager/folder/list.jsp"
 			}
 		},{
 			"id":112,
