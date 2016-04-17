@@ -7,7 +7,7 @@
 	"children":[{
 		"id":11,
 		"text":"目录",
-		"state":"closed",
+		"state":"open",
 		"attributes":{
 			"folder":"1"
 		},

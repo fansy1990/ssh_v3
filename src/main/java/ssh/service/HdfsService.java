@@ -8,6 +8,8 @@ import java.util.List;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import ssh.model.HdfsResponseProperties;
@@ -16,6 +18,8 @@ import ssh.util.Utils;
 
 @Service
 public class HdfsService {
+	private static final Logger log = LoggerFactory
+			.getLogger(HdfsService.class);
 
 	public List<HdfsResponseProperties> listFolder(String folder)
 			throws FileNotFoundException, IllegalArgumentException, IOException {
@@ -41,9 +45,47 @@ public class HdfsService {
 		return null;
 	}
 
-	public String searchFolder() {
+	public List<HdfsResponseProperties> searchFolder(String folder,
+			String name, String nameOp, String owner, String ownerOp)
+			throws FileNotFoundException, IllegalArgumentException, IOException {
+		List<HdfsResponseProperties> files = new ArrayList<>();
+		FileSystem fs = HadoopUtils.getFs();
+		FileStatus[] filesStatus = fs.listStatus(new Path(folder));
+		for (FileStatus file : filesStatus) {
+			if (!checkName(file.getPath().getName(), name, nameOp))
+				continue; // 名字没有检查通过，则下一个
+			if (!checkName(file.getOwner(), owner, ownerOp))
+				continue; // owner没有检查通过，则下一个
+			files.add(Utils.getDataFromLocatedFileStatus(file));
+		}
 
-		return null;
+		return files;
+	}
+
+	/**
+	 * 检查名字与给定名字是否符合op关系
+	 * 
+	 * @param fileName
+	 * @param name
+	 * @param op
+	 * @return
+	 */
+	private boolean checkName(String fileName, String name, String op) {
+		switch (op) {
+		case "no":// 不用检查
+			return true;
+		case "contains":// 是否包含,包含返回true
+			return fileName.contains(name) ? true : false;
+		case "equals": // 是否相等,相等返回true
+			return fileName.equals(name) ? true : false;
+		case "noequal": // 是否不相等,不相等返回true
+			return fileName.equals(name) ? false : true;
+
+		default:
+			log.info("wrong op:{}", op);
+			break;
+		}
+		return false;
 	}
 
 	public String createFolder() {

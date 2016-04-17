@@ -71,13 +71,24 @@ public class HdfsManagerAction extends ActionSupport implements
 	}
 
 	/**
-	 * 检索文件夹
+	 * 检索文件夹 先检查权限
 	 * 
 	 * @return
+	 * @throws IOException
+	 * @throws IllegalArgumentException
+	 * @throws FileNotFoundException
 	 */
-	public String searchFolder() {
+	public void searchFolder() throws FileNotFoundException,
+			IllegalArgumentException, IOException {
 
-		return null;
+		List<HdfsResponseProperties> files = this.hdfsService.searchFolder(
+				hdfsFile.getFolder(), hdfsFile.getName(), hdfsFile.getNameOp(),
+				hdfsFile.getOwner(), hdfsFile.getOwnerOp());
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		jsonMap.put("total", files.size());
+		jsonMap.put("rows", files);
+		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+		return;
 	}
 
 	/**
