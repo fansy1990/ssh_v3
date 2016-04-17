@@ -28,6 +28,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<span>目录:</span> <input class="easyui-validatebox" type="text"
 				id="hdfsManager_list_folder" data-options="required:true"
 				style="width:300px" value="/" />
+				<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-reload" onclick="loaddata()">确定</a>
 		</div>
 
 		<table id="dg_hdfsManager_list" class="easyui-datagrid"></table>

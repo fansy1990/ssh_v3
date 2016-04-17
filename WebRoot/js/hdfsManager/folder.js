@@ -58,10 +58,20 @@ $(function(){
 				},{
 					field : 'group',
 					title : '组名',
-					width : '70'
+					width : '100'
 				}
 				 ]]
 		    }); 
 	
 	// recomend
 });
+
+
+/**
+ * 重新加载数据
+ */
+function loaddata(){
+    $('#dg_hdfsManager_list').datagrid('load',{
+        folder: $('#hdfsManager_list_folder').val()
+    });
+}

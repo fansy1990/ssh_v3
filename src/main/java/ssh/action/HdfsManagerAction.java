@@ -8,13 +8,12 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.mortbay.util.ajax.JSON;
-
 import ssh.model.HdfsRequestProperties;
 import ssh.model.HdfsResponseProperties;
 import ssh.service.HdfsService;
 import ssh.util.Utils;
 
+import com.alibaba.fastjson.JSON;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
@@ -57,7 +56,7 @@ public class HdfsManagerAction extends ActionSupport implements
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		jsonMap.put("total", files.size());
 		jsonMap.put("rows", files);
-		Utils.write2PrintWriter(JSON.toString(jsonMap));
+		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
 		return;
 	}
 

@@ -33,7 +33,8 @@ public class Utils {
 				file.getModificationTime(), null));
 		properties.setOwner(file.getOwner());
 		properties.setPermission(file.getPermission().toString());
-		properties.setReplication(file.getReplication());
+		properties.setReplication(file.getReplication() > 0 ? String
+				.valueOf(file.getReplication()) : "");
 		properties.setSize(convertFileSize(file.getLen()));
 		properties.setType(file.isDirectory() ? "dir" : "file");
 		return properties;

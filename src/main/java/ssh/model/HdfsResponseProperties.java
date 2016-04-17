@@ -1,11 +1,17 @@
 package ssh.model;
 
-public class HdfsResponseProperties {
+import java.io.Serializable;
 
+public class HdfsResponseProperties implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String name;
 	private String type;
 	private String size;
-	private int replication;
+	private String replication;
 	private String blockSize;
 	private String modificationTime;
 	private String permission;
@@ -36,11 +42,11 @@ public class HdfsResponseProperties {
 		this.size = size;
 	}
 
-	public int getReplication() {
+	public String getReplication() {
 		return replication;
 	}
 
-	public void setReplication(int replication) {
+	public void setReplication(String replication) {
 		this.replication = replication;
 	}
 
