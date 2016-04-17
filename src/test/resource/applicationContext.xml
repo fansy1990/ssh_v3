@@ -13,7 +13,7 @@
 http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 
-	<!-- 自动加载Annotation bean -->  
+	<!-- 自动加载Annotation bean -->
 	<context:annotation-config />
 	<context:component-scan base-package="demo" />
 	<context:component-scan base-package="ssh" />
@@ -22,7 +22,7 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations" value="classpath:jdbc.properties" />
 	</bean>
-	<!--  配置dbcp数据源 -->
+	<!-- 配置dbcp数据源 -->
 	<bean id="dataSource" destroy-method="close"
 		class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="${jdbc.driverClassName}" />
@@ -35,7 +35,7 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<!-- 自动扫描注解方式配置的hibernate类文件 --> 
+		<!-- 自动扫描注解方式配置的hibernate类文件 -->
 		<property name="packagesToScan">
 			<list>
 				<value>demo.model</value>
@@ -51,32 +51,48 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 			</props>
 		</property>
 	</bean>
-	
-<!-- 	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate4.HibernateTemplate">
-		<property name="sessionFactory" ref="sessionFactory"></property>
-	</bean> -->
+
+	<!-- <bean id="hibernateTemplate" class="org.springframework.orm.hibernate4.HibernateTemplate"> 
+		<property name="sessionFactory" ref="sessionFactory"></property> </bean> -->
 	
 	<!-- <tx:annotation-driven transaction-manager="txManager" /> -->
-	 <!-- 配置事务管理器 -->  
-	 <bean id="txManager"
+	
+	<!-- 配置事务管理器 -->
+	<bean id="txManager"
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
-  <!-- 配置事务切面 -->
-	<aop:config >
-		<aop:pointcut id="defaultServiceOperation" expression="execution(public * demo.service.*Service.*(..))" />
+	<!-- 配置事务切面 -->
+	<aop:config>
+		<aop:pointcut id="defaultServiceOperation"
+			expression="execution(public * demo.service.*Service.*(..))" />
 
-		<aop:advisor pointcut-ref="defaultServiceOperation" advice-ref="defaultTxAdvice" />
+		<aop:advisor pointcut-ref="defaultServiceOperation"
+			advice-ref="defaultTxAdvice" />
 	</aop:config>
 
 	<tx:advice id="defaultTxAdvice" transaction-manager="txManager">
 		<tx:attributes>
-		<!-- 先暂定所有方法都加事务 -->
-			<tx:method name="*" propagation="REQUIRED"/>
+			<!-- 先暂定所有方法都加事务 -->
+			<tx:method name="*" propagation="REQUIRED" />
 		</tx:attributes>
-	</tx:advice> 
+	</tx:advice>
 
-    <bean id="hadoopUtils" class="ssh.util.HadoopUtils" init-method="initFs"/>
+	<!-- HdfsManangerAction AOP ,不使用spring aop-->
+<!-- 	<aop:config>
+		<aop:pointcut id="hdfsAuth"
+			expression="execution(public * ssh.action.HdfsManagerAction.search*(..))" />
+
+		<aop:aspect id="authAspect" ref="hdfsAuthInterceptor">
+			<aop:before method="before" pointcut="execution(public * ssh.action.HdfsManagerAction.search*(..))"/>
+		</aop:aspect>
+	</aop:config>
+	<bean id="hdfsAuthInterceptor" class="ssh.aop.HdfsAuthInterceptor" /> -->
+	
+
+
+
+	<bean id="hadoopUtils" class="ssh.util.HadoopUtils" init-method="initFs" />
 
 
 </beans>

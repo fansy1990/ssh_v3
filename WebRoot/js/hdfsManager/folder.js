@@ -21,6 +21,10 @@ $(function(){
 		queryParams: {
 			folder: folder_
 		},
+		onLoadError:function(){
+			console.info("list load error!");
+			 $.messager.alert('信息','确保目录输入正确!','info');
+		},
 		idField:'id',
 		columns :[[
 				{
@@ -78,13 +82,19 @@ $(function(){
 		rownumbers : true,// 行号
 		pagePosition : 'top',
 		url : 'hdfs/hdfsManager_searchFolder.action',
-//		url:'',
 		queryParams: {
 			folder: "/",
 			name:"",
 			nameOp:"no",
 			owner:"",
 			ownerOp:"no"
+		},
+		onLoadError:function(){
+			console.info("load error!");
+			 $.messager.alert('警告','目录没有权限，请重新输入!','warning');
+		},
+		onLoadSuccess:function(data ){
+			console.info("success,data:"+data);
 		},
 		idField:'id',
 		columns :[[

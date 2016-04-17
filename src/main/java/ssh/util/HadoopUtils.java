@@ -8,7 +8,9 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,4 +86,30 @@ public class HadoopUtils {
 
 		return fs;
 	}
+
+	/**
+	 * 检查用户是否对hdfs 目录folder 有读权限 规则： 判断是否和档案拥有者同名，同名直接返回true； 不同名，直接归为其他用户
+	 * 
+	 * @param folder
+	 * @param permission
+	 * @return
+	 * @throws IOException
+	 * @throws IllegalArgumentException
+	 */
+	public static boolean checkHdfsAuth(String folder, String permission)
+			throws IllegalArgumentException, IOException {
+		FileStatus fileStatus = getFs().getFileStatus(new Path(folder));
+		if (fileStatus.getOwner().equals(currentUser))
+			return true;
+		log.info("userAction:{},groupAction:{},otherAction:{}", new Object[] {
+				fileStatus.getPermission().getUserAction().SYMBOL,
+				fileStatus.getPermission().getGroupAction().SYMBOL,
+				fileStatus.getPermission().getOtherAction().SYMBOL });
+		if (fileStatus.getPermission().getOtherAction().SYMBOL
+				.contains(permission))
+			return true;
+		return false;
+	}
+
+	private static String currentUser = System.getProperty("user.name");
 }
