@@ -60,6 +60,15 @@ public class HdfsManagerAction extends ActionSupport implements
 		return;
 	}
 
+	public void checkExist() throws IllegalArgumentException, IOException {
+		boolean exist = this.hdfsService.checkExist(this.hdfsFile.getFolder());
+
+		Utils.write2PrintWriter(String.valueOf(exist));
+
+		return;
+
+	}
+
 	/**
 	 * 移除文件夹
 	 * 

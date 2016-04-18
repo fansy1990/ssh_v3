@@ -92,4 +92,20 @@ public class HdfsService {
 
 		return null;
 	}
+
+	/**
+	 * 检查目录是否存在
+	 * 
+	 * @param folder
+	 * @return
+	 * @throws IllegalArgumentException
+	 * @throws IOException
+	 */
+	public boolean checkExist(String folder) throws IllegalArgumentException,
+			IOException {
+		boolean flag = HadoopUtils.getFs().exists(new Path(folder));
+		if (!flag)
+			log.info("文件或目录:{}不存在！", folder);
+		return flag;
+	}
 }

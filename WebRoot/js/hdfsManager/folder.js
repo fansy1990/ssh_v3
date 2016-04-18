@@ -25,6 +25,30 @@ $(function(){
 			console.info("list load error!");
 			 $.messager.alert('信息','确保目录输入正确!','info');
 		},
+		onBeforeLoad:function(param){// 检查权限以及目录有效性
+			var flag =false;
+			$.ajax({
+				url : 'hdfs/hdfsManager_checkExist.action',
+				data: {folder:param.folder},
+				async:true,
+				dataType:"json",
+				async: false,
+				context : document.body,
+				success : function(data) {
+					console.info(data)
+					var retMsg;
+					if(data){
+						flag=true;
+					}else{
+						flag=false;
+						console.info("目录不存在");
+						
+					}
+					
+				}
+			});
+			return flag;
+		},
 		idField:'id',
 		columns :[[
 				{
