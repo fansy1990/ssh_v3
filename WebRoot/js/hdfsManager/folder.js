@@ -23,32 +23,9 @@ $(function(){
 		},
 		onLoadError:function(){
 			console.info("list load error!");
-			 $.messager.alert('信息','确保目录输入正确!','info');
+			 $.messager.alert('信息','加载错误，请联系管理员!','info');
 		},
-		onBeforeLoad:function(param){// 检查权限以及目录有效性
-			var flag =false;
-			$.ajax({
-				url : 'hdfs/hdfsManager_checkExist.action',
-				data: {folder:param.folder},
-				async:true,
-				dataType:"json",
-				async: false,
-				context : document.body,
-				success : function(data) {
-					console.info(data)
-					var retMsg;
-					if(data){
-						flag=true;
-					}else{
-						flag=false;
-						console.info("目录不存在");
-						
-					}
-					
-				}
-			});
-			return flag;
-		},
+		onBeforeLoad:checkExistAndAuth,
 		idField:'id',
 		columns :[[
 				{
@@ -115,7 +92,10 @@ $(function(){
 		},
 		onLoadError:function(){
 			console.info("load error!");
-			 $.messager.alert('警告','目录没有权限，请重新输入!','warning');
+			 $.messager.alert('警告','读取错误，请联系管理员!','warning');
+		},
+		onBeforeLoad:function(param){
+			return checkExistAndAuth(param);
 		},
 		onLoadSuccess:function(data ){
 			console.info("success,data:"+data);
@@ -164,6 +144,39 @@ $(function(){
 	
 });
 
+/**
+ * 检查目录是否存在或权限错误
+ * @param param
+ * @returns {Boolean}
+ */
+function checkExistAndAuth(param){
+	var flag =false;
+	$.ajax({
+		url : 'hdfs/hdfsManager_checkExistAndAuth.action',
+		data: {folder:param.folder},
+		async:true,
+		dataType:"json",
+		async: false,
+		context : document.body,
+		success : function(data) {
+			console.info("data:"+data.flag);
+			var retMsg;
+			if("noauth" == data.flag){
+				flag=false;
+				console.info("目录没有权限");
+				$.messager.alert('警告','目录没有权限，请重新输入!','warning');
+			}else if("nodir" == data.flag){
+				flag=false;
+				console.info("目录不存在");
+				$.messager.alert('警告','目录不存在，请重新输入!','warning');
+			}else if("true" == data.flag){
+				flag =true;
+			}
+		}
+	});
+	console.info("flag:"+flag);
+	return flag;
+}
 
 /**
  * 重新加载数据

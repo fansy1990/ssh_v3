@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 import ssh.model.HdfsRequestProperties;
 import ssh.model.HdfsResponseProperties;
 import ssh.service.HdfsService;
+import ssh.util.HadoopUtils;
 import ssh.util.Utils;
 
 import com.alibaba.fastjson.JSON;
@@ -59,14 +60,28 @@ public class HdfsManagerAction extends ActionSupport implements
 		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
 		return;
 	}
-
-	public void checkExist() throws IllegalArgumentException, IOException {
+/**
+ * 检查目录权限或是否存在
+ * @throws IllegalArgumentException
+ * @throws IOException
+ */
+	public void checkExistAndAuth() throws IllegalArgumentException, IOException {
+		Map<String ,Object> map = new HashMap<>();
 		boolean exist = this.hdfsService.checkExist(this.hdfsFile.getFolder());
-
-		Utils.write2PrintWriter(String.valueOf(exist));
-
+		if(!exist){
+			map.put("flag", "nodir");
+			Utils.write2PrintWriter(JSON.toJSONString(map));
+			return;
+		}
+		boolean auth= HadoopUtils.checkHdfsAuth(this.hdfsFile.getFolder(), "r");
+		if(!auth){
+			map.put("flag", "noauth");
+		}
+		if(map.get("flag")==null){
+			map.put("flag", "true");
+		}
+		Utils.write2PrintWriter(JSON.toJSONString(map));
 		return;
-
 	}
 
 	/**

@@ -21,17 +21,17 @@
 
 	<!-- HDFS 文件系统管理 -->
 	<package name="hdfs" namespace="/hdfs" extends="struts-default">
-		<!-- 定义一个拦截器 -->
-		<interceptors>
+		<!-- 定义一个拦截器       不使用拦截器，直接使用js-->
+		<!-- <interceptors>
 			<interceptor name="hdfsAuth" class="ssh.interceptor.HdfsAuthInterceptor"></interceptor>
-		</interceptors>
+		</interceptors> -->
 		<action name="hdfsManager_*" method="{1}" class="ssh.action.HdfsManagerAction" >
-			 <interceptor-ref name="hdfsAuth">
-                <!-- <param name="excludeMethods">addMoveInfo</param> -->
+			 <!-- <interceptor-ref name="hdfsAuth">
+                <param name="excludeMethods">addMoveInfo</param>
                 <param name="includeMethods">searchFolder</param>
             </interceptor-ref>
 
-            <interceptor-ref name="defaultStack"></interceptor-ref>
+            <interceptor-ref name="defaultStack"></interceptor-ref> -->
 		</action>
 	</package>
 </struts>
