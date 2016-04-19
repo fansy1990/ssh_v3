@@ -94,9 +94,8 @@ $(function(){
 			console.info("load error!");
 			 $.messager.alert('警告','读取错误，请联系管理员!','warning');
 		},
-		onBeforeLoad:function(param){
-			return checkExistAndAuth(param);
-		},
+		onBeforeLoad:
+			 checkExistAndAuth,
 		onLoadSuccess:function(data ){
 			console.info("success,data:"+data);
 		},
@@ -142,6 +141,37 @@ $(function(){
 				 ]]
 		    });
 	
+	
+	// 目录新建
+	$('#dg_hdfsManager_folder_add_btn').bind('click', function(){
+		var folder_=$('#dg_hdfsManager_folder_add').val();
+		
+		// ajax 异步提交任务
+		var result = callByAJax('hdfs/hdfsManager_createFolder.action',{folder:folder_});
+		if("true" == result.flag){
+			$.messager.alert('信息','目录创建成功!','info');
+		}else if("false" == result.flag){
+			$.messager.alert('信息','目录创建失败，'+result.msg,'info');
+		}else if("hasdir" == result.flag){
+			$.messager.alert('warning','目录已经存在!','warning');
+		}
+		
+	});
+	
+	// 目录删除
+	$('#dg_hdfsManager_folder_delete_btn').bind('click', function(){
+		var folder_=$('#dg_hdfsManager_folder_delete').val();
+		var recursive_ =$('#dg_hdfsManager_folder_delete_cc').combobox('getValue');
+		// ajax 异步提交任务
+		var result = callByAJax('hdfs/hdfsManager_deleteFolder.action',{folder:folder_,recursive:recursive_});
+		if("true" == result.flag){
+			$.messager.alert('信息','目录删除成功!','info');
+		}else if("false" == result.flag){
+			$.messager.alert('信息','目录删除失败，'+result.msg,'info');
+		}
+		
+	});
+	
 });
 
 /**
@@ -151,30 +181,44 @@ $(function(){
  */
 function checkExistAndAuth(param){
 	var flag =false;
-	$.ajax({
-		url : 'hdfs/hdfsManager_checkExistAndAuth.action',
-		data: {folder:param.folder},
-		async:true,
-		dataType:"json",
-		async: false,
-		context : document.body,
-		success : function(data) {
-			console.info("data:"+data.flag);
-			var retMsg;
-			if("noauth" == data.flag){
-				flag=false;
-				console.info("目录没有权限");
-				$.messager.alert('警告','目录没有权限，请重新输入!','warning');
-			}else if("nodir" == data.flag){
-				flag=false;
-				console.info("目录不存在");
-				$.messager.alert('警告','目录不存在，请重新输入!','warning');
-			}else if("true" == data.flag){
-				flag =true;
-			}
-		}
-	});
-	console.info("flag:"+flag);
+	var result = callByAJax('hdfs/hdfsManager_checkExistAndAuth.action',{folder:param.folder});
+	console.info("result.flag:"+result.flag);
+	if("noauth" == result.flag){
+		flag=false;
+		console.info("目录没有权限");
+		$.messager.alert('警告','目录没有权限，请重新输入!','warning');
+	}else if("nodir" == result.flag){
+		flag=false;
+		console.info("目录不存在");
+		$.messager.alert('警告','目录不存在，请重新输入!','warning');
+	}else if("true" == result.flag){
+		flag =true;
+	}
+//	$.ajax({
+//		url : 'hdfs/hdfsManager_checkExistAndAuth.action',
+//		data: {folder:param.folder},
+//		async:true,
+//		dataType:"json",
+//		async: false,
+//		context : document.body,
+//		success : function(data) {
+//			console.info("data:"+data.flag);
+//			var retMsg;
+//			if("noauth" == data.flag){
+//				flag=false;
+//				console.info("目录没有权限");
+//				$.messager.alert('警告','目录没有权限，请重新输入!','warning');
+//			}else if("nodir" == data.flag){
+//				flag=false;
+//				console.info("目录不存在");
+//				$.messager.alert('警告','目录不存在，请重新输入!','warning');
+//			}else if("true" == data.flag){
+//				flag =true;
+//			}
+//		}
+//	});
+//	console.info("flag:"+flag);
+	
 	return flag;
 }
 

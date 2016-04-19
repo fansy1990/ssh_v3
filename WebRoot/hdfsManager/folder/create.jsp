@@ -29,5 +29,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	<a id="dg_hdfsManager_folder_add_btn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'">确定</a>
     </div>
     </div>
+    <script type="text/javascript" src="js/hdfsManager/folder.js" ></script>
   </body>
 </html>

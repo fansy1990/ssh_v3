@@ -8,6 +8,9 @@ import java.util.List;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.PathIsNotEmptyDirectoryException;
+import org.apache.hadoop.ipc.RemoteException;
+import org.apache.hadoop.security.AccessControlException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -40,10 +43,14 @@ public class HdfsService {
 		return files;
 	}
 
-	public boolean removeFolder(String folder, boolean recursive)
+	public boolean deleteFolder(String folder, boolean recursive)
 			throws IllegalArgumentException, IOException {
 		FileSystem fs = HadoopUtils.getFs();
-		return fs.delete(new Path(folder), recursive);
+		try{
+			return fs.delete(new Path(folder), recursive);
+		}catch(RemoteException e){
+			throw e;
+		}
 	}
 
 	public List<HdfsResponseProperties> searchFolder(String folder,
@@ -90,9 +97,13 @@ public class HdfsService {
 	}
 
 	public boolean createFolder(String folder, boolean recursive)
-			throws IllegalArgumentException, IOException {
+			throws IllegalArgumentException, IOException,AccessControlException {
 		FileSystem fs = HadoopUtils.getFs();
-		return fs.mkdirs(new Path(folder));
+		try{
+			return fs.mkdirs(new Path(folder));
+		}catch(AccessControlException e){
+			throw e;
+		}
 	}
 
 	/**
