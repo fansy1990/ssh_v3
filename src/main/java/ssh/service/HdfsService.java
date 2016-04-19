@@ -40,9 +40,10 @@ public class HdfsService {
 		return files;
 	}
 
-	public String removeFolder() {
-
-		return null;
+	public boolean removeFolder(String folder, boolean recursive)
+			throws IllegalArgumentException, IOException {
+		FileSystem fs = HadoopUtils.getFs();
+		return fs.delete(new Path(folder), recursive);
 	}
 
 	public List<HdfsResponseProperties> searchFolder(String folder,
@@ -88,9 +89,10 @@ public class HdfsService {
 		return false;
 	}
 
-	public String createFolder() {
-
-		return null;
+	public boolean createFolder(String folder, boolean recursive)
+			throws IllegalArgumentException, IOException {
+		FileSystem fs = HadoopUtils.getFs();
+		return fs.mkdirs(new Path(folder));
 	}
 
 	/**

@@ -23,6 +23,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
-    目录删除. <br>
+  <div style="padding: 15px">
+		<div style="margin:20px 0;">请输入要删除的目录路径：
+    <input  id="dg_hdfsManager_folder_delete" class="easyui-textbox" data-options="iconCls:'icon-folder_delete'" style="width:300px">
+    <a id="dg_hdfsManager_folder_delete_btn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">确定</a>
+    </div>
+    </div>
   </body>
 </html>

@@ -94,3 +94,10 @@
 .icon-large-chart{
 	background:url('icons/large_chart.png') no-repeat center center;
 }
+.icon-folder_add
+  {    background: url('icons/folder_add.png') no-repeat scroll center center transparent;
+}
+
+.icon-folder_delete
+  {    background: url('icons/folder_delete.png') no-repeat scroll center center transparent;
+}

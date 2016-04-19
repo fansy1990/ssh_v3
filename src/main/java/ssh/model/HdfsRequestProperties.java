@@ -13,6 +13,7 @@ public class HdfsRequestProperties {
 	private String nameOp;
 	private String owner;
 	private String ownerOp;
+	private boolean recursive;
 
 	public String getFolder() {
 		return folder;
@@ -52,6 +53,14 @@ public class HdfsRequestProperties {
 
 	public void setOwnerOp(String ownerOp) {
 		this.ownerOp = ownerOp;
+	}
+
+	public boolean isRecursive() {
+		return recursive;
+	}
+
+	public void setRecursive(boolean recursive) {
+		this.recursive = recursive;
 	}
 
 }

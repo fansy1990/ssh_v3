@@ -60,24 +60,28 @@ public class HdfsManagerAction extends ActionSupport implements
 		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
 		return;
 	}
-/**
- * 检查目录权限或是否存在
- * @throws IllegalArgumentException
- * @throws IOException
- */
-	public void checkExistAndAuth() throws IllegalArgumentException, IOException {
-		Map<String ,Object> map = new HashMap<>();
+
+	/**
+	 * 检查目录权限或是否存在
+	 * 
+	 * @throws IllegalArgumentException
+	 * @throws IOException
+	 */
+	public void checkExistAndAuth() throws IllegalArgumentException,
+			IOException {
+		Map<String, Object> map = new HashMap<>();
 		boolean exist = this.hdfsService.checkExist(this.hdfsFile.getFolder());
-		if(!exist){
+		if (!exist) {
 			map.put("flag", "nodir");
 			Utils.write2PrintWriter(JSON.toJSONString(map));
 			return;
 		}
-		boolean auth= HadoopUtils.checkHdfsAuth(this.hdfsFile.getFolder(), "r");
-		if(!auth){
+		boolean auth = HadoopUtils
+				.checkHdfsAuth(this.hdfsFile.getFolder(), "r");
+		if (!auth) {
 			map.put("flag", "noauth");
 		}
-		if(map.get("flag")==null){
+		if (map.get("flag") == null) {
 			map.put("flag", "true");
 		}
 		Utils.write2PrintWriter(JSON.toJSONString(map));
@@ -88,10 +92,21 @@ public class HdfsManagerAction extends ActionSupport implements
 	 * 移除文件夹
 	 * 
 	 * @return
+	 * @throws IOException
+	 * @throws IllegalArgumentException
 	 */
-	public String removeFolder() {
+	public void removeFolder() throws IllegalArgumentException, IOException {
+		Map<String, Object> map = new HashMap<>();
+		boolean flag = this.hdfsService.removeFolder(this.hdfsFile.getFolder(),
+				hdfsFile.isRecursive());
 
-		return null;
+		if (flag) {// 目录删除成功
+			map.put("flag", "true");
+		} else {// 目录删除失败
+			map.put("flag", "false");
+		}
+		Utils.write2PrintWriter(JSON.toJSONString(map));
+		return;
 	}
 
 	/**
@@ -119,10 +134,21 @@ public class HdfsManagerAction extends ActionSupport implements
 	 * 新建文件夹
 	 * 
 	 * @return
+	 * @throws IOException
+	 * @throws IllegalArgumentException
 	 */
-	public String createFolder() {
+	public void createFolder() throws IllegalArgumentException, IOException {
+		Map<String, Object> map = new HashMap<>();
+		boolean flag = this.hdfsService.createFolder(this.hdfsFile.getFolder(),
+				hdfsFile.isRecursive());
 
-		return null;
+		if (flag) {// 目录删除成功
+			map.put("flag", "true");
+		} else {// 目录删除失败
+			map.put("flag", "false");
+		}
+		Utils.write2PrintWriter(JSON.toJSONString(map));
+		return;
 	}
 
 	public HdfsService getHdfsService() {
