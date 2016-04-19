@@ -101,3 +101,10 @@
 .icon-folder_delete
   {    background: url('icons/folder_delete.png') no-repeat scroll center center transparent;
 }
+
+.icon-door_in
+  {    background: url('icons/door_in.png') no-repeat scroll center center transparent;
+}
+.icon-door_out
+  {    background: url('icons/door_out.png') no-repeat scroll center center transparent;
+}
