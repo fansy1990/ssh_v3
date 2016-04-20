@@ -1,17 +1,32 @@
 $(function(){
+	
 	// 文件上传
 	$('#dg_hdfsManager_file_upload_btn').bind('click', function(){
-		var file_=$('#dg_hdfsManager_file_upload').textbox('getValue');
-		console.info("file:"+file_);
-		
+//		var file_=$('#dg_hdfsManager_file_upload').filebox('getValue');
+//		console.info("file:"+file_);
+//		
 //		// ajax 异步提交任务
-//		var result = callByAJax('hdfs/hdfsManager_deleteFolder.action',{folder:folder_,recursive:recursive_});
+//		var result = callByAJax('hdfs/hdfsManager_upload.action',{file:file_});
 //		if("true" == result.flag){
 //			$.messager.alert('信息','目录删除成功!','info');
 //		}else if("false" == result.flag){
 //			$.messager.alert('信息','目录删除失败，'+result.msg,'info');
 //		}
+		// submit the form    
+		$('#dg_hdfsManager_file_upload_ff').submit(); 
+		
 		
 	});
+	// 文件上传 
+	$('#dg_hdfsManager_file_upload_ff').form({    
+	    url:'hdfs/hdfsManager_upload.action',    
+	    onSubmit: function(){    
+	         
+	    },    
+	    success:function(data){    
+	        alert(data) ;   
+	    }    
+	});    
+	
 	
 });

@@ -1,5 +1,6 @@
 package ssh.action;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
@@ -39,6 +40,11 @@ public class HdfsManagerAction extends ActionSupport implements
 	private HdfsService hdfsService;
 	private int rows;
 	private int page;
+
+	private File file;
+	private String fileFileName;
+
+	private String fileContentType;
 
 	@Override
 	public HdfsRequestProperties getModel() {
@@ -81,8 +87,8 @@ public class HdfsManagerAction extends ActionSupport implements
 		}
 		// 读取并且执行权限
 		boolean auth = HadoopUtils
-				.checkHdfsAuth(this.hdfsFile.getFolder(), "r") &&HadoopUtils
-				.checkHdfsAuth(this.hdfsFile.getFolder(), "x");
+				.checkHdfsAuth(this.hdfsFile.getFolder(), "r")
+				&& HadoopUtils.checkHdfsAuth(this.hdfsFile.getFolder(), "x");
 		if (!auth) {
 			map.put("flag", "noauth");
 		}
@@ -101,7 +107,7 @@ public class HdfsManagerAction extends ActionSupport implements
 	 * @throws IllegalArgumentException
 	 */
 	public void deleteFolder() throws IllegalArgumentException, IOException {
-		boolean flag =false;
+		boolean flag = false;
 		Map<String, Object> map = new HashMap<>();
 		boolean exist = this.hdfsService.checkExist(this.hdfsFile.getFolder());
 		if (!exist) {
@@ -112,20 +118,21 @@ public class HdfsManagerAction extends ActionSupport implements
 		}
 		// 读取并且执行权限
 		boolean auth = HadoopUtils
-				.checkHdfsAuth(this.hdfsFile.getFolder(), "r") &&HadoopUtils
-				.checkHdfsAuth(this.hdfsFile.getFolder(), "x");
+				.checkHdfsAuth(this.hdfsFile.getFolder(), "r")
+				&& HadoopUtils.checkHdfsAuth(this.hdfsFile.getFolder(), "x");
 		if (!auth) {
 			map.put("msg", "没有权限!");
 			map.put("flag", "false");
 			Utils.write2PrintWriter(JSON.toJSONString(map));
 			return;
 		}
-		
-		try{
-			flag= this.hdfsService.deleteFolder(this.hdfsFile.getFolder(),
-				hdfsFile.isRecursive());
-		}catch(RemoteException e){
-			if(e.getClassName().equals("org.apache.hadoop.fs.PathIsNotEmptyDirectoryException")){
+
+		try {
+			flag = this.hdfsService.deleteFolder(this.hdfsFile.getFolder(),
+					hdfsFile.isRecursive());
+		} catch (RemoteException e) {
+			if (e.getClassName().equals(
+					"org.apache.hadoop.fs.PathIsNotEmptyDirectoryException")) {
 				map.put("msg", "目录下有子目录!");
 			}
 		}
@@ -175,12 +182,12 @@ public class HdfsManagerAction extends ActionSupport implements
 			return;
 		}
 		boolean flag = false;
-		try{
-			flag= this.hdfsService.createFolder(this.hdfsFile.getFolder(),
-				hdfsFile.isRecursive());
-		}catch(AccessControlException e){
+		try {
+			flag = this.hdfsService.createFolder(this.hdfsFile.getFolder(),
+					hdfsFile.isRecursive());
+		} catch (AccessControlException e) {
 			map.put("msg", "没有权限！");
-		}catch (Exception e) {
+		} catch (Exception e) {
 			map.put("msg", "创建目录异常，请联系管理员！");
 		}
 		if (flag) {// 目录删除成功
@@ -188,6 +195,35 @@ public class HdfsManagerAction extends ActionSupport implements
 		} else {// 目录删除失败
 			map.put("flag", "false");
 		}
+		Utils.write2PrintWriter(JSON.toJSONString(map));
+		return;
+	}
+
+	public void upload() {
+		Map<String, Object> map = new HashMap<>();
+		// boolean exist =
+		// this.hdfsService.checkExist(this.hdfsFile.getFolder());
+		// if (exist) {
+		// map.put("flag", "hasdir");
+		// Utils.write2PrintWriter(JSON.toJSONString(map));
+		// return;
+		// }
+		boolean flag = false;
+		// try{
+		// flag= this.hdfsService.createFolder(this.hdfsFile.getFolder(),
+		// hdfsFile.isRecursive());
+		// }catch(AccessControlException e){
+		// map.put("msg", "没有权限！");
+		// }catch (Exception e) {
+		// map.put("msg", "创建目录异常，请联系管理员！");
+		// }
+		if (flag) {// 目录删除成功
+			map.put("flag", "true");
+		} else {// 目录删除失败
+			map.put("flag", "false");
+		}
+		System.out.println("file:" + file.getAbsolutePath() + ","
+				+ file.getName());
 		Utils.write2PrintWriter(JSON.toJSONString(map));
 		return;
 	}
@@ -215,5 +251,29 @@ public class HdfsManagerAction extends ActionSupport implements
 
 	public void setPage(int page) {
 		this.page = page;
+	}
+
+	public File getFile() {
+		return file;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
+	}
+
+	public String getFileFileName() {
+		return fileFileName;
+	}
+
+	public void setFileFileName(String fileFileName) {
+		this.fileFileName = fileFileName;
+	}
+
+	public String getFileContentType() {
+		return fileContentType;
+	}
+
+	public void setFileContentType(String fileContentType) {
+		this.fileContentType = fileContentType;
 	}
 }

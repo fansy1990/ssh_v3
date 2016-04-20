@@ -6,6 +6,7 @@
 <struts>
 
 	<constant name="struts.devMode" value="true" />
+	<constant name="struts.multipart.saveDir" value="d:/tmp/v3" />
 	<constant name="struts.enable.DynamicMethodInvocation" value="true" />
 	<!--设置编码形式为UTF-8 -->
 	<constant name="struts.i18n.encoding" value="UTF-8" />

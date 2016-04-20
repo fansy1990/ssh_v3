@@ -25,9 +25,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <body>
   	<div style="padding: 15px">
 		<div style="margin:20px 0;">
-			上传文件：<input id="dg_hdfsManager_file_upload" class="easyui-filebox" style="width:300px">
+		<form id="dg_hdfsManager_file_upload_ff" action="#" method="post" enctype="multipart/form-data">
+			上传文件：<input name="file" class="easyui-filebox" style="width:300px">
 			<a id="dg_hdfsManager_file_upload_btn" href="#"
 				class="easyui-linkbutton" data-options="iconCls:'icon-door_in'">上传</a>
+				</form>
 		</div>
 		</div>
 		<script type="text/javascript" src="js/hdfsManager/file.js"></script>
