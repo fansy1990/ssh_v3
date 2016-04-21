@@ -11,6 +11,8 @@ import javax.annotation.Resource;
 
 import org.apache.hadoop.ipc.RemoteException;
 import org.apache.hadoop.security.AccessControlException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ssh.model.HdfsRequestProperties;
 import ssh.model.HdfsResponseProperties;
@@ -31,6 +33,8 @@ import com.opensymphony.xwork2.ModelDriven;
 @Resource(name = "hdfsManagerAction")
 public class HdfsManagerAction extends ActionSupport implements
 		ModelDriven<HdfsRequestProperties> {
+	private static final Logger log = LoggerFactory
+			.getLogger(HdfsManagerAction.class);
 
 	/**
 	 * 
@@ -71,7 +75,7 @@ public class HdfsManagerAction extends ActionSupport implements
 	}
 
 	/**
-	 * 检查目录权限或是否存在
+	 * 检查目录权限或是否存在 权限由外部设定
 	 * 
 	 * @throws IllegalArgumentException
 	 * @throws IOException
@@ -86,11 +90,24 @@ public class HdfsManagerAction extends ActionSupport implements
 			return;
 		}
 		// 读取并且执行权限
-		boolean auth = HadoopUtils
-				.checkHdfsAuth(this.hdfsFile.getFolder(), "r")
-				&& HadoopUtils.checkHdfsAuth(this.hdfsFile.getFolder(), "x");
-		if (!auth) {
-			map.put("flag", "noauth");
+		boolean hasAuth = true;
+		if (this.hdfsFile.getAuth() == null
+				|| this.hdfsFile.getAuth().length() < 1
+				|| this.hdfsFile.getAuth().length() > 3) {
+			log.info("权限设置异常！authString:{}", this.hdfsFile.getAuth());
+			map.put("flag", "false");
+			map.put("msg", "后台错误，请联系管理员！");
+			Utils.write2PrintWriter(JSON.toJSONString(map));
+			return;
+		}
+		for (char a : this.hdfsFile.getAuth().toCharArray()) {
+			hasAuth = hasAuth
+					&& HadoopUtils.checkHdfsAuth(this.hdfsFile.getFolder(),
+							String.valueOf(a));
+		}
+		if (!hasAuth) {
+			map.put("flag", "false");
+			map.put("msg", "目录操作没有权限！");
 		}
 		if (map.get("flag") == null) {
 			map.put("flag", "true");

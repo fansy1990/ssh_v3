@@ -181,12 +181,12 @@ $(function(){
  */
 function checkExistAndAuth(param){
 	var flag =false;
-	var result = callByAJax('hdfs/hdfsManager_checkExistAndAuth.action',{folder:param.folder});
+	var result = callByAJax('hdfs/hdfsManager_checkExistAndAuth.action',{folder:param.folder,auth:"rx"});
 	console.info("result.flag:"+result.flag);
-	if("noauth" == result.flag){
+	if("false" == result.flag){
 		flag=false;
-		console.info("目录没有权限");
-		$.messager.alert('警告','目录没有权限，请重新输入!','warning');
+		console.info("目录没有权限或后台错误！");
+		$.messager.alert('警告',result.msg,'warning');
 	}else if("nodir" == result.flag){
 		flag=false;
 		console.info("目录不存在");
@@ -223,9 +223,30 @@ function checkExistAndAuth(param){
 }
 
 /**
+ * check if textbox is empty ，empty: true
+ * @param id_
+ * @returns {Boolean}
+ */
+function checkTextBoxEmpty(id_){
+	var folder_ = $('#'+id_).val();
+	if(folder_=="") {
+		$.messager.alert('警告','目录为空，请重新输入!','warning');
+		return true;
+	}
+	return false;
+}
+
+/**
  * 重新加载数据
  */
 function list_data(){
+//	var folder_ = $('#hdfsManager_list_folder').val();
+//	if(folder_=="") {
+//		$.messager.alert('警告','目录为空，请重新输入!','warning');
+//		return ;
+//	}
+	if(checkTextBoxEmpty('hdfsManager_list_folder')) return ;
+//	if() // 加输入框验证
     $('#dg_hdfsManager_list').datagrid('load',{
         folder: $('#hdfsManager_list_folder').val()
     });
@@ -235,6 +256,8 @@ function list_data(){
  * 过滤加载数据
  */
 function search_data(){
+	 // 加输入框验证
+	if(checkTextBoxEmpty('hdfsManager_search_folder')) return ;
     $('#dg_hdfsManager_search').datagrid('load',{
         folder: $('#hdfsManager_search_folder').val(),
         name:$('#hdfsManager_search_folder_name').val(),
