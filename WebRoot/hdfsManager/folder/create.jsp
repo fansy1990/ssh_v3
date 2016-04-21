@@ -25,7 +25,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <body>
     <div style="padding: 15px">
 		<div style="margin:20px 0;">请输入要添加的目录路径：
-    <input  id="dg_hdfsManager_folder_add" class="easyui-textbox" data-options="iconCls:'icon-folder_add'" style="width:300px">
+    <input  id="dg_hdfsManager_folder_add" class="easyui-textbox"  value="/" data-options="required:true,iconCls:'icon-folder_add'" style="width:300px">
     	<a id="dg_hdfsManager_folder_add_btn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'">确定</a>
     </div>
     </div>

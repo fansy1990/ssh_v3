@@ -21,6 +21,16 @@ $(function(){
 	$('#dg_hdfsManager_file_upload_ff').form({    
 	    url:'hdfs/hdfsManager_upload.action',    
 	    onSubmit: function(){    
+	    	var file_=$('#dg_hdfsManager_file_upload_input').filebox('getValue');
+	         if(file_=="") {
+	        	 $.messager.alert('警告',"上传文件不能为空！",'warning');
+	        	 return false;
+	         }
+	         if(checkTextBoxEmpty('dg_hdfsManager_file_upload_folder','上传目录不能为空，请输入！')) return false;
+	         
+	         // 权限及目录
+	         return checkExistAndAuth($('#dg_hdfsManager_file_upload_folder').val(),'rwx');
+	         
 	         
 	    },    
 	    success:function(data){    

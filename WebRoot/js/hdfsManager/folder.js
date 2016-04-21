@@ -25,7 +25,9 @@ $(function(){
 			console.info("list load error!");
 			 $.messager.alert('信息','加载错误，请联系管理员!','info');
 		},
-		onBeforeLoad:checkExistAndAuth,
+		onBeforeLoad:function(param){
+			return checkExistAndAuth(param.folder,'rx');
+		},
 		idField:'id',
 		columns :[[
 				{
@@ -94,8 +96,9 @@ $(function(){
 			console.info("load error!");
 			 $.messager.alert('警告','读取错误，请联系管理员!','warning');
 		},
-		onBeforeLoad:
-			 checkExistAndAuth,
+		onBeforeLoad:function(param){
+			return checkExistAndAuth(param.folder,'rx');
+		},
 		onLoadSuccess:function(data ){
 			console.info("success,data:"+data);
 		},
@@ -176,12 +179,13 @@ $(function(){
 
 /**
  * 检查目录是否存在或权限错误
- * @param param
+ * @param folder_
+ * @param auth_
  * @returns {Boolean}
  */
-function checkExistAndAuth(param){
+function checkExistAndAuth(folder_,auth_){
 	var flag =false;
-	var result = callByAJax('hdfs/hdfsManager_checkExistAndAuth.action',{folder:param.folder,auth:"rx"});
+	var result = callByAJax('hdfs/hdfsManager_checkExistAndAuth.action',{folder:folder_,auth:auth_});
 	console.info("result.flag:"+result.flag);
 	if("false" == result.flag){
 		flag=false;
@@ -223,20 +227,6 @@ function checkExistAndAuth(param){
 }
 
 /**
- * check if textbox is empty ，empty: true
- * @param id_
- * @returns {Boolean}
- */
-function checkTextBoxEmpty(id_){
-	var folder_ = $('#'+id_).val();
-	if(folder_=="") {
-		$.messager.alert('警告','目录为空，请重新输入!','warning');
-		return true;
-	}
-	return false;
-}
-
-/**
  * 重新加载数据
  */
 function list_data(){
@@ -245,7 +235,7 @@ function list_data(){
 //		$.messager.alert('警告','目录为空，请重新输入!','warning');
 //		return ;
 //	}
-	if(checkTextBoxEmpty('hdfsManager_list_folder')) return ;
+	if(checkTextBoxEmpty('hdfsManager_list_folder','输入目录不能为空，请重新输入!')) return ;
 //	if() // 加输入框验证
     $('#dg_hdfsManager_list').datagrid('load',{
         folder: $('#hdfsManager_list_folder').val()
@@ -257,7 +247,7 @@ function list_data(){
  */
 function search_data(){
 	 // 加输入框验证
-	if(checkTextBoxEmpty('hdfsManager_search_folder')) return ;
+	if(checkTextBoxEmpty('hdfsManager_search_folder','输入目录不能为空，请重新输入!')) return ;
     $('#dg_hdfsManager_search').datagrid('load',{
         folder: $('#hdfsManager_search_folder').val(),
         name:$('#hdfsManager_search_folder_name').val(),

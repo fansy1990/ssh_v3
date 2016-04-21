@@ -16,6 +16,21 @@ function update_project(title_,data){
 }
 
 /**
+ * check if textbox is empty ，empty: true
+ * @param id_
+ * @param msg
+ * @returns {Boolean}
+ */
+function checkTextBoxEmpty(id_,msg){
+	var folder_ = $('#'+id_).val();
+	if(folder_=="") {
+		$.messager.alert('警告',msg,'warning');
+		return true;
+	}
+	return false;
+}
+
+/**
  * 添加tab 页
  * @param title
  * @param url
