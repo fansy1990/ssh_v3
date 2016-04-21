@@ -8,7 +8,6 @@ import java.util.List;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-
 import org.apache.hadoop.ipc.RemoteException;
 import org.apache.hadoop.security.AccessControlException;
 import org.slf4j.Logger;
@@ -122,14 +121,26 @@ public class HdfsService {
 		return flag;
 	}
 
-	public boolean upload(String src, String des) {
+	public boolean upload(String src, String des) throws Exception {
 		try {
 			HadoopUtils.getFs().copyFromLocalFile(new Path(src), new Path(des));
 		} catch (IllegalArgumentException | IOException e) {
 			
 			log.info("数据上传异常，src:{},des:{}",new Object[]{src,des});
-			return false;
+			throw e;
 		}
 		return true;
+	}
+
+	public boolean deleteFile(String fileName) throws Exception {
+		boolean flag =false;
+		try {
+			flag = HadoopUtils.getFs().delete(new Path(fileName), false);
+		} catch (IllegalArgumentException | IOException e) {
+			
+			log.info("数据删除异常，fileName:{}",new Object[]{fileName});
+			throw e;
+		}
+		return flag;
 	}
 }

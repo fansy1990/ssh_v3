@@ -221,7 +221,34 @@ public class HdfsManagerAction extends ActionSupport implements
 	
 		boolean flag = false;
 		
-		flag = this.hdfsService.upload(file.getAbsolutePath(),hdfsFile.getFolder()+"/"+fileFileName);
+		try {
+			flag = this.hdfsService.upload(file.getAbsolutePath(),hdfsFile.getFolder()+"/"+fileFileName);
+		} catch (Exception e) {
+			map.put("msg", "请联系管理员!");
+			flag=false;
+		}
+		
+		if (flag) {// 上传成功
+			map.put("flag", "true");
+		} else {// 失败
+			map.put("flag", "false");
+			
+		}
+		Utils.write2PrintWriter(JSON.toJSONString(map));
+		return;
+	}
+	
+	public void deleteFile(){
+		Map<String, Object> map = new HashMap<>();
+		
+		boolean flag = false;
+		
+		try {
+			flag = this.hdfsService.deleteFile(hdfsFile.getFileName());
+		} catch (Exception e) {
+			map.put("msg", "不能删除目录！");
+			flag=false;
+		}
 		
 		if (flag) {// 上传成功
 			map.put("flag", "true");
