@@ -218,29 +218,16 @@ public class HdfsManagerAction extends ActionSupport implements
 
 	public void upload() {
 		Map<String, Object> map = new HashMap<>();
-		// boolean exist =
-		// this.hdfsService.checkExist(this.hdfsFile.getFolder());
-		// if (exist) {
-		// map.put("flag", "hasdir");
-		// Utils.write2PrintWriter(JSON.toJSONString(map));
-		// return;
-		// }
+	
 		boolean flag = false;
-		// try{
-		// flag= this.hdfsService.createFolder(this.hdfsFile.getFolder(),
-		// hdfsFile.isRecursive());
-		// }catch(AccessControlException e){
-		// map.put("msg", "没有权限！");
-		// }catch (Exception e) {
-		// map.put("msg", "创建目录异常，请联系管理员！");
-		// }
-		if (flag) {// 目录删除成功
+		
+		flag = this.hdfsService.upload(file.getAbsolutePath(),hdfsFile.getFolder()+"/"+fileFileName);
+		
+		if (flag) {// 上传成功
 			map.put("flag", "true");
-		} else {// 目录删除失败
+		} else {// 失败
 			map.put("flag", "false");
 		}
-		System.out.println("file:" + file.getAbsolutePath() + ","
-				+ file.getName());
 		Utils.write2PrintWriter(JSON.toJSONString(map));
 		return;
 	}

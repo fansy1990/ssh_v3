@@ -22,6 +22,7 @@ $(function(){
 	    url:'hdfs/hdfsManager_upload.action',    
 	    onSubmit: function(){    
 	    	var file_=$('#dg_hdfsManager_file_upload_input').filebox('getValue');
+	    	console.info(file_);
 	         if(file_=="") {
 	        	 $.messager.alert('警告',"上传文件不能为空！",'warning');
 	        	 return false;
@@ -29,14 +30,21 @@ $(function(){
 	         if(checkTextBoxEmpty('dg_hdfsManager_file_upload_folder','上传目录不能为空，请输入！')) return false;
 	         
 	         // 权限及目录
-	         return checkExistAndAuth($('#dg_hdfsManager_file_upload_folder').val(),'rwx');
+	         var flag = checkExistAndAuth($('#dg_hdfsManager_file_upload_folder').val(),'rwx');
 	         
+	         if(flag) popupProgressbar('数据上传','数据上传中...',1000);
+	         
+
+	         return flag;
 	         
 	    },    
 	    success:function(data){    
-	        alert(data) ;   
+	    	closeProgressbar();
+	    	$.messager.alert('信息','文件上传完成！','info');
 	    }    
 	});    
 	
+	// 隐藏upload 中fileName属性
+//	$('#dg_hdfsManager_file_upload_fileName').hide();
 	
 });

@@ -14,6 +14,8 @@ public class HdfsRequestProperties {
 	private String owner;
 	private String ownerOp;
 	private boolean recursive;
+	
+	private String fileName;
 
 	private String auth;
 
@@ -71,6 +73,14 @@ public class HdfsRequestProperties {
 
 	public void setAuth(String auth) {
 		this.auth = auth;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 }

@@ -8,7 +8,7 @@ import java.util.List;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.fs.PathIsNotEmptyDirectoryException;
+
 import org.apache.hadoop.ipc.RemoteException;
 import org.apache.hadoop.security.AccessControlException;
 import org.slf4j.Logger;
@@ -120,5 +120,16 @@ public class HdfsService {
 		if (!flag)
 			log.info("文件或目录:{}不存在！", folder);
 		return flag;
+	}
+
+	public boolean upload(String src, String des) {
+		try {
+			HadoopUtils.getFs().copyFromLocalFile(new Path(src), new Path(des));
+		} catch (IllegalArgumentException | IOException e) {
+			
+			log.info("数据上传异常，src:{},des:{}",new Object[]{src,des});
+			return false;
+		}
+		return true;
 	}
 }

@@ -30,5 +30,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </div>
     </div>
     <script type="text/javascript" src="js/hdfsManager/folder.js" ></script>
+    	<script type="text/javascript" src="js/hdfsManager/hdfsManager_utils.js"></script>
   </body>
 </html>
