@@ -120,6 +120,11 @@ public class HdfsService {
 			log.info("文件或目录:{}不存在！", folder);
 		return flag;
 	}
+	
+	public boolean isDir(String dir) throws IllegalArgumentException, IOException{
+		boolean flag = HadoopUtils.getFs().isDirectory(new Path(dir));
+		return flag;
+	}
 
 	public boolean upload(String src, String des) throws Exception {
 		try {
@@ -139,6 +144,18 @@ public class HdfsService {
 		} catch (IllegalArgumentException | IOException e) {
 			
 			log.info("数据删除异常，fileName:{}",new Object[]{fileName});
+			throw e;
+		}
+		return flag;
+	}
+
+	public boolean download(String fileName, String localFile) throws Exception {
+		boolean flag =false;
+		try {
+			 HadoopUtils.getFs().copyToLocalFile(new Path(fileName), new Path(localFile));
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.info("数据下载异常，src:{},des:{}",new Object[]{fileName,localFile});
 			throw e;
 		}
 		return flag;

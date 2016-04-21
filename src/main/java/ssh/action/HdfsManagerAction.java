@@ -238,6 +238,39 @@ public class HdfsManagerAction extends ActionSupport implements
 		return;
 	}
 	
+	public void download() {
+		Map<String, Object> map = new HashMap<>();
+	
+		boolean flag = false;
+		boolean dir = false;
+		try{
+			dir = this.hdfsService.isDir(this.hdfsFile.getFileName());
+		}catch(Exception e){
+			map.put("msg", "请联系管理员!");
+		}
+		if (dir) {
+			map.put("flag", "false");
+			if(map.get("msg")==null) map.put("msg", "不能下载目录!");
+			Utils.write2PrintWriter(JSON.toJSONString(map));
+			return;
+		}
+		try {
+			flag = this.hdfsService.download(hdfsFile.getFileName(),hdfsFile.getLocalFile());
+		} catch (Exception e) {
+			map.put("msg", "请联系管理员!");
+			flag=false;
+		}
+		
+		if (flag) {// 上传成功
+			map.put("flag", "true");
+		} else {// 失败
+			map.put("flag", "false");
+			
+		}
+		Utils.write2PrintWriter(JSON.toJSONString(map));
+		return;
+	}
+	
 	public void deleteFile(){
 		Map<String, Object> map = new HashMap<>();
 		

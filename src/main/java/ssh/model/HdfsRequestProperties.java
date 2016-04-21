@@ -16,6 +16,7 @@ public class HdfsRequestProperties {
 	private boolean recursive;
 	
 	private String fileName;
+	private String localFile;
 
 	private String auth;
 
@@ -81,6 +82,14 @@ public class HdfsRequestProperties {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+	public String getLocalFile() {
+		return localFile;
+	}
+
+	public void setLocalFile(String localFile) {
+		this.localFile = localFile;
 	}
 
 }

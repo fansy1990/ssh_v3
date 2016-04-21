@@ -23,6 +23,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
-    文件下载. <br>
+<div style="padding: 15px">
+		<div style="margin:20px 0;">
+			请输入要下载的文件路径： <input id="dg_hdfsManager_file_download_src"
+				class="easyui-textbox" value="/"
+				data-options="required:true"
+				style="width:300px"> 
+				<br><br>
+			请输入要保存的文件路径： <input id="dg_hdfsManager_file_download_des"
+				class="easyui-textbox" value="d:/"
+				data-options="required:true"
+				style="width:300px"> 	
+				 <a id="dg_hdfsManager_file_download_btn" href="#"
+				class="easyui-linkbutton" data-options="iconCls:'icon-save'">下载</a>
+		</div>
+	</div>
+	<script type="text/javascript" src="js/hdfsManager/file.js"></script>
+	<script type="text/javascript"
+		src="js/hdfsManager/hdfsManager_utils.js"></script>
   </body>
 </html>

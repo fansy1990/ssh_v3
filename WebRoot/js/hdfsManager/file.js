@@ -66,4 +66,24 @@ $(function(){
 		
 	});
 	
+	// 文件下载
+	$('#dg_hdfsManager_file_download_btn').bind('click', function(){
+		if(checkTextBoxEmpty('dg_hdfsManager_file_download_src','HDFS文件路径不能为空，请重新输入!')) return ;
+		if(checkTextBoxEmpty('dg_hdfsManager_file_download_des','本地文件路径不能为空，请重新输入!')) return ;
+		// 权限及目录
+        var flag = checkExistAndAuth($('#dg_hdfsManager_file_download_src').val(),'r');
+        if(!flag) return;
+        
+		var file_=$('#dg_hdfsManager_file_download_src').val();
+		var des_=$('#dg_hdfsManager_file_download_des').val();
+		// ajax 异步提交任务
+		var result = callByAJax('hdfs/hdfsManager_download.action',{fileName:file_,localFile:des_});
+		if("true" == result.flag){
+			$.messager.alert('信息','文件下载成功!','info');
+		}else if("false" == result.flag){
+			$.messager.alert('信息','文件下载失败，'+result.msg,'info');
+		}
+		
+	});
+	
 });
