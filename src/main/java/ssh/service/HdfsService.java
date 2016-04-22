@@ -45,9 +45,9 @@ public class HdfsService {
 	public boolean deleteFolder(String folder, boolean recursive)
 			throws IllegalArgumentException, IOException {
 		FileSystem fs = HadoopUtils.getFs();
-		try{
+		try {
 			return fs.delete(new Path(folder), recursive);
-		}catch(RemoteException e){
+		} catch (RemoteException e) {
 			throw e;
 		}
 	}
@@ -96,11 +96,12 @@ public class HdfsService {
 	}
 
 	public boolean createFolder(String folder, boolean recursive)
-			throws IllegalArgumentException, IOException,AccessControlException {
+			throws IllegalArgumentException, IOException,
+			AccessControlException {
 		FileSystem fs = HadoopUtils.getFs();
-		try{
+		try {
 			return fs.mkdirs(new Path(folder));
-		}catch(AccessControlException e){
+		} catch (AccessControlException e) {
 			throw e;
 		}
 	}
@@ -120,8 +121,9 @@ public class HdfsService {
 			log.info("文件或目录:{}不存在！", folder);
 		return flag;
 	}
-	
-	public boolean isDir(String dir) throws IllegalArgumentException, IOException{
+
+	public boolean isDir(String dir) throws IllegalArgumentException,
+			IOException {
 		boolean flag = HadoopUtils.getFs().isDirectory(new Path(dir));
 		return flag;
 	}
@@ -130,32 +132,34 @@ public class HdfsService {
 		try {
 			HadoopUtils.getFs().copyFromLocalFile(new Path(src), new Path(des));
 		} catch (IllegalArgumentException | IOException e) {
-			
-			log.info("数据上传异常，src:{},des:{}",new Object[]{src,des});
+
+			log.info("数据上传异常，src:{},des:{}", new Object[] { src, des });
 			throw e;
 		}
 		return true;
 	}
 
 	public boolean deleteFile(String fileName) throws Exception {
-		boolean flag =false;
+		boolean flag = false;
 		try {
 			flag = HadoopUtils.getFs().delete(new Path(fileName), false);
 		} catch (IllegalArgumentException | IOException e) {
-			
-			log.info("数据删除异常，fileName:{}",new Object[]{fileName});
+
+			log.info("数据删除异常，fileName:{}", new Object[] { fileName });
 			throw e;
 		}
 		return flag;
 	}
 
 	public boolean download(String fileName, String localFile) throws Exception {
-		boolean flag =false;
+		boolean flag = true;
 		try {
-			 HadoopUtils.getFs().copyToLocalFile(new Path(fileName), new Path(localFile));
+			HadoopUtils.getFs().copyToLocalFile(new Path(fileName),
+					new Path(localFile));
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.info("数据下载异常，src:{},des:{}",new Object[]{fileName,localFile});
+			log.info("数据下载异常，src:{},des:{}",
+					new Object[] { fileName, localFile });
 			throw e;
 		}
 		return flag;
