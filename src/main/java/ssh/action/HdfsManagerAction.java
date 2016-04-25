@@ -218,71 +218,74 @@ public class HdfsManagerAction extends ActionSupport implements
 
 	public void upload() {
 		Map<String, Object> map = new HashMap<>();
-	
+
 		boolean flag = false;
-		
+
 		try {
-			flag = this.hdfsService.upload(file.getAbsolutePath(),hdfsFile.getFolder()+"/"+fileFileName);
+			flag = this.hdfsService.upload(file.getAbsolutePath(),
+					hdfsFile.getFolder() + "/" + fileFileName);
 		} catch (Exception e) {
 			map.put("msg", "请联系管理员!");
-			flag=false;
+			flag = false;
 		}
-		
+
 		if (flag) {// 上传成功
 			map.put("flag", "true");
 		} else {// 失败
 			map.put("flag", "false");
-			
+
 		}
 		Utils.write2PrintWriter(JSON.toJSONString(map));
 		return;
 	}
-	
+
 	public void download() {
 		Map<String, Object> map = new HashMap<>();
-	
+
 		boolean flag = false;
 		boolean dir = false;
-		try{
+		try {
 			dir = this.hdfsService.isDir(this.hdfsFile.getFileName());
-		}catch(Exception e){
+		} catch (Exception e) {
 			map.put("msg", "请联系管理员!");
 		}
 		if (dir) {
 			map.put("flag", "false");
-			if(map.get("msg")==null) map.put("msg", "不能下载目录!");
+			if (map.get("msg") == null)
+				map.put("msg", "不能下载目录!");
 			Utils.write2PrintWriter(JSON.toJSONString(map));
 			return;
 		}
 		try {
-			flag = this.hdfsService.download(hdfsFile.getFileName(),hdfsFile.getLocalFile());
+			flag = this.hdfsService.download(hdfsFile.getFileName(),
+					hdfsFile.getLocalFile());
 		} catch (Exception e) {
 			map.put("msg", "请联系管理员!");
-			flag=false;
+			flag = false;
 		}
-		
+
 		if (flag) {// 上传成功
 			map.put("flag", "true");
 		} else {// 失败
 			map.put("flag", "false");
-			
+
 		}
 		Utils.write2PrintWriter(JSON.toJSONString(map));
 		return;
 	}
-	
-	public void deleteFile(){
+
+	public void deleteFile() {
 		Map<String, Object> map = new HashMap<>();
-		
+
 		boolean flag = false;
-		
+
 		try {
 			flag = this.hdfsService.deleteFile(hdfsFile.getFileName());
 		} catch (Exception e) {
 			map.put("msg", "不能删除目录！");
-			flag=false;
+			flag = false;
 		}
-		
+
 		if (flag) {// 上传成功
 			map.put("flag", "true");
 		} else {// 失败
@@ -290,6 +293,13 @@ public class HdfsManagerAction extends ActionSupport implements
 		}
 		Utils.write2PrintWriter(JSON.toJSONString(map));
 		return;
+	}
+
+	/**
+	 * 读取HDFS文件 ；序列化和文本 读取记录数
+	 */
+	public void read() {
+
 	}
 
 	public HdfsService getHdfsService() {

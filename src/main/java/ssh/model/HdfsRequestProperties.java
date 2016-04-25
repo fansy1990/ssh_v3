@@ -14,11 +14,14 @@ public class HdfsRequestProperties {
 	private String owner;
 	private String ownerOp;
 	private boolean recursive;
-	
+
 	private String fileName;
 	private String localFile;
 
 	private String auth;
+
+	private int records;
+	private String textSeq;
 
 	public String getFolder() {
 		return folder;
@@ -90,6 +93,22 @@ public class HdfsRequestProperties {
 
 	public void setLocalFile(String localFile) {
 		this.localFile = localFile;
+	}
+
+	public int getRecords() {
+		return records;
+	}
+
+	public void setRecords(int records) {
+		this.records = records;
+	}
+
+	public String getTextSeq() {
+		return textSeq;
+	}
+
+	public void setTextSeq(String textSeq) {
+		this.textSeq = textSeq;
 	}
 
 }

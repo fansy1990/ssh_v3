@@ -86,4 +86,27 @@ $(function(){
 		
 	});
 	
+	// 文件读取
+	$('#dg_hdfsManager_file_read_btn').bind('click', function(){
+		if(checkTextBoxEmpty('dg_hdfsManager_file_read_file','文件路径不能为空，请重新输入!')) return ;
+		
+		// 权限及目录
+        var flag = checkExistAndAuth($('#dg_hdfsManager_file_read_file').val(),'r');
+        if(!flag) return;
+        
+		var file_=$('#dg_hdfsManager_file_read_file').val();
+		var text_seq= $('#dg_hdfsManager_file_read_text_seq').combobox('getValue');
+		var records_= $('#dg_hdfsManager_file_read_records').combobox('getValue');
+		// ajax 异步提交任务
+		var result = callByAJax('hdfs/hdfsManager_read.action',{fileName:file_,textSeq:text_seq,records:records_});
+		if("true" == result.flag){
+//			$.messager.alert('信息','文件删除成功!','info');
+			// 文件读取结果展示；
+			
+		}else if("false" == result.flag){
+			$.messager.alert('信息','文件读取失败，'+result.msg,'info');
+		}
+		
+	});
+	
 });
