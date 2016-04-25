@@ -29,7 +29,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div data-options="region:'north'" style="height:50px">
 			<h2 align="center">Hadoop Ecosystem </h2>	
 		</div>
-		<div data-options="region:'south',split:true" style="height:50px;"></div>
+		<div data-options="region:'south',split:true,collapsed:true" style="height:50px;"></div>
 		<div data-options="region:'east',split:true" title="East"
 			style="width:180px;">
 			<ul class="easyui-tree" id="eastTree"
@@ -45,11 +45,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<div title="博客推荐系统" data-options="selected:true"
 					style="padding:10px;">
 					<div title="HDFS" style="padding:10px;">
-					<a onclick="update_project('博客推荐系统','json/tree_data1.json')" 
+					<a onclick="update_project('博客推荐系统：未完成','json/tree_data1.json')" 
 						class="easyui-linkbutton">博客推荐系统</a>
 				</div>
 				</div>
-				<div title="Title3" style="padding:10px">content3</div>
+				<div title="待续" style="padding:10px">待续</div>
 			</div>
 		</div>
 		<div id="centerTitleId"
