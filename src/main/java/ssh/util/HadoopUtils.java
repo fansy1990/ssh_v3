@@ -49,6 +49,9 @@ public class HadoopUtils {
 	}
 
 	private static void init() {
+		System.setProperty("user.name", "root");
+		 currentUser = System.getProperty("user.name");
+		 System.out.println("user.name:"+currentUser);
 		Properties props = new Properties();
 		InputStream in = null;
 		try {
