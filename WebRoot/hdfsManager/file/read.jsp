@@ -53,6 +53,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				class="easyui-linkbutton" data-options="iconCls:'icon-save'">读取</a>
 		</div>
 	</div>
+	<div id="retId" style="padding: 15px">
+	</div>
 	<script type="text/javascript" src="js/hdfsManager/file.js"></script>
 	<script type="text/javascript"
 		src="js/hdfsManager/hdfsManager_utils.js"></script>

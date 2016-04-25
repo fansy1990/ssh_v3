@@ -14,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 import ssh.model.HdfsResponseProperties;
 import ssh.util.HadoopUtils;
 import ssh.util.Utils;
@@ -163,5 +165,22 @@ public class HdfsService {
 			throw e;
 		}
 		return flag;
+	}
+
+	public String read(String fileName, String textSeq, int records) throws Exception {
+		String data = null;
+		try{
+			if("text".equals(textSeq)){
+				data = HadoopUtils.readText(fileName,records);
+			}else if("seq".equals(textSeq)){
+				data = HadoopUtils.readSeq(fileName,records);
+			}else{
+				log.info("数据读取参数设置错误,textSeq:{}",textSeq);
+			}
+		}catch(Exception exception){
+			log.info("数据读取异常:fileName:{},textSeq:{}",new Object[]{fileName,textSeq});
+			throw exception;
+		}
+		return data;
 	}
 }

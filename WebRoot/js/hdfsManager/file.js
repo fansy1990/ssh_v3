@@ -102,8 +102,11 @@ $(function(){
 		if("true" == result.flag){
 //			$.messager.alert('信息','文件删除成功!','info');
 			// 文件读取结果展示；
-			
+			$('#retId').show();
+			$('#retId').html("<hr>"+result.data+"<hr>");
 		}else if("false" == result.flag){
+//			$('#retId').html(result.data);
+			$('#retId').hide();
 			$.messager.alert('信息','文件读取失败，'+result.msg,'info');
 		}
 		

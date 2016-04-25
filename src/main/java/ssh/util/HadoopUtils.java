@@ -1,16 +1,30 @@
 package ssh.util;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.BooleanWritable;
+import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.io.IOUtils;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.SequenceFile;
+import org.apache.hadoop.io.SequenceFile.Reader;
+import org.apache.hadoop.io.ShortWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.Writable;
+import org.apache.hadoop.util.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -112,4 +126,89 @@ public class HadoopUtils {
 	}
 
 	private static String currentUser = System.getProperty("user.name");
+/**
+ * 读取文本文件
+ * @param fileName
+ * @param records
+ * @return
+ * @throws IllegalArgumentException
+ * @throws IOException
+ */
+	public static String readText(String fileName, int records) throws IllegalArgumentException, IOException {
+		FileSystem fs = getFs();
+		FSDataInputStream inStream = fs.open(new Path(fileName));
+		BufferedReader br=new BufferedReader(new InputStreamReader(inStream));
+		StringBuffer buffer = new StringBuffer();
+		try {
+		  String line;
+		  line=br.readLine();
+		  while (line != null&& records-->0){
+//		    System.out.println(line);
+			  buffer.append(line).append("<br>");
+		    // be sure to read the next line otherwise you'll get an infinite loop
+		    line = br.readLine();
+		  }
+		} finally {
+		  // you should close out the BufferedReader
+		  br.close();
+		  inStream.close();
+		}
+		return buffer.toString();
+	}
+/**
+ * 读取序列文件
+ * @param fileName
+ * @param records
+ * @return
+ * @throws IOException
+ */
+	public static String readSeq(String fileName, int records) throws IOException {
+		Configuration conf = getConf();
+		SequenceFile.Reader reader = null;
+		StringBuffer buffer = new StringBuffer();
+		try {
+			reader = new SequenceFile.Reader(conf, Reader.file(new Path(fileName)),
+					Reader.bufferSize(4096), Reader.start(0));
+			Writable dkey = (Writable) ReflectionUtils.newInstance(
+					reader.getKeyClass(), conf);
+			Writable dvalue = (Writable) ReflectionUtils.newInstance(
+					reader.getValueClass(), conf);
+			while (reader.next(dkey, dvalue)&&records-->0) {// 循环读取文件
+				buffer.append(getValue(dkey)).append("\t").append(getValue(dvalue)).append("<br>");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			IOUtils.closeStream(reader);
+		}
+		return buffer.toString();
+	}
+/**
+ * 获得writable 的实际值
+ * @param writable
+ * @return
+ */
+	private static String getValue(Writable writable) {
+		if(writable instanceof Text){
+			return writable.toString();
+		}
+		if(writable instanceof LongWritable){
+			return String.valueOf(((LongWritable)writable).get());
+		}
+		if(writable instanceof IntWritable){
+			return String.valueOf(((IntWritable)writable).get());
+		}
+		if(writable instanceof ShortWritable){
+			return String.valueOf(((ShortWritable)writable).get());
+		}
+		
+		if(writable instanceof DoubleWritable){
+			return String.valueOf(((DoubleWritable)writable).get());
+		}
+		if(writable instanceof BooleanWritable){
+			return String.valueOf(((BooleanWritable)writable).get());
+		}
+		return null;
+	}
 }

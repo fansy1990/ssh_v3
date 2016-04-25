@@ -69,9 +69,15 @@ public class HdfsManagerAction extends ActionSupport implements
 				.listFolder(hdfsFile.getFolder());
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		jsonMap.put("total", files.size());
-		jsonMap.put("rows", files);
+		jsonMap.put("rows", getProperFiles(files,page,rows));
 		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
 		return;
+	}
+
+	private List<HdfsResponseProperties> getProperFiles(List<HdfsResponseProperties> files,
+			int page, int rows) {
+
+		return files.subList((page-1)*rows, page*rows>files.size()?files.size():page*rows);
 	}
 
 	/**
@@ -178,7 +184,7 @@ public class HdfsManagerAction extends ActionSupport implements
 				hdfsFile.getOwner(), hdfsFile.getOwnerOp());
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		jsonMap.put("total", files.size());
-		jsonMap.put("rows", files);
+		jsonMap.put("rows", getProperFiles(files, page, rows));
 		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
 		return;
 	}
@@ -299,7 +305,37 @@ public class HdfsManagerAction extends ActionSupport implements
 	 * 读取HDFS文件 ；序列化和文本 读取记录数
 	 */
 	public void read() {
+		Map<String, Object> map = new HashMap<>();
+		boolean dir = false;
+		try {
+			dir = this.hdfsService.isDir(this.hdfsFile.getFileName());
+		} catch (Exception e) {
+			map.put("msg", "请联系管理员!");
+		}
+		if (dir) {
+			map.put("flag", "false");
+			if (map.get("msg") == null)
+				map.put("msg", "不能读取目录!");
+			Utils.write2PrintWriter(JSON.toJSONString(map));
+			return;
+		}
+		String data = null;
 
+		try {
+			data = this.hdfsService.read(hdfsFile.getFileName(),hdfsFile.getTextSeq(),hdfsFile.getRecords());
+		} catch (Exception e) {
+			map.put("msg", "请检查文件！");
+			data = null;
+		}
+
+		if (data!=null) {// 上传成功
+			map.put("flag", "true");
+			map.put("data", data);
+		} else {// 失败
+			map.put("flag", "false");
+		}
+		Utils.write2PrintWriter(JSON.toJSONString(map));
+		return;
 	}
 
 	public HdfsService getHdfsService() {

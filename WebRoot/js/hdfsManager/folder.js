@@ -61,7 +61,7 @@ $(function(){
 				},{
 					field : 'owner',
 					title : '所有者',
-					width : '50'
+					width : '100'
 				},{
 					field : 'group',
 					title : '组名',
@@ -135,7 +135,7 @@ $(function(){
 				},{
 					field : 'owner',
 					title : '所有者',
-					width : '50'
+					width : '100'
 				},{
 					field : 'group',
 					title : '组名',
