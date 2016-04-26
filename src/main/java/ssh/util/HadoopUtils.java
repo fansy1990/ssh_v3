@@ -49,9 +49,10 @@ public class HadoopUtils {
 	}
 
 	private static void init() {
-		System.setProperty("user.name", "root");
-		 currentUser = System.getProperty("user.name");
-		 System.out.println("user.name:"+currentUser);
+		System.setProperty("HADOOP_USER_NAME", "root");
+		// System.setProperty("HADOOP_PROXY_NAME", "root");
+		currentUser = System.getProperty("HADOOP_USER_USER");
+		System.out.println("user.name:" + currentUser);
 		Properties props = new Properties();
 		InputStream in = null;
 		try {
@@ -129,55 +130,63 @@ public class HadoopUtils {
 	}
 
 	private static String currentUser = System.getProperty("user.name");
-/**
- * 读取文本文件
- * @param fileName
- * @param records
- * @return
- * @throws IllegalArgumentException
- * @throws IOException
- */
-	public static String readText(String fileName, int records) throws IllegalArgumentException, IOException {
+
+	/**
+	 * 读取文本文件
+	 * 
+	 * @param fileName
+	 * @param records
+	 * @return
+	 * @throws IllegalArgumentException
+	 * @throws IOException
+	 */
+	public static String readText(String fileName, int records)
+			throws IllegalArgumentException, IOException {
 		FileSystem fs = getFs();
 		FSDataInputStream inStream = fs.open(new Path(fileName));
-		BufferedReader br=new BufferedReader(new InputStreamReader(inStream));
+		BufferedReader br = new BufferedReader(new InputStreamReader(inStream));
 		StringBuffer buffer = new StringBuffer();
 		try {
-		  String line;
-		  line=br.readLine();
-		  while (line != null&& records-->0){
-//		    System.out.println(line);
-			  buffer.append(line).append("<br>");
-		    // be sure to read the next line otherwise you'll get an infinite loop
-		    line = br.readLine();
-		  }
+			String line;
+			line = br.readLine();
+			while (line != null && records-- > 0) {
+				// System.out.println(line);
+				buffer.append(line).append("<br>");
+				// be sure to read the next line otherwise you'll get an
+				// infinite loop
+				line = br.readLine();
+			}
 		} finally {
-		  // you should close out the BufferedReader
-		  br.close();
-		  inStream.close();
+			// you should close out the BufferedReader
+			br.close();
+			inStream.close();
 		}
 		return buffer.toString();
 	}
-/**
- * 读取序列文件
- * @param fileName
- * @param records
- * @return
- * @throws IOException
- */
-	public static String readSeq(String fileName, int records) throws IOException {
+
+	/**
+	 * 读取序列文件
+	 * 
+	 * @param fileName
+	 * @param records
+	 * @return
+	 * @throws IOException
+	 */
+	public static String readSeq(String fileName, int records)
+			throws IOException {
 		Configuration conf = getConf();
 		SequenceFile.Reader reader = null;
 		StringBuffer buffer = new StringBuffer();
 		try {
-			reader = new SequenceFile.Reader(conf, Reader.file(new Path(fileName)),
-					Reader.bufferSize(4096), Reader.start(0));
+			reader = new SequenceFile.Reader(conf, Reader.file(new Path(
+					fileName)), Reader.bufferSize(4096), Reader.start(0));
 			Writable dkey = (Writable) ReflectionUtils.newInstance(
 					reader.getKeyClass(), conf);
 			Writable dvalue = (Writable) ReflectionUtils.newInstance(
 					reader.getValueClass(), conf);
-			while (reader.next(dkey, dvalue)&&records-->0) {// 循环读取文件
-				buffer.append(getValue(dkey)).append("\t").append(getValue(dvalue)).append("<br>");
+			while (reader.next(dkey, dvalue) && records-- > 0) {// 循环读取文件
+				buffer.append(getValue(dkey)).append("\t")
+						.append(getValue(dvalue)).append("<br>");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -187,30 +196,32 @@ public class HadoopUtils {
 		}
 		return buffer.toString();
 	}
-/**
- * 获得writable 的实际值
- * @param writable
- * @return
- */
+
+	/**
+	 * 获得writable 的实际值
+	 * 
+	 * @param writable
+	 * @return
+	 */
 	private static String getValue(Writable writable) {
-		if(writable instanceof Text){
+		if (writable instanceof Text) {
 			return writable.toString();
 		}
-		if(writable instanceof LongWritable){
-			return String.valueOf(((LongWritable)writable).get());
+		if (writable instanceof LongWritable) {
+			return String.valueOf(((LongWritable) writable).get());
 		}
-		if(writable instanceof IntWritable){
-			return String.valueOf(((IntWritable)writable).get());
+		if (writable instanceof IntWritable) {
+			return String.valueOf(((IntWritable) writable).get());
 		}
-		if(writable instanceof ShortWritable){
-			return String.valueOf(((ShortWritable)writable).get());
+		if (writable instanceof ShortWritable) {
+			return String.valueOf(((ShortWritable) writable).get());
 		}
-		
-		if(writable instanceof DoubleWritable){
-			return String.valueOf(((DoubleWritable)writable).get());
+
+		if (writable instanceof DoubleWritable) {
+			return String.valueOf(((DoubleWritable) writable).get());
 		}
-		if(writable instanceof BooleanWritable){
-			return String.valueOf(((BooleanWritable)writable).get());
+		if (writable instanceof BooleanWritable) {
+			return String.valueOf(((BooleanWritable) writable).get());
 		}
 		return null;
 	}
