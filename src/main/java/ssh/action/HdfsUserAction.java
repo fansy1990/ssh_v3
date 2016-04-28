@@ -1,9 +1,15 @@
 package ssh.action;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.ServletResponse;
+
+import org.apache.struts2.ServletActionContext;
 
 import ssh.model.HdfsUser;
 import ssh.service.HdfsUserService;
@@ -37,8 +43,10 @@ public class HdfsUserAction extends ActionSupport implements
 
 	/**
 	 * 登录
+	 * @throws IOException 
+	 * @throws ServletException 
 	 */
-	public void login() {
+	public void login() throws ServletException, IOException {
 		Map<String, Object> map = new HashMap<>();
 		HdfsUser hUser = hdfsUserService.getByEmail(hdfsUser.getEmail());
 		if (hUser == null) {
@@ -50,10 +58,15 @@ public class HdfsUserAction extends ActionSupport implements
 		if (!hdfsUser.getPassword().equals(hUser.getPassword())) {
 			map.put("flag", "false");
 			map.put("msg", "登录失败,用户密码不正确!");
+			Utils.write2PrintWriter(JSON.toJSONString(map));
+			return;
 
 		} else {
 			map.put("flag", "true");
 			map.put("msg", "登录成功!");
+			ActionContext context = ActionContext.getContext();
+			Map session = context.getSession();
+			session.put("user", hUser.getName());
 		}
 		Utils.write2PrintWriter(JSON.toJSONString(map));
 		return;

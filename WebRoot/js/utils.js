@@ -5,9 +5,14 @@ $(function(){
 	    url:'user/hdfsUser_login.action',      
 	    success:function(data){    
 	    	var jsonData = JSON.parse(data);
-	    	$.messager.alert('提示',jsonData.msg,'info');
 	    	if("true" == jsonData.flag){
 	    		$('#login_window').window('close');
+//	    		window.self.location = "main.jsp";
+	    		 window.location.href="main.jsp";
+//	    		 window.navigate("main.jsp");
+//	    		 window.location.replace("main.jsp");
+	    	}else{
+	    		$.messager.alert('提示',jsonData.msg,'info');
 	    	}
 	    }    
 	});    

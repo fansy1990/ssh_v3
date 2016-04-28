@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib uri="/struts-tags" prefix="s"%>	
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -26,11 +27,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </head>
 
 <body class="easyui-layout" style="width:100%;height:100%;">
-	<%@ include file="login.jsp" %>
 
 	<!-- 主体界面 -->
-	<div data-options="region:'north'" style="height:50px">
+	<div data-options="region:'north'" style="height:65px;padding-top: 5px">
 		<h2 align="center">Hadoop Ecosystem</h2>
+		<div style="text-align: right;padding-right: 180px;font-size: 13px;">
+			用户：<s:property value="#session.user"/> 
+			<s:if test='#session.user==null'>
+    			  <script type="text/javascript">
+    			  window.location.href="login.jsp";
+    			  </script>
+			</s:if>
+		</div>
 	</div>
 	<div data-options="region:'south',split:true,collapsed:true"
 		style="height:50px;"></div>
@@ -62,7 +70,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			data-options="fit:true,border:false,plain:true">
 			<div title="HE简介" data-options="href:'about.jsp'"
 				style="padding:10px"></div>
+				
 		</div>
+	</div>
 	</div>
 </body>
 </html>
