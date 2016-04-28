@@ -27,36 +27,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <body class="easyui-layout" style="width:100%;height:100%;">
 	<%@ include file="login.jsp" %>
-	<!-- 登录界面 -->
-	<!-- <div id="win" class="easyui-window" title="登录"
-		style="width:300px;height:200px;text-align: center;padding: 15px"
-		data-options="modal:true,closable:false,collapsible:false,minimizable:false,maximizable:false,draggable:false,resizable:false">
-
-		<form id="login_ff" method="post">
-			<table>
-			<tr>
-			<div>
-				<td><label for="email">邮箱:</label></td><td> <input class="easyui-validatebox"
-					type="text" name="email" data-options="validType:'email',required:true" /></td>
-			</div>
-			</tr>
-			<tr>
-			<div>
-				<td><label for="password">密码:</label> </td> <td><input class="easyui-validatebox"
-					type="password" name="password" data-options="required:true" /></td>
-			</div>
-			</tr>
-			<tr>
-				<td>
-				<a id="login_btn" href="#" class="easyui-linkbutton" data-options="">登录</a> 
-				</td>
-				
-				<td></td>
-			</tr>
-			</table>
-		</form>
-
-	</div> -->
 
 	<!-- 主体界面 -->
 	<div data-options="region:'north'" style="height:50px">

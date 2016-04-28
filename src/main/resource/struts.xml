@@ -35,4 +35,9 @@
             <interceptor-ref name="defaultStack"></interceptor-ref> -->
 		</action>
 	</package>
+	
+	<package name="user" namespace="/user" extends="struts-default">
+		<action name="hdfsUser_*" method="{1}" class="ssh.action.HdfsUserAction"></action>
+	</package>
+	
 </struts>

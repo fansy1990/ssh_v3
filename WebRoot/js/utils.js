@@ -1,4 +1,19 @@
 
+$(function(){
+	// 绑定登录form表单
+	$('#login_ff').form({    
+	    url:'user/hdfsUser_login.action',      
+	    success:function(data){    
+	    	var jsonData = JSON.parse(data);
+	    	$.messager.alert('提示',jsonData.msg,'info');
+	    	if("true" == jsonData.flag){
+	    		$('#login_window').window('close');
+	    	}
+	    }    
+	});    
+});
+
+
 /**
  * 更新项目
  * @param title_
@@ -14,6 +29,18 @@ function update_project(title_,data){
 			
 	
 }
+
+
+// 登录
+function login(){
+	$('#login_ff').submit(); 
+}
+
+// 注册
+function register(){
+	
+}
+
 //弹出progressBar
 //
 function popupProgressbar(titleStr,msgStr,intervalStr){
