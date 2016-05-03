@@ -65,7 +65,7 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 	<!-- 配置事务切面 -->
 	<aop:config>
 		<aop:pointcut id="defaultServiceOperation"
-			expression="execution(public * demo.service.*Service.*(..))" />
+			expression="execution(public * *.service.*Service.*(..))" />
 
 		<aop:advisor pointcut-ref="defaultServiceOperation"
 			advice-ref="defaultTxAdvice" />
@@ -74,7 +74,9 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 	<tx:advice id="defaultTxAdvice" transaction-manager="txManager">
 		<tx:attributes>
 			<!-- 先暂定所有方法都加事务 -->
-			<tx:method name="*" propagation="REQUIRED" />
+			
+			<tx:method name="get*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="update*" read-only="false" propagation="REQUIRED"/>
 		</tx:attributes>
 	</tx:advice>
 

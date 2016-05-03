@@ -111,9 +111,9 @@ public class Utils {
 	 */
 	public static boolean canLogin(String hdfsUserName,String hdfsPassword){
 		// hdfsPassword 解密
-		
+		//TODO 未完成
 		// ssh远程检查用户名和密码
-		return false;
+		return true;
 		
 	}
 }

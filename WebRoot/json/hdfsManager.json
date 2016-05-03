@@ -79,6 +79,13 @@
 		}]
 	},{
 		"id":14,
+		"text":"权限管理",
+		"attributes":{
+			"folder":"0",
+			"url":"hdfsManager/auth.jsp"
+		}
+	},{
+		"id":15,
 		"text":"简介",
 		"attributes":{
 			"folder":"0",

@@ -46,3 +46,41 @@ function checkExistAndAuth(folder_,auth_){
 	
 	return flag;
 }
+
+
+$(function(){
+	// 权限验证
+	$('#authCheckId').bind('click', function(){
+		if(checkTextBoxEmpty('hdfsUser','用户不能为空，请重新输入!')) return ;
+		if(checkTextBoxEmpty('hdfsPassword','密码不能为空，请重新输入!')) return ;
+	      
+		var hUser=$('#hdfsUser').val();
+		var hPassword=$('#hdfsPassword').val();
+		// ajax 异步提交任务
+		var result = callByAJax('user/hdfsUser_authCheck.action',{hdfsUserName:hUser,hdfsPassword:hPassword});
+		if("true" == result.flag){
+			$.messager.alert('信息','HDFS用户验证成功!','info');
+		}else if("false" == result.flag){
+			$.messager.alert('信息','HDFS用户验证失败，'+result.msg,'info');
+		}
+		
+	});
+	
+	// 权限更新
+	$('#authUpdateId').bind('click', function(){
+		if(checkTextBoxEmpty('hdfsUser','用户不能为空，请重新输入!')) return ;
+		if(checkTextBoxEmpty('hdfsPassword','密码不能为空，请重新输入!')) return ;
+	      
+		var hUser=$('#hdfsUser').val();
+		var hPassword=$('#hdfsPassword').val();
+		// ajax 异步提交任务
+		var result = callByAJax('user/hdfsUser_authUpdate.action',{hdfsUserName:hUser,hdfsPassword:hPassword});
+		if("true" == result.flag){
+			$.messager.alert('信息','HDFS用户更新成功!','info');
+		}else if("false" == result.flag){
+			$.messager.alert('信息','HDFS用户更新失败，'+result.msg,'info');
+		}
+		
+	});
+
+});

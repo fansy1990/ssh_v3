@@ -27,8 +27,12 @@ public class HdfsUserService  {
 		HdfsUser hdfsUser = hdfsUserDao.loadByEmail(email);
 		hdfsUser.setHdfsUserName(hdfsUserName);
 		hdfsUser.setHdfsPassword(hdfsPassword);
-		hdfsUserDao.update(hdfsUser);
-		
+		try{
+			hdfsUserDao.update(hdfsUser);
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
 		return true;
 	}
 	

@@ -49,9 +49,10 @@ public class HadoopUtils {
 	}
 
 	private static void init() {
+		//TODO 从数据库获取，而非设置
 		System.setProperty("HADOOP_USER_NAME", "root");
 		// System.setProperty("HADOOP_PROXY_NAME", "root");
-		currentUser = System.getProperty("HADOOP_USER_USER");
+		currentUser = System.getProperty("HADOOP_USER_NAME");
 		System.out.println("user.name:" + currentUser);
 		Properties props = new Properties();
 		InputStream in = null;
