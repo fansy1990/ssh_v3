@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ssh.model.HdfsResponseProperties;
+import ch.ethz.ssh2.Connection;
 
 public class Utils {
 	private static final Logger log = LoggerFactory.getLogger(Utils.class);
@@ -116,7 +117,21 @@ public class Utils {
 		// TODO 未完成
 		// ssh远程检查用户名和密码
 
-		return true;
+		String hostname = HadoopUtils.getPropertyValue("hdfs.ssh.client.host");
+		int port = Integer.parseInt(HadoopUtils
+				.getPropertyValue("hdfs.ssh.client.port"));
+		try {
+			Connection conn = new Connection(hostname, port);
+			conn.connect();
+
+			boolean isAuthenticated = conn.authenticateWithPassword(
+					hdfsUserName, hdfsPassword);
+			return isAuthenticated;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 
 	}
+
 }

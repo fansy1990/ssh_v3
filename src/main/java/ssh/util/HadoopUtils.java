@@ -36,6 +36,18 @@ public class HadoopUtils {
 	public static final String hadoop_properties = "hadoop.properties";
 	private static FileSystem fs;
 
+	/**
+	 * 获取hadoop.properties中的值
+	 * 
+	 * @param property
+	 * @return
+	 */
+	public static String getPropertyValue(String property) {
+		if (confMap == null)
+			return null;
+		return confMap.get(property);
+	}
+
 	public void initFs() {
 		try {
 
