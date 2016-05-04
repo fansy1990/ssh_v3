@@ -30,7 +30,7 @@
 			请输入要删除的文件路径： <input id="dg_hdfsManager_file_delete"
 				class="easyui-textbox" value="/"
 				data-options="required:true,iconCls:'icon-folder_delete'"
-				style="width:300px">  <a id="dg_hdfsManager_file_delete_btn" href="#"
+				style="width:300px">  <a id="dg_hdfsManager_file_delete_btn" 
 				class="easyui-linkbutton" data-options="iconCls:'icon-remove'">确定</a>
 		</div>
 	</div>

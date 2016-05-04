@@ -34,7 +34,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				class="easyui-textbox" value="d:/"
 				data-options="required:true"
 				style="width:300px"> 	
-				 <a id="dg_hdfsManager_file_download_btn" href="#"
+				 <a id="dg_hdfsManager_file_download_btn" 
 				class="easyui-linkbutton" data-options="iconCls:'icon-save'">下载</a>
 		</div>
 	</div>

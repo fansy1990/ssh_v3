@@ -5,14 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.ServletResponse;
-
-import org.apache.struts2.ServletActionContext;
 
 import ssh.model.HdfsUser;
 import ssh.service.HdfsUserService;
+import ssh.util.HadoopUtils;
 import ssh.util.Utils;
 
 import com.alibaba.fastjson.JSON;
@@ -31,6 +28,7 @@ public class HdfsUserAction extends ActionSupport implements
 		ModelDriven<HdfsUser> {
 	HdfsUser hdfsUser = new HdfsUser();
 	private HdfsUserService hdfsUserService;
+	
 	/**
 	 * 
 	 */
@@ -68,8 +66,7 @@ public class HdfsUserAction extends ActionSupport implements
 			Map session = context.getSession();
 			session.put("user", hUser.getName());
 			session.put("email", hUser.getEmail());// 用于更新
-			session.put("hUser", hUser.getHdfsUserName());// 用于更新
-			
+			session.put("hUser", HadoopUtils.getHadoopUserName());// 用于更新
 		}
 		Utils.write2PrintWriter(JSON.toJSONString(map));
 		return;
@@ -82,8 +79,7 @@ public class HdfsUserAction extends ActionSupport implements
 	public void authCheck(){
 		Map<String, Object> map = new HashMap<>();
 		// 进行ssh权限验证
-		boolean hasHdfsLoginAuth = Utils.canLogin(hdfsUser.getHdfsUserName(),
-				hdfsUser.getHdfsPassword());
+		boolean hasHdfsLoginAuth = Utils.canLogin(hdfsUser.getHadoopUserName(),hdfsUser.getHadoopPassword());
 		ActionContext context = ActionContext.getContext();
 		Map session = context.getSession();
 		if (!hasHdfsLoginAuth) {
@@ -116,18 +112,13 @@ public class HdfsUserAction extends ActionSupport implements
 			
 		}
 		String email = (String) session.get("email");
-		// 更新数据库
-		boolean flag = hdfsUserService.updateByHdfsUserName(email,
-				hdfsUser.getHdfsUserName(), hdfsUser.getHdfsPassword());
-		if (!flag) {
-			map.put("flag", "false");
-			map.put("msg", "数据库更新失败！");
-
-		} else {
-			map.put("flag", "true");
-			map.put("msg", "更新成功!");
-			session.put("hUser", hdfsUser.getHdfsUserName());// 用于更新
-		}
+		// 更新常量值
+		HadoopUtils.updateHadoopUserNamePassword(hdfsUser.getHadoopUserName(), hdfsUser.getHadoopPassword());
+	
+		map.put("flag", "true");
+		map.put("msg", "更新成功!");
+		session.put("hUser", hdfsUser.getHadoopUserName());// 用于更新
+		
 		Utils.write2PrintWriter(JSON.toJSONString(map));
 		return;
 

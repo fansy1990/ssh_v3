@@ -74,7 +74,7 @@ $(function(){
 		var hUser=$('#hdfsUser').val();
 		var hPassword=$('#hdfsPassword').val();
 		// ajax 异步提交任务
-		var result = callByAJax('user/hdfsUser_authUpdate.action',{hdfsUserName:hUser,hdfsPassword:hPassword});
+		var result = callByAJax('user/hdfsUser_authUpdate.action',{hadoopUserName:hUser,hadoopPassword:hPassword});
 		if("true" == result.flag){
 			$.messager.alert('信息','HDFS用户更新成功!','info');
 		}else if("false" == result.flag){

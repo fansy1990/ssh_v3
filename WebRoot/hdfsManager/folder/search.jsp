@@ -48,7 +48,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<option value="equals">Equals</option>
 					<option value="noequal">NoEqual</option>
 				</select>
-				<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-filter" onclick="search_data()">确定</a>
+				<a  class="easyui-linkbutton" iconCls="icon-filter" onclick="search_data()">确定</a>
 				
 			</div>
 		</div>

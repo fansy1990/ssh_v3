@@ -6,6 +6,7 @@ package ssh.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 @Entity
 public class HdfsUser {
@@ -13,10 +14,13 @@ public class HdfsUser {
 	private String name;
 	private String email;
 	private String password; // 加密存储 md5
+	// 要设计成单例 才行
+//	private String hdfsUserName; // 权限模块
+//	private String hdfsPassword;// 权限模块，加密存储md5
 	
-	private String hdfsUserName; // 权限模块
-	private String hdfsPassword;// 权限模块，加密存储md5
-
+	private String hadoopUserName;
+	private String hadoopPassword; 
+	private int authority; // 权限
 	@Id
 	@GeneratedValue
 	public int getId() {
@@ -50,21 +54,29 @@ public class HdfsUser {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
-	public String getHdfsUserName() {
-		return hdfsUserName;
+	@Transient
+	public String getHadoopUserName() {
+		return hadoopUserName;
 	}
 
-	public void setHdfsUserName(String hdfsUserName) {
-		this.hdfsUserName = hdfsUserName;
+	public void setHadoopUserName(String hadoopUserName) {
+		this.hadoopUserName = hadoopUserName;
+	}
+	@Transient
+	public String getHadoopPassword() {
+		return hadoopPassword;
 	}
 
-	public String getHdfsPassword() {
-		return hdfsPassword;
+	public void setHadoopPassword(String hadoopPassword) {
+		this.hadoopPassword = hadoopPassword;
 	}
 
-	public void setHdfsPassword(String hdfsPassword) {
-		this.hdfsPassword = hdfsPassword;
+	public int getAuthority() {
+		return authority;
+	}
+
+	public void setAuthority(int authority) {
+		this.authority = authority;
 	}
 
 }

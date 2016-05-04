@@ -49,7 +49,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<option value="text" selected="selected">文本</option>
 				</select>
 				<br>
-				 <a id="dg_hdfsManager_file_read_btn" href="#"
+				 <a id="dg_hdfsManager_file_read_btn" 
 				class="easyui-linkbutton" data-options="iconCls:'icon-save'">读取</a>
 		</div>
 	</div>

@@ -33,7 +33,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<option value="true" >递归</option>
 				<option value="false" selected="selected">非递归</option>
 				
-			</select> <a id="dg_hdfsManager_folder_delete_btn" href="#"
+			</select> <a id="dg_hdfsManager_folder_delete_btn" 
 				class="easyui-linkbutton" data-options="iconCls:'icon-remove'">确定</a>
 		</div>
 	</div>

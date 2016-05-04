@@ -22,19 +22,6 @@ public class HdfsUserService  {
 	public void setHdfsUserDao(HdfsUserDao hdfsUserDao) {
 		this.hdfsUserDao = hdfsUserDao;
 	}
-
-	public boolean updateByHdfsUserName(String email,String hdfsUserName,String hdfsPassword){
-		HdfsUser hdfsUser = hdfsUserDao.loadByEmail(email);
-		hdfsUser.setHdfsUserName(hdfsUserName);
-		hdfsUser.setHdfsPassword(hdfsPassword);
-		try{
-			hdfsUserDao.update(hdfsUser);
-		}catch(Exception e){
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
 	
 	public HdfsUser getByEmail(String email){
 		

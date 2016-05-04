@@ -36,6 +36,27 @@ public class HadoopUtils {
 	public static final String hadoop_properties = "hadoop.properties";
 	private static FileSystem fs;
 
+	private static String hadoopUserName = "root";// 初始值，root字符串
+	private static String hadoopPassword = "null";
+
+	/**
+	 * 更新 绑定的hadoop用户密码
+	 * @param username
+	 * @param password
+	 */
+	public static void updateHadoopUserNamePassword(String username,String password){
+		if(username!=null){
+			hadoopUserName= username;
+		}else{
+			hadoopUserName="null";
+		}
+		if(password!=null){
+			setHadoopPassword(password);
+		}else{
+			setHadoopPassword("null") ;
+		}
+		initFs();// 重新初始化
+	}
 	/**
 	 * 获取hadoop.properties中的值
 	 * 
@@ -48,9 +69,12 @@ public class HadoopUtils {
 		return confMap.get(property);
 	}
 
-	public void initFs() {
+	/**
+	 * 在更新 绑定的HDFS用户时，需要重新初始化FS
+	 */
+	public static void initFs() {
 		try {
-
+			conf = null;
 			fs = FileSystem.get(getConf());
 			log.info("Hadoop文件系统FS被初始化！");
 		} catch (IOException e) {
@@ -61,11 +85,7 @@ public class HadoopUtils {
 	}
 
 	private static void init() {
-		// 初始化，应该设置为null，在每次更新的时候，才会更新，不然全部是null用户
-		System.setProperty("HADOOP_USER_NAME", "null");
-		// System.setProperty("HADOOP_PROXY_NAME", "root");
-		currentUser = System.getProperty("HADOOP_USER_NAME");
-		log.info("user.name:" + currentUser);
+		System.setProperty("HADOOP_USER_NAME", getHadoopUserName());
 		Properties props = new Properties();
 		InputStream in = null;
 		try {
@@ -91,6 +111,10 @@ public class HadoopUtils {
 			}
 
 		}
+	}
+	
+	public static String getHadoopUserName() {
+		return hadoopUserName ;
 	}
 
 	public static Configuration getConf() {
@@ -130,7 +154,7 @@ public class HadoopUtils {
 	public static boolean checkHdfsAuth(String folder, String permission)
 			throws IllegalArgumentException, IOException {
 		FileStatus fileStatus = getFs().getFileStatus(new Path(folder));
-		if (fileStatus.getOwner().equals(currentUser))
+		if (fileStatus.getOwner().equals(getHadoopUserName()))
 			return true;
 		log.info("userAction:{},groupAction:{},otherAction:{}", new Object[] {
 				fileStatus.getPermission().getUserAction().SYMBOL,
@@ -141,8 +165,6 @@ public class HadoopUtils {
 			return true;
 		return false;
 	}
-
-	private static String currentUser = System.getProperty("user.name");
 
 	/**
 	 * 读取文本文件
@@ -237,5 +259,14 @@ public class HadoopUtils {
 			return String.valueOf(((BooleanWritable) writable).get());
 		}
 		return null;
+	}
+	public static String getHadoopPassword() {
+		return hadoopPassword;
+	}
+	public static void setHadoopPassword(String hadoopPassword) {
+		HadoopUtils.hadoopPassword = hadoopPassword;
+	}
+	public static void setHadoopUserName(String hadoopUserName) {
+		HadoopUtils.hadoopUserName = hadoopUserName;
 	}
 }
