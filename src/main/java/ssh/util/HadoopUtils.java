@@ -49,11 +49,11 @@ public class HadoopUtils {
 	}
 
 	private static void init() {
-		//TODO 从数据库获取，而非设置
-		System.setProperty("HADOOP_USER_NAME", "root");
+		// 初始化，应该设置为null，在每次更新的时候，才会更新，不然全部是null用户
+		System.setProperty("HADOOP_USER_NAME", "null");
 		// System.setProperty("HADOOP_PROXY_NAME", "root");
 		currentUser = System.getProperty("HADOOP_USER_NAME");
-		System.out.println("user.name:" + currentUser);
+		log.info("user.name:" + currentUser);
 		Properties props = new Properties();
 		InputStream in = null;
 		try {
