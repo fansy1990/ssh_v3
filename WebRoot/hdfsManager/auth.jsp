@@ -41,20 +41,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</s:else>
 		</div>
 	</div>
-	
-	<div id="p" style="width:400px;"></div> 
 
 	<div style="padding:10px 60px 20px 60px; ">
+	<form id="auth_ff" class="easyui-form" method="post"
+				data-options="novalidate:true" >
 		<table style="font-size: 12px;text-align: left;">
 				<tr>
 					<td>HDFS用户名：</td>
-					<td><input class="easyui-textbox" type="text" id="hdfsUser"
+					<td><input class="easyui-textbox" type="text" id="hdfsUser" name="hadoopUserName"
 							style="height:30px;width: 180px;" 
 							data-options="required:true" /></td>
 				</tr>
 				<tr>
 					<td>HDFS密码：</td>
-					<td><input class="easyui-textbox" type="password" id="hdfsPassword"
+					<td><input class="easyui-textbox" type="password" id="hdfsPassword" name="hadoopPassword"
 							style="height:30px;width: 180px;" 
 							data-options="required:true"></input></td>
 				</tr>
@@ -70,6 +70,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</td>
 				</tr>
 		</table>
+		</form>
 	</div>
 	<script type="text/javascript"
 		src="js/hdfsManager/hdfsManager_utils.js"></script>

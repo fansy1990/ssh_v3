@@ -49,24 +49,29 @@ function checkExistAndAuth(folder_,auth_){
 
 
 $(function(){
+	//权限验证
+	$('#auth_ff').form({    
+	    url:'user/hdfsUser_authCheck.action',    
+	    onSubmit: function(){    
+	    	if(checkTextBoxEmpty('hdfsUser','用户不能为空，请重新输入!')) return false;
+			if(checkTextBoxEmpty('hdfsPassword','密码不能为空，请重新输入!')) return false;
+	        popupProgressbar('权限验证','权限验证中...',1000);
+	        return true;
+	         
+	    },    
+	    success:function(data){    
+	    	closeProgressbar();
+	    	var result = JSON.parse(data);
+	    	if("true" == result.flag){
+				$.messager.alert('信息','HDFS用户验证成功!','info');
+			}else if("false" == result.flag){
+				$.messager.alert('信息','HDFS用户验证失败，'+result.msg,'info');
+			}
+	    }    
+	});    
 	// 权限验证
 	$('#authCheckId').bind('click', function(){
-		if(checkTextBoxEmpty('hdfsUser','用户不能为空，请重新输入!')) return ;
-		if(checkTextBoxEmpty('hdfsPassword','密码不能为空，请重新输入!')) return ;
-	      
-		var hUser=$('#hdfsUser').val();
-		var hPassword=$('#hdfsPassword').val();
-		// ajax 异步提交任务
-		$.messager.progress();
-		var result = callByAJax('user/hdfsUser_authCheck.action',{hadoopUserName:hUser,hadoopPassword:hPassword});
-		$.messager.progress('close');
-
-		if("true" == result.flag){
-			$.messager.alert('信息','HDFS用户验证成功!','info');
-		}else if("false" == result.flag){
-			$.messager.alert('信息','HDFS用户验证失败，'+result.msg,'info');
-		}
-		
+		$('#auth_ff').submit(); 
 	});
 	
 	// 权限更新
