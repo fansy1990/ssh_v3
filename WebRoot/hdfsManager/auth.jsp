@@ -42,7 +42,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</div>
 	</div>
 	
-	
+	<div id="p" style="width:400px;"></div> 
+
 	<div style="padding:10px 60px 20px 60px; ">
 		<table style="font-size: 12px;text-align: left;">
 				<tr>

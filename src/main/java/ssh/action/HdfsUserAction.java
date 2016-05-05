@@ -29,6 +29,9 @@ public class HdfsUserAction extends ActionSupport implements
 	HdfsUser hdfsUser = new HdfsUser();
 	private HdfsUserService hdfsUserService;
 	
+	private String hadoopUserName;
+	private String hadoopPassword; 
+	
 	/**
 	 * 
 	 */
@@ -79,7 +82,7 @@ public class HdfsUserAction extends ActionSupport implements
 	public void authCheck(){
 		Map<String, Object> map = new HashMap<>();
 		// 进行ssh权限验证
-		boolean hasHdfsLoginAuth = Utils.canLogin(hdfsUser.getHadoopUserName(),hdfsUser.getHadoopPassword());
+		boolean hasHdfsLoginAuth = Utils.canLogin(hadoopUserName,hadoopPassword);
 		ActionContext context = ActionContext.getContext();
 		Map session = context.getSession();
 		if (!hasHdfsLoginAuth) {
@@ -113,11 +116,11 @@ public class HdfsUserAction extends ActionSupport implements
 		}
 		String email = (String) session.get("email");
 		// 更新常量值
-		HadoopUtils.updateHadoopUserNamePassword(hdfsUser.getHadoopUserName(), hdfsUser.getHadoopPassword());
+		HadoopUtils.updateHadoopUserNamePassword(hadoopUserName, hadoopPassword);
 	
 		map.put("flag", "true");
 		map.put("msg", "更新成功!");
-		session.put("hUser", hdfsUser.getHadoopUserName());// 用于更新
+		session.put("hUser", hadoopUserName);// 用于更新
 		
 		Utils.write2PrintWriter(JSON.toJSONString(map));
 		return;
@@ -131,6 +134,22 @@ public class HdfsUserAction extends ActionSupport implements
 	@Resource
 	public void setHdfsUserService(HdfsUserService hdfsUserService) {
 		this.hdfsUserService = hdfsUserService;
+	}
+
+	public String getHadoopUserName() {
+		return hadoopUserName;
+	}
+
+	public void setHadoopUserName(String hadoopUserName) {
+		this.hadoopUserName = hadoopUserName;
+	}
+
+	public String getHadoopPassword() {
+		return hadoopPassword;
+	}
+
+	public void setHadoopPassword(String hadoopPassword) {
+		this.hadoopPassword = hadoopPassword;
 	}
 
 }

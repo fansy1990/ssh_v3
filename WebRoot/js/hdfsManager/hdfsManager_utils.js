@@ -57,7 +57,10 @@ $(function(){
 		var hUser=$('#hdfsUser').val();
 		var hPassword=$('#hdfsPassword').val();
 		// ajax 异步提交任务
-		var result = callByAJax('user/hdfsUser_authCheck.action',{hdfsUserName:hUser,hdfsPassword:hPassword});
+		$.messager.progress();
+		var result = callByAJax('user/hdfsUser_authCheck.action',{hadoopUserName:hUser,hadoopPassword:hPassword});
+		$.messager.progress('close');
+
 		if("true" == result.flag){
 			$.messager.alert('信息','HDFS用户验证成功!','info');
 		}else if("false" == result.flag){

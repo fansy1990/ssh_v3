@@ -18,8 +18,7 @@ public class HdfsUser {
 //	private String hdfsUserName; // 权限模块
 //	private String hdfsPassword;// 权限模块，加密存储md5
 	
-	private String hadoopUserName;
-	private String hadoopPassword; 
+	
 	private int authority; // 权限
 	@Id
 	@GeneratedValue
@@ -53,22 +52,6 @@ public class HdfsUser {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-	@Transient
-	public String getHadoopUserName() {
-		return hadoopUserName;
-	}
-
-	public void setHadoopUserName(String hadoopUserName) {
-		this.hadoopUserName = hadoopUserName;
-	}
-	@Transient
-	public String getHadoopPassword() {
-		return hadoopPassword;
-	}
-
-	public void setHadoopPassword(String hadoopPassword) {
-		this.hadoopPassword = hadoopPassword;
 	}
 
 	public int getAuthority() {
