@@ -7,6 +7,9 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ssh.model.HdfsUser;
 import ssh.service.HdfsUserService;
 import ssh.util.HadoopUtils;
@@ -31,6 +34,8 @@ public class HdfsUserAction extends ActionSupport implements
 
 	private String hadoopUserName;
 	private String hadoopPassword;
+
+	private Logger log = LoggerFactory.getLogger(HdfsUserAction.class);
 
 	/**
 	 * 
@@ -71,7 +76,39 @@ public class HdfsUserAction extends ActionSupport implements
 			session.put("user", hUser.getName());
 			session.put("email", hUser.getEmail());// 用于更新
 			session.put("hUser", HadoopUtils.getHadoopUserName());// 用于更新
+			log.info("用户：{}, email:{} 登录!", new Object[] { hUser.getName(),
+					hUser.getEmail() });
 		}
+		Utils.write2PrintWriter(JSON.toJSONString(map));
+		return;
+
+	}
+
+	/**
+	 * 注销
+	 * 
+	 * @throws IOException
+	 * @throws ServletException
+	 */
+	public void logout() throws ServletException, IOException {
+		Map<String, Object> map = new HashMap<>();
+
+		ActionContext context = ActionContext.getContext();
+		Map session = context.getSession();
+
+		if (session.get("user") != null || session.get("email") != null) {
+			map.put("flag", "true");
+			map.put("msg", "注销成功!");
+			log.info("用户：{}, email:{} 注销!", new Object[] { session.get("user"),
+					session.get("email") });
+			session.put("user", null);
+			session.put("email", null);// 用于更新
+
+		} else {
+			map.put("flag", "false");
+			map.put("msg", "注销失败!");
+		}
+
 		Utils.write2PrintWriter(JSON.toJSONString(map));
 		return;
 
