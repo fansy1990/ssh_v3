@@ -77,6 +77,8 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 			
 			<tx:method name="get*" propagation="REQUIRED" read-only="true" />
 			<tx:method name="update*" read-only="false" propagation="REQUIRED"/>
+			<tx:method name="save*" read-only="false" propagation="REQUIRED"/>
+			
 		</tx:attributes>
 	</tx:advice>
 

@@ -16,6 +16,44 @@ $(function(){
 	    	}
 	    }    
 	});    
+	
+	// 绑定注册form表单
+	$('#register_ff').form({    
+	    url:'user/hdfsUser_register.action',
+	    onSubmit: function(){    
+	    	var email_ = $('#register_eamil').val();
+	    	var result = callByAJax('user/hdfsUser_registerCheck.action',{email:email_});
+	    	if(result.flag == "false"){
+	    		$.messager.alert('提示','用户Email已存在!','warning');
+	    		return false;
+	    	}else{
+	    		return true;
+	    	}
+	         
+	    },
+	    success:function(data){    
+	    	console.info(data);
+	    	var jsonData = JSON.parse(data);
+	    	if("true" == jsonData.flag){
+	    		$.messager.confirm('提示', '注册成功，转到登录界面？', function(r){
+	    			if (r){
+	    				window.location.href="login.jsp";
+	    			}
+	    		});
+	    	}else{
+	    		$.messager.alert('提示',jsonData.msg,'info');
+	    	}
+	    }    
+	});  
+	
+	// 绑定注册按钮
+	
+	$('#registerBtn').bind('click', function(){
+		// submit the form    
+		$('#register_ff').submit(); 
+		
+		
+	});
 });
 
 
@@ -59,7 +97,7 @@ function logout(){
 }
 // 注册
 function register(){
-	
+	window.location.href="register.jsp";
 }
 
 //弹出progressBar

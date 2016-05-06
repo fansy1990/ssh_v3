@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ssh.model.Authority;
 import ssh.model.HdfsUser;
 import ssh.service.HdfsUserService;
 import ssh.util.HadoopUtils;
@@ -175,6 +176,42 @@ public class HdfsUserAction extends ActionSupport implements
 		Utils.write2PrintWriter(JSON.toJSONString(map));
 		return;
 
+	}
+
+	/**
+	 * 注册
+	 */
+	public void register() {
+		Map<String, Object> map = new HashMap<>();
+		// 注册用户权限全部设置为用户
+		hdfsUser.setAuthority(Authority.USER.ordinal());
+		Integer ret = hdfsUserService.save(hdfsUser);
+		if (ret > 0) {
+			map.put("flag", "true");
+		} else {
+			map.put("flag", "false");
+			map.put("msg", "注册失败，请联系管理员!");
+		}
+		Utils.write2PrintWriter(JSON.toJSONString(map));
+		return;
+	}
+
+	/**
+	 * 注册前的检查，是否有重email
+	 */
+	public void registerCheck() {
+		Map<String, Object> map = new HashMap<>();
+
+		HdfsUser hUser = hdfsUserService.getByEmail(hdfsUser.getEmail());
+		if (hUser != null) {
+			map.put("flag", "false");
+			map.put("msg", "该邮件名已经注册!");
+		} else {
+			map.put("flag", "true");
+		}
+
+		Utils.write2PrintWriter(JSON.toJSONString(map));
+		return;
 	}
 
 	public HdfsUserService getHdfsUserService() {
