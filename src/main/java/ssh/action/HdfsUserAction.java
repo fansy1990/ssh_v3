@@ -28,10 +28,10 @@ public class HdfsUserAction extends ActionSupport implements
 		ModelDriven<HdfsUser> {
 	HdfsUser hdfsUser = new HdfsUser();
 	private HdfsUserService hdfsUserService;
-	
+
 	private String hadoopUserName;
-	private String hadoopPassword; 
-	
+	private String hadoopPassword;
+
 	/**
 	 * 
 	 */
@@ -44,8 +44,9 @@ public class HdfsUserAction extends ActionSupport implements
 
 	/**
 	 * 登录
-	 * @throws IOException 
-	 * @throws ServletException 
+	 * 
+	 * @throws IOException
+	 * @throws ServletException
 	 */
 	public void login() throws ServletException, IOException {
 		Map<String, Object> map = new HashMap<>();
@@ -79,25 +80,28 @@ public class HdfsUserAction extends ActionSupport implements
 	/**
 	 * 权限验证
 	 */
-	public void authCheck(){
+	public void authCheck() {
 		Map<String, Object> map = new HashMap<>();
 		// 进行ssh权限验证
-		boolean hasHdfsLoginAuth = Utils.canLogin(hadoopUserName,hadoopPassword);
+		boolean hasHdfsLoginAuth = Utils.canLogin(hadoopUserName,
+				hadoopPassword);
 		ActionContext context = ActionContext.getContext();
 		Map session = context.getSession();
 		if (!hasHdfsLoginAuth) {
 			map.put("flag", "false");
 			map.put("msg", "HDFS用户名或密码错误！");
 			session.put("authCheck", "false");// 用于验证 ,更新数据库时
-			
-		}else{
+
+		} else {
 			map.put("flag", "true");
 			session.put("authCheck", "true");
+			session.put("tmpHadoopUserName", hadoopUserName);// 临时存储，防止验证和更新使用的是不一样的用户名
+			session.put("tmpHadoopPassword", hadoopPassword);// 临时存储，防止验证和更新使用的是不一样的密码
 		}
 		Utils.write2PrintWriter(JSON.toJSONString(map));
 		return;
 	}
-	
+
 	/**
 	 * 更新hdfsuser表数据
 	 */
@@ -107,21 +111,30 @@ public class HdfsUserAction extends ActionSupport implements
 		// 获得session中的email
 		ActionContext context = ActionContext.getContext();
 		Map session = context.getSession();
-		if(session.get("authCheck")==null || !"true".equals(session.get("authCheck"))){
+		if (session.get("authCheck") == null
+				|| !"true".equals(session.get("authCheck"))) {
 			map.put("flag", "false");
 			map.put("msg", "权限验证没用通过！");
 			Utils.write2PrintWriter(JSON.toJSONString(map));
 			return;
-			
+
+		}
+		if (!session.get("tmpHadoopUserName").equals(hadoopUserName)
+				|| !session.get("tmpHadoopPassword").equals(hadoopPassword)) {
+			map.put("flag", "false");
+			map.put("msg", "验证用户名或密码被修改！");
+			Utils.write2PrintWriter(JSON.toJSONString(map));
+			return;
 		}
 		String email = (String) session.get("email");
 		// 更新常量值
-		HadoopUtils.updateHadoopUserNamePassword(hadoopUserName, hadoopPassword);
-	
+		HadoopUtils
+				.updateHadoopUserNamePassword(hadoopUserName, hadoopPassword);
+
 		map.put("flag", "true");
 		map.put("msg", "更新成功!");
 		session.put("hUser", hadoopUserName);// 用于更新
-		
+
 		Utils.write2PrintWriter(JSON.toJSONString(map));
 		return;
 
