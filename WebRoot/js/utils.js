@@ -138,6 +138,15 @@ function layout_center_addTabFun(opts) {
 		if (t.tabs('exists', opts.title)) {
 			t.tabs('select', opts.title);
 		} else {
+			// 增加权限验证
+			
+			if(opts.title == '权限管理'){
+				var ret = callByAJax('user/hdfsUser_getSessionValue.action',{sessionProperty:'authority'});
+				if(ret.authority!=0){
+					$.messager.alert('信息','没有权限打开此页面，请使用管理员账户登录!','info');
+					return ;
+				}
+			}
 			t.tabs('add', opts);
 		}
 		console.info("打开页面："+opts.title);

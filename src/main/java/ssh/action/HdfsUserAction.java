@@ -36,6 +36,8 @@ public class HdfsUserAction extends ActionSupport implements
 	private String hadoopUserName;
 	private String hadoopPassword;
 
+	private String sessionProperty;
+
 	private Logger log = LoggerFactory.getLogger(HdfsUserAction.class);
 
 	/**
@@ -77,6 +79,7 @@ public class HdfsUserAction extends ActionSupport implements
 			session.put("user", hUser.getName());
 			session.put("email", hUser.getEmail());// 用于更新
 			session.put("hUser", HadoopUtils.getHadoopUserName());// 用于更新
+			session.put("authority", hUser.getAuthority());
 			log.info("用户：{}, email:{} 登录!", new Object[] { hUser.getName(),
 					hUser.getEmail() });
 		}
@@ -214,6 +217,23 @@ public class HdfsUserAction extends ActionSupport implements
 		return;
 	}
 
+	/**
+	 * 获取session中的sessionProperty对应的值
+	 */
+	public void getSessionValue() {
+		Map<String, Object> map = new HashMap<>();
+		ActionContext context = ActionContext.getContext();
+		Map session = context.getSession();
+
+		int authority = -1;
+		if (session.get(sessionProperty) != null) {
+			authority = (Integer) session.get(sessionProperty);
+		}
+		map.put("authority", authority);
+		Utils.write2PrintWriter(JSON.toJSONString(map));
+		return;
+	}
+
 	public HdfsUserService getHdfsUserService() {
 		return hdfsUserService;
 	}
@@ -237,6 +257,14 @@ public class HdfsUserAction extends ActionSupport implements
 
 	public void setHadoopPassword(String hadoopPassword) {
 		this.hadoopPassword = hadoopPassword;
+	}
+
+	public String getSessionProperty() {
+		return sessionProperty;
+	}
+
+	public void setSessionProperty(String sessionProperty) {
+		this.sessionProperty = sessionProperty;
 	}
 
 }
