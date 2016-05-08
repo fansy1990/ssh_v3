@@ -105,8 +105,9 @@ public class HdfsUserAction extends ActionSupport implements
 			map.put("msg", "注销成功!");
 			log.info("用户：{}, email:{} 注销!", new Object[] { session.get("user"),
 					session.get("email") });
-			session.put("user", null);
-			session.put("email", null);// 用于更新
+			// session.put("user", null);
+			// session.put("email", null);// 用于更新
+			session.clear();
 
 		} else {
 			map.put("flag", "false");

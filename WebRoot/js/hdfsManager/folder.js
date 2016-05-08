@@ -107,7 +107,31 @@ $(function(){
 				{
 					field : 'name',
 					title : '文件名',
-					width : '120'
+					width : '120',
+					formatter: function(value,row,index){
+//						var ret = "<a href='javascript:void(0);' onclick='refreshDir(";
+//						ret = ret + "'" + value +"','"+row.type+"')"
+//						var v1 = value;
+//						var v2 = row.type;
+						// 使用转义即可解决单引号、双引号不够用的问题
+						return "<a href='javascript:void(0);' onclick='refreshDir(\""+value+"\",\""+row.type+"\")"+"'>"+value+"</a>";
+//						return "<a href='javascript:void(0);' onclick='refreshDir(v1,v2)"+"'>"+value+"</a>";
+						
+//						var ref_href = $("<a href='javascript:void(0);'>"+value+"</a>");
+////						ref_href.live('click',function(v1,v2){
+////							console.info("name:"+v1);
+////							console.info("type:"+v2);
+////						});
+//						console.info("v1:"+v1);
+//						ref_href.bind('click',function(v1,v2){
+//							console.info("name:"+v1);
+//							console.info("type:"+v2);
+//							alter.show('a');
+//						});
+//						return ref_href[0].outerHTML;
+						
+					}
+
 				},{
 					field : 'type',
 					title : '类型',
@@ -177,7 +201,20 @@ $(function(){
 	
 });
 
-
+function refreshDir(name,type){
+	if(type != 'dir'){
+		$.messager.alert('信息','您点击的是非目录！','info');
+		return ;
+	}
+	var curr =$('#hdfsManager_search_folder').val();
+	if(curr == '/'){
+		$('#hdfsManager_search_folder').val(curr+name);
+	}else{
+		$('#hdfsManager_search_folder').val(curr+'/'+name);
+	}
+	
+	search_data();
+}
 
 /**
  * 重新加载数据
@@ -208,5 +245,31 @@ function search_data(){
         owner:$('#hdfsManager_search_owner').val(),
         ownerOp:$('#hdfsManager_search_owner_op').combobox('getValue')
     });
+}
+/**
+ * 返回上一级
+ */
+function back_to_parent(){
+	var curr =$('#hdfsManager_search_folder').val();
+	if(curr == '/'){ return ;}
+	
+	var index = curr.lastIndexOf('/');
+	if(index == 0){
+		back_to_dir('/');
+		return ;
+	}
+	back_to_dir(curr.slice(0,index));
+//	console.info("index:"+);
+}
+/**
+ * 返回dir目录
+ *  如果是根目录，并且flag= true，则直接返回
+ *  如果flag =false，则执行一次
+ */
+function back_to_dir(dir){
+	var curr =$('#hdfsManager_search_folder').val();
+	if(curr == '/'){ return ;}
+	$('#hdfsManager_search_folder').val(dir);
+	search_data();
 }
 

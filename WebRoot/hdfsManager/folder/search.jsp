@@ -28,7 +28,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div style="margin:20px 0;">
 			<span>目录：</span><input class="easyui-validatebox" type="text"
 				id="hdfsManager_search_folder" data-options="required:true"
-				style="width:300px" value="/" /> <br>
+				style="width:300px" value="/" /> 
+				
+				<br>
 			<p>请输入检索条件，进行检索:</p>
 			<div >
 				文件名：<input class="easyui-validatebox" type="text"
@@ -48,8 +50,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<option value="equals">Equals</option>
 					<option value="noequal">NoEqual</option>
 				</select>
+				
 				<a  class="easyui-linkbutton" iconCls="icon-filter" onclick="search_data()">确定</a>
 				
+				
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				
+				<a  class="easyui-linkbutton" iconCls="icon-undo" onclick="back_to_parent()">返回上一级</a>
+				<a  class="easyui-linkbutton" iconCls="icon-application_home" onclick="back_to_dir('/')">返回根目录</a>
 			</div>
 		</div>
 
