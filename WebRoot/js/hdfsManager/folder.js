@@ -208,12 +208,15 @@ function refreshDir(name,type){
 	}
 	var curr =$('#hdfsManager_search_folder').val();
 	if(curr == '/'){
+		var ret = refresh_data(curr+name);
+		if(!ret) return ;
 		$('#hdfsManager_search_folder').val(curr+name);
 	}else{
+		var ret = refresh_data(curr+'/'+name);
+		if(!ret) return ;
 		$('#hdfsManager_search_folder').val(curr+'/'+name);
 	}
 	
-	search_data();
 }
 
 /**
@@ -238,13 +241,24 @@ function list_data(){
 function search_data(){
 	 // 加输入框验证
 	if(checkTextBoxEmpty('hdfsManager_search_folder','输入目录不能为空，请重新输入!')) return ;
-    $('#dg_hdfsManager_search').datagrid('load',{
-        folder: $('#hdfsManager_search_folder').val(),
+    var folder_ = $('#hdfsManager_search_folder').val();
+    refresh_data(folder_);
+}
+/**
+ * 重新刷新dg_HdfsManager_search数据
+ */
+function refresh_data(folder_){
+	if (!checkExistAndAuth(folder_,'rx')){
+		return false;
+	}
+	 $('#dg_hdfsManager_search').datagrid('load',{
+        folder: folder_,
         name:$('#hdfsManager_search_folder_name').val(),
         nameOp:$('#hdfsManager_search_folder_name_op').combobox('getValue'),
         owner:$('#hdfsManager_search_owner').val(),
         ownerOp:$('#hdfsManager_search_owner_op').combobox('getValue')
     });
+	 return true;
 }
 /**
  * 返回上一级
@@ -269,7 +283,12 @@ function back_to_parent(){
 function back_to_dir(dir){
 	var curr =$('#hdfsManager_search_folder').val();
 	if(curr == '/'){ return ;}
+	
+	// 先刷新
+	var ret = refresh_data(dir);
+	console.info("ret:"+ret);
+	if(!ret) return ;
+	// 再更新组件值
 	$('#hdfsManager_search_folder').val(dir);
-	search_data();
 }
 
