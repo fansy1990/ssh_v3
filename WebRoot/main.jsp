@@ -55,7 +55,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</div>
 	<!-- <div data-options="region:'south',split:true,collapsed:true"
 		style="height:50px;"></div> -->
-	<div data-options="region:'east',split:true" title="East"
+	<div data-options="region:'east',split:true" title="导航"
 		style="width:180px;">
 		<ul class="easyui-tree" id="eastTree"
 			data-options="url:'json/hdfsManager.json',method:'get',animate:true,dnd:true"></ul>
