@@ -30,7 +30,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</h2>
 		</p>    	
 		<div id="project_about_id">
-			HDFS文件系统
+			HDFS文件管理系统
 		</div>
 		<s:debug></s:debug>
     
