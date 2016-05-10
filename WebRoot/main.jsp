@@ -58,18 +58,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<div data-options="region:'east',split:true" title="导航"
 		style="width:180px;">
 		<ul class="easyui-tree" id="eastTree"
-			data-options="url:'json/hdfsManager.json',method:'get',animate:true,dnd:true"></ul>
+			data-options="url:'json/hbase.json',method:'get',animate:true,dnd:true"></ul>
 	</div>
 	<div data-options="region:'west',split:true,collapsed:true" title="项目"
 		style="width:100px;">
 		<div class="easyui-accordion" data-options="fit:true,border:false">
-			<div title="HDFS" style="padding:10px;">
+			<div title="HDFS" style="padding:10px;selected:true">
 				<a onclick="update_project('HDFS文件管理','json/hdfsManager.json')"
 					class="easyui-linkbutton">HDFS文件管理系统</a>
 			</div>
-			<div title="博客推荐系统" data-options="selected:true"
+			<div title="HBase" data-options="selected:false"
 				style="padding:10px;">
-				<div title="HDFS" style="padding:10px;">
+				<div title="HBase" style="padding:10px;">
+					<a onclick="update_project('HBase命令演示系统','json/hbase.json')"
+						class="easyui-linkbutton">HBase命令演示系统</a>
+				</div>
+			</div>
+			<div title="博客推荐系统" data-options="selected:false"
+				style="padding:10px;">
+				<div title="blog" style="padding:10px;">
 					<a onclick="update_project('博客推荐系统：未完成','json/tree_data1.json')"
 						class="easyui-linkbutton">博客推荐系统</a>
 				</div>
