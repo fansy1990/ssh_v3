@@ -69,16 +69,12 @@ public class HdfsManagerAction extends ActionSupport implements
 				.listFolder(hdfsFile.getFolder());
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		jsonMap.put("total", files.size());
-		jsonMap.put("rows", getProperFiles(files,page,rows));
+		jsonMap.put("rows", Utils.getProperFiles(files,page,rows));
 		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
 		return;
 	}
 
-	private List<HdfsResponseProperties> getProperFiles(List<HdfsResponseProperties> files,
-			int page, int rows) {
-
-		return files.subList((page-1)*rows, page*rows>files.size()?files.size():page*rows);
-	}
+	
 
 	/**
 	 * 检查目录权限或是否存在 权限由外部设定
@@ -184,7 +180,7 @@ public class HdfsManagerAction extends ActionSupport implements
 				hdfsFile.getOwner(), hdfsFile.getOwnerOp());
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		jsonMap.put("total", files.size());
-		jsonMap.put("rows", getProperFiles(files, page, rows));
+		jsonMap.put("rows", Utils.getProperFiles(files, page, rows));
 		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
 		return;
 	}

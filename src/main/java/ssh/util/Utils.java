@@ -3,6 +3,7 @@ package ssh.util;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.fs.FileStatus;
@@ -40,6 +41,12 @@ public class Utils {
 		properties.setType(file.isDirectory() ? "dir" : "file");
 		return properties;
 
+	}
+	
+	public static <T> List<T> getProperFiles(List<T> files,
+			int page, int rows) {
+
+		return files.subList((page-1)*rows, page*rows>files.size()?files.size():page*rows);
 	}
 
 	/**

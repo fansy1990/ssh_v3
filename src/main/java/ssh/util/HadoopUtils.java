@@ -14,6 +14,9 @@ import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.hbase.client.ConnectionFactory;
 import org.apache.hadoop.io.BooleanWritable;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.IOUtils;
@@ -116,7 +119,25 @@ public class HadoopUtils {
 	public static String getHadoopUserName() {
 		return hadoopUserName ;
 	}
-
+	private static Configuration hbaseConfiguration =null;
+	private static Connection hbaseConnection =null;
+	public static Connection getHBaseConnection(){
+		if(hbaseConnection ==null){
+			hbaseConfiguration = HBaseConfiguration.create();
+			conf.set("hbase.master", confMap.get("hbase.master"));
+			conf.set("hbase.rootdir", confMap.get("hbase.rootdir"));
+			conf.set("hbase.zookeeper.quorum", confMap.get("hbase.zookeeper.quorum"));
+			conf.set("hbase.zookeeper.property.clientPort", 
+					confMap.get("hbase.zookeeper.property.clientPort"));
+			try{
+				hbaseConnection = ConnectionFactory.createConnection(hbaseConfiguration);
+			}catch(IOException e){
+				log.error("获取hbase 连接异常！");
+				hbaseConnection = null;
+			}
+		}
+		return hbaseConnection;
+	}
 	public static Configuration getConf() {
 		if (conf == null) {
 			init();
