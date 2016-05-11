@@ -40,4 +40,9 @@
 		<action name="hdfsUser_*" method="{1}" class="ssh.action.HdfsUserAction"></action>
 	</package>
 	
+	<package name="hbase" namespace="/hbase" extends="struts-default">
+		<action name="hbaseComamnd_*" method="{1}" class="ssh.action.HBaseComamndAction"></action>
+	</package>
+	
+	
 </struts>
