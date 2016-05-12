@@ -44,22 +44,25 @@ public class HadoopUtils {
 
 	/**
 	 * 更新 绑定的hadoop用户密码
+	 * 
 	 * @param username
 	 * @param password
 	 */
-	public static void updateHadoopUserNamePassword(String username,String password){
-		if(username!=null){
-			hadoopUserName= username;
-		}else{
-			hadoopUserName="null";
+	public static void updateHadoopUserNamePassword(String username,
+			String password) {
+		if (username != null) {
+			hadoopUserName = username;
+		} else {
+			hadoopUserName = "null";
 		}
-		if(password!=null){
+		if (password != null) {
 			setHadoopPassword(password);
-		}else{
-			setHadoopPassword("null") ;
+		} else {
+			setHadoopPassword("null");
 		}
 		initFs();// 重新初始化
 	}
+
 	/**
 	 * 获取hadoop.properties中的值
 	 * 
@@ -115,29 +118,35 @@ public class HadoopUtils {
 
 		}
 	}
-	
+
 	public static String getHadoopUserName() {
-		return hadoopUserName ;
+		return hadoopUserName;
 	}
-	private static Configuration hbaseConfiguration =null;
-	private static Connection hbaseConnection =null;
-	public static Connection getHBaseConnection(){
-		if(hbaseConnection ==null){
+
+	private static Configuration hbaseConfiguration = null;
+	private static Connection hbaseConnection = null;
+
+	public static Connection getHBaseConnection() {
+		if (hbaseConnection == null) {
 			hbaseConfiguration = HBaseConfiguration.create();
-			conf.set("hbase.master", confMap.get("hbase.master"));
-			conf.set("hbase.rootdir", confMap.get("hbase.rootdir"));
-			conf.set("hbase.zookeeper.quorum", confMap.get("hbase.zookeeper.quorum"));
-			conf.set("hbase.zookeeper.property.clientPort", 
+			hbaseConfiguration.set("hbase.master", confMap.get("hbase.master"));
+			hbaseConfiguration.set("hbase.rootdir",
+					confMap.get("hbase.rootdir"));
+			hbaseConfiguration.set("hbase.zookeeper.quorum",
+					confMap.get("hbase.zookeeper.quorum"));
+			hbaseConfiguration.set("hbase.zookeeper.property.clientPort",
 					confMap.get("hbase.zookeeper.property.clientPort"));
-			try{
-				hbaseConnection = ConnectionFactory.createConnection(hbaseConfiguration);
-			}catch(IOException e){
+			try {
+				hbaseConnection = ConnectionFactory
+						.createConnection(hbaseConfiguration);
+			} catch (IOException e) {
 				log.error("获取hbase 连接异常！");
 				hbaseConnection = null;
 			}
 		}
 		return hbaseConnection;
 	}
+
 	public static Configuration getConf() {
 		if (conf == null) {
 			init();
@@ -281,12 +290,15 @@ public class HadoopUtils {
 		}
 		return null;
 	}
+
 	public static String getHadoopPassword() {
 		return hadoopPassword;
 	}
+
 	public static void setHadoopPassword(String hadoopPassword) {
 		HadoopUtils.hadoopPassword = hadoopPassword;
 	}
+
 	public static void setHadoopUserName(String hadoopUserName) {
 		HadoopUtils.hadoopUserName = hadoopUserName;
 	}

@@ -5,13 +5,13 @@ $(function(){
 		border : false,
 		fitColumns : false,
 		singleSelect : true,
-		width : 600,
-		height : 250,
+		width : 1100,
+		height : 420,
 		nowrap : false,
-		fit : true,
+		fit : false,
 		pagination : true,// 分页控件
-		pageSize : 4, // 每页记录数，需要和pageList保持倍数关系
-		pageList : [ 4, 8, 12 ],
+		pageSize : 2, // 每页记录数，需要和pageList保持倍数关系
+		pageList : [ 2,4,6, 8 ],
 		rownumbers : true,// 行号
 		pagePosition : 'top',
 		url : 'hbase/hbaseCommand_getTables.action',
@@ -40,27 +40,27 @@ $(function(){
 				},{
 					field : 'onlineRegions',
 					title : 'Online Regions',
-					width : '50'
+					width : '100'
 				},{
 					field : 'offlineRegions',
 					title : 'Offline Regions',
-					width : '50',
+					width : '100',
 				},{
 					field : 'failedRegions',
 					title : 'Failed Regions',
-					width : '50'
+					width : '100'
 				},{
 					field : 'splitRegions',
 					title : 'Split Regions',
-					width : '50'
+					width : '100'
 				},{
 					field : 'otherRegions',
 					title : 'Other Regions',
-					width : '50'
+					width : '100'
 				},{
 					field : 'description',
 					title : '表描述',
-					width : '200'
+					width : '300'
 				}
 				 ]]
 		    }); 
