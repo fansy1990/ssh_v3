@@ -116,3 +116,7 @@
 .icon-application_home
   {    background: url('icons/application_home.png') no-repeat scroll center center transparent;
 }
+
+.icon-application_view_detail
+  {    background: url('icons/application_view_detail.png') no-repeat scroll center center transparent;
+}

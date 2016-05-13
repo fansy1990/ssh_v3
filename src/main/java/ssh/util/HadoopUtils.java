@@ -123,8 +123,28 @@ public class HadoopUtils {
 		return hadoopUserName;
 	}
 
+	// private static Admin admin = null;
 	private static Configuration hbaseConfiguration = null;
 	private static Connection hbaseConnection = null;
+
+	/**
+	 * Pooling or caching of the returned Admin is not recommended. 不使用
+	 * 
+	 * @return
+	 */
+	// public static Admin getHBaseAdmin() {
+	// try {
+	// if (admin == null) {
+	// admin = HadoopUtils.getHBaseConnection().getAdmin();
+	// }
+	// log.info("HBase admin 被初始化!");
+	// } catch (IOException e) {
+	// log.info("初始化HBase admin异常!");
+	// e.printStackTrace();
+	// admin = null;
+	// }
+	// return admin;
+	// }
 
 	public static Connection getHBaseConnection() {
 		if (hbaseConnection == null) {

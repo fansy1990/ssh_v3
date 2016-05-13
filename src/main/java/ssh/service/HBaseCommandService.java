@@ -10,12 +10,14 @@ import org.apache.hadoop.hbase.client.Admin;
 import org.springframework.stereotype.Service;
 
 import ssh.model.HBaseTable;
+import ssh.util.HadoopUtils;
 
 @Service
 public class HBaseCommandService {
 
-	public List<HBaseTable> getTables(Admin admin) throws IOException {
+	public List<HBaseTable> getTables() throws IOException {
 		List<HBaseTable> list = new ArrayList<>();
+		Admin admin = HadoopUtils.getHBaseConnection().getAdmin();
 		TableName[] tables = admin.listTableNames();
 		HBaseTable hTable = null;
 

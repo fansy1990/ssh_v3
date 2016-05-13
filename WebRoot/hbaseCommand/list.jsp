@@ -26,9 +26,12 @@
 
 <body>
 	<div style="padding: 15px">
-		<div style="margin:20px 0;">
+		<div style="margin:20px 0; ">
 			<span>HBase表如下所示:</span> 
-			<a  class="easyui-linkbutton" iconCls="icon-reload" onclick="list()">确定</a>
+			<a  class="easyui-linkbutton" iconCls="icon-reload" onclick="list()" >刷新</a>
+			<a  class="easyui-linkbutton" iconCls="icon-application_view_detail"   onclick="table_detail()">表详细</a>
+			<a  class="easyui-linkbutton" iconCls="icon-add"   onclick="table_add()">表新增</a>
+			<a  class="easyui-linkbutton" iconCls="icon-remove"  onclick="table_delete()">表删除</a>
 		</div>
 
 		<table id="dg_hbaseCommand_list" class="easyui-datagrid"></table>

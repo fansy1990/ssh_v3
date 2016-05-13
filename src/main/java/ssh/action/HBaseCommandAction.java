@@ -6,17 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 
-import org.apache.hadoop.hbase.client.Admin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ssh.model.HBaseTable;
 import ssh.service.HBaseCommandService;
-import ssh.util.HadoopUtils;
 import ssh.util.Utils;
 
 import com.alibaba.fastjson.JSON;
@@ -33,37 +29,47 @@ public class HBaseCommandAction extends ActionSupport {
 	private HBaseCommandService hbaseCommandService;
 	private int rows;
 	private int page;
-	private Admin admin = null;
 
-	@PostConstruct
-	public void init() {
-		try {
-			admin = HadoopUtils.getHBaseConnection().getAdmin();
-		} catch (IOException e) {
-			logger.info("初始化HBase admin异常!");
-			e.printStackTrace();
-			admin = null;
-		}
+	// private Admin admin = null; // 应该放在公共的地方
+
+	public HBaseCommandAction() {
+		// 每次请求都是一个实例
+		// logger.info("HBaseCommandAction==================");
 	}
 
-	@PreDestroy
-	public void destory() {
-		try {
-			admin.close();
-		} catch (IOException e) {
-			logger.info("关闭 HBase admin异常！");
-			if (admin != null)
-				admin = null;
-		}
-	}
+	// @PostConstruct
+	// public void init() {
+	// try {
+	// if (admin == null) {
+	// admin = HadoopUtils.getHBaseConnection().getAdmin();
+	// }
+	// logger.info("HBase admin 被初始化!");
+	// } catch (IOException e) {
+	// logger.info("初始化HBase admin异常!");
+	// e.printStackTrace();
+	// admin = null;
+	// }
+	// }
+	//
+	// @PreDestroy
+	// public void destory() {
+	// try {
+	// admin.close();
+	// } catch (IOException e) {
+	// logger.info("关闭 HBase admin异常！");
+	// if (admin != null)
+	// admin = null;
+	// }
+	// }
 
 	public void getTables() {
 		List<HBaseTable> files = new ArrayList<>();
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		try {
-			files = this.hbaseCommandService.getTables(admin);
+			files = this.hbaseCommandService.getTables();
 		} catch (IOException e) {// @TODO 前台如何处理
 			e.printStackTrace();
+			logger.info("获取HBase 表异常!");
 		}
 		jsonMap.put("total", files.size());
 		jsonMap.put("rows", Utils.getProperFiles(files, page, rows));
