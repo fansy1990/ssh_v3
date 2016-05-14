@@ -17,6 +17,7 @@ import ch.ethz.ssh2.Connection;
 public class Utils {
 	private static final Logger log = LoggerFactory.getLogger(Utils.class);
 	public static final String TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+	public static final String COMMA = ",";
 	private static PrintWriter writer = null;
 
 	/**
@@ -42,11 +43,11 @@ public class Utils {
 		return properties;
 
 	}
-	
-	public static <T> List<T> getProperFiles(List<T> files,
-			int page, int rows) {
 
-		return files.subList((page-1)*rows, page*rows>files.size()?files.size():page*rows);
+	public static <T> List<T> getProperFiles(List<T> files, int page, int rows) {
+
+		return files.subList((page - 1) * rows,
+				page * rows > files.size() ? files.size() : page * rows);
 	}
 
 	/**
