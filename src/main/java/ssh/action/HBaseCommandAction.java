@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ssh.model.HBaseTable;
+import ssh.model.HBaseTableName;
 import ssh.service.HBaseCommandService;
 import ssh.util.Utils;
 
@@ -66,10 +67,10 @@ public class HBaseCommandAction extends ActionSupport {
 	// }
 
 	public void getTables() {
-		List<HBaseTable> files = new ArrayList<>();
+		List<HBaseTable> tables = new ArrayList<>();
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		try {
-			files = this.hbaseCommandService.getTables();
+			tables = this.hbaseCommandService.getTables();
 		} catch (IOException e) {// @TODO 前台如何处理
 			e.printStackTrace();
 			logger.info("获取HBase 表异常!");
@@ -78,10 +79,28 @@ public class HBaseCommandAction extends ActionSupport {
 			Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
 			return;
 		}
-		jsonMap.put("total", files.size());
-		jsonMap.put("rows", Utils.getProperFiles(files, page, rows));
+		jsonMap.put("total", tables.size());
+		jsonMap.put("rows", Utils.getProperFiles(tables, page, rows));
 		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
 		return;
+	}
+	
+	public void getTablesJson(){
+		List<HBaseTableName> tables = new ArrayList<>();
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		try {
+			tables = this.hbaseCommandService.getTablesString();
+		} catch (IOException e) {// @TODO 前台如何处理
+			e.printStackTrace();
+			logger.info("获取HBase 表异常!");
+			jsonMap.put("flag", "false");
+			jsonMap.put("data", null);
+			Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+			return ;
+		}
+		jsonMap.put("flag", "true");
+		jsonMap.put("data", tables);
+		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
 	}
 
 	public void getTableDetails() {

@@ -1,12 +1,19 @@
 $(function(){
 	
+	// 获取hbase表
+//	var tablesString = callByAJax('hbase/hbaseCommand_getTablesJson.action', {});
+////	console.info(JSON.parse(tablesString));
+//	console.info(":"+tablesString.data);
 	// 绑定获取hbase表；
-	$('#cc_data_retrieve_tableName').combo({    
+	$('#cc_data_retrieve_tableName').combobox({    
 	    required:true,    
-	    multiple:true  ,
+	    multiple:false  ,
 	    valueField:'value',
 	    textField:'text',
-	    data:[{value:9,text:"addf"},{value:5,text:"sdfsdf"}, {value:3,text:"hjhfjhj"},{value:4,text:"fghgfh"}]
+//	    url: 'hbase/hbaseCommand_getTablesJson.action'
+//	    data: tablesString.data
+	    data: callByAJax('hbase/hbaseCommand_getTablesJson.action', {}).data
+//	    data:[{value:9,text:"addf"},{value:5,text:"sdfsdf"}, {value:3,text:"hjhfjhj"},{value:4,text:"fghgfh"}]
 	});
 	
 	// hbase 表 list

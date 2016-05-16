@@ -13,6 +13,7 @@ import org.apache.hadoop.hbase.client.Admin;
 import org.springframework.stereotype.Service;
 
 import ssh.model.HBaseTable;
+import ssh.model.HBaseTableName;
 import ssh.util.HadoopUtils;
 import ssh.util.Utils;
 
@@ -46,6 +47,16 @@ public class HBaseCommandService {
 			list.add(hTable);
 		}
 
+		return list;
+	}
+	
+	public List<HBaseTableName> getTablesString() throws IOException {
+		List<HBaseTableName> list = new ArrayList<>();
+		Admin admin = HadoopUtils.getHBaseConnection().getAdmin();
+		TableName[] tables = admin.listTableNames();
+		for (TableName t : tables) {
+			list.add(new HBaseTableName(t.getNameAsString()));
+		}
 		return list;
 	}
 
