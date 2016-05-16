@@ -12,8 +12,21 @@ $(function(){
 	    textField:'text',
 //	    url: 'hbase/hbaseCommand_getTablesJson.action'
 //	    data: tablesString.data
-	    data: callByAJax('hbase/hbaseCommand_getTablesJson.action', {}).data
+	    data: callByAJax('hbase/hbaseCommand_getTablesJson.action', {}).data,
 //	    data:[{value:9,text:"addf"},{value:5,text:"sdfsdf"}, {value:3,text:"hjhfjhj"},{value:4,text:"fghgfh"}]
+	    onSelect: function (record) { 
+	    	console.info("table:"+record.value);
+	    	
+	    	//设置表对应的column family
+	    	$('#cc_data_retrieve_column_family').combobox({    
+	    	    required:true,    
+	    	    multiple:true ,
+	    	    valueField:'value',
+	    	    textField:'text',
+	    	    data:callByAJax('hbase/hbaseCommand_getTableColumnFamilyJson.action',
+	    	    		{tableName:record.value}).data,
+	    	});
+	    }
 	});
 	
 	// hbase 表 list

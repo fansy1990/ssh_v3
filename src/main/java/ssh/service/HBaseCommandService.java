@@ -13,7 +13,7 @@ import org.apache.hadoop.hbase.client.Admin;
 import org.springframework.stereotype.Service;
 
 import ssh.model.HBaseTable;
-import ssh.model.HBaseTableName;
+import ssh.model.TextValue;
 import ssh.util.HadoopUtils;
 import ssh.util.Utils;
 
@@ -50,12 +50,12 @@ public class HBaseCommandService {
 		return list;
 	}
 	
-	public List<HBaseTableName> getTablesString() throws IOException {
-		List<HBaseTableName> list = new ArrayList<>();
+	public List<TextValue> getTablesString() throws IOException {
+		List<TextValue> list = new ArrayList<>();
 		Admin admin = HadoopUtils.getHBaseConnection().getAdmin();
 		TableName[] tables = admin.listTableNames();
 		for (TableName t : tables) {
-			list.add(new HBaseTableName(t.getNameAsString()));
+			list.add(new TextValue(t.getNameAsString()));
 		}
 		return list;
 	}
@@ -127,6 +127,17 @@ public class HBaseCommandService {
 		}
 		admin.createTable(hTableDescriptor);
 		return true;
+	}
+
+	public List<TextValue> getTablesColumnFamily(String tableName) throws IOException {
+		List<TextValue> list = new ArrayList<>();
+		Admin admin = HadoopUtils.getHBaseConnection().getAdmin();
+		HTableDescriptor tableDescriptor=  admin.getTableDescriptor(getTableName(tableName));
+		HColumnDescriptor[] columnDescriptors = tableDescriptor.getColumnFamilies();
+		for (HColumnDescriptor t : columnDescriptors) {
+			list.add(new TextValue(t.getNameAsString()));
+		}
+		return list;
 	}
 
 }

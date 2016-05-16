@@ -1,6 +1,6 @@
 package ssh.model;
 
-public class HBaseTableName {
+public class TextValue {
 
 	private String value;
 	private String text;
@@ -17,9 +17,9 @@ public class HBaseTableName {
 		this.text = text;
 	}
 	
-	public HBaseTableName(){}
+	public TextValue(){}
 	
-	public HBaseTableName(String tableName){
+	public TextValue(String tableName){
 		this.text=tableName;
 		this.value=tableName;
 	}

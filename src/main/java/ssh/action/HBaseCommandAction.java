@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ssh.model.HBaseTable;
-import ssh.model.HBaseTableName;
+import ssh.model.TextValue;
 import ssh.service.HBaseCommandService;
 import ssh.util.Utils;
 
@@ -86,10 +86,28 @@ public class HBaseCommandAction extends ActionSupport {
 	}
 	
 	public void getTablesJson(){
-		List<HBaseTableName> tables = new ArrayList<>();
+		List<TextValue> tables = new ArrayList<>();
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		try {
 			tables = this.hbaseCommandService.getTablesString();
+		} catch (IOException e) {// @TODO 前台如何处理
+			e.printStackTrace();
+			logger.info("获取HBase 表异常!");
+			jsonMap.put("flag", "false");
+			jsonMap.put("data", null);
+			Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+			return ;
+		}
+		jsonMap.put("flag", "true");
+		jsonMap.put("data", tables);
+		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+	}
+	
+	public void getTableColumnFamilyJson(){
+		List<TextValue> tables = new ArrayList<>();
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		try {
+			tables = this.hbaseCommandService.getTablesColumnFamily(tableName);
 		} catch (IOException e) {// @TODO 前台如何处理
 			e.printStackTrace();
 			logger.info("获取HBase 表异常!");

@@ -26,16 +26,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    <div style="padding: 15px">
 		<div style="margin:20px 0;">
 			<!-- 先手动输入，后期考虑使用select，并从后台获取 -->
-			<span>表名：</span><!-- <input class="easyui-validatebox" type="text"
-				id="data_retrieve_tableName" data-options="required:true"
-				style="width:300px" value="t1" />  -->
+			<span>表名：</span>
 				<input id="cc_data_retrieve_tableName" > 
-				
 				<br>
 			<p>请输入检索条件，进行检索:</p>
 			<div >
-				列簇名：<input class="easyui-validatebox" type="text"
-					id="data_retrieve_column_family" style="width:60px;" value="" /> 
+				列簇名：<!-- <input class="easyui-validatebox" type="text"
+					id="data_retrieve_column_family" style="width:60px;" value="" />  -->
+					<input id="cc_data_retrieve_column_family" > 
 				列名：<input class="easyui-validatebox" type="text"
 					id="data_retrieve_column_qualifier" style="width:60px;" value="" />
 				
