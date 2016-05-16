@@ -1,5 +1,14 @@
 $(function(){
 	
+	// 绑定获取hbase表；
+	$('#cc_data_retrieve_tableName').combo({    
+	    required:true,    
+	    multiple:true  ,
+	    valueField:'value',
+	    textField:'text',
+	    data:[{value:9,text:"addf"},{value:5,text:"sdfsdf"}, {value:3,text:"hjhfjhj"},{value:4,text:"fghgfh"}]
+	});
+	
 	// hbase 表 list
 	$('#dg_hbaseCommand_list').datagrid({
 		border : false,

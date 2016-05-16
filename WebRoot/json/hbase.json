@@ -1,36 +1,36 @@
 [{
 	"id":1,
-	"text":"HDFS文件管理系统",
+	"text":"HBase表管理系统",
 	"attributes":{
 			"folder":"1"
 	},
 	"children":[{
 		"id":11,
-		"text":"目录",
+		"text":"表管理",
 		"state":"open",
 		"attributes":{
 			"folder":"1"
 		},
 		"children":[{
 			"id":111,
-			"text":"Table浏览",
+			"text":"Table管理",
 			"attributes":{
 				"folder":"0",
 				"url":"hbaseCommand/list.jsp"
 			}
 		},{
 			"id":113,
-			"text":"Table新建",
+			"text":"Table数据检索",
 			"attributes":{
 				"folder":"0",
-				"url":"hbaseCommand/create.jsp"
+				"url":"hbaseCommand/data_retrieve.jsp"
 			}
 		},{
 			"id":114,
-			"text":"Table删除",
+			"text":"Table数据删除",
 			"attributes":{
 				"folder":"0",
-				"url":"hbaseCommand/delete.jsp"
+				"url":"hbaseCommand/data_delete.jsp"
 			}
 		}]
 	},{
