@@ -25,6 +25,9 @@ $(function(){
 	    	    textField:'text',
 	    	    data:callByAJax('hbase/hbaseCommand_getTableColumnFamilyJson.action',
 	    	    		{tableName:record.value}).data,
+	    	    onSelect:function(cfs){
+	    	    	console.info("cfs:"+cfs.value);
+	    	    }
 	    	});
 	    }
 	});

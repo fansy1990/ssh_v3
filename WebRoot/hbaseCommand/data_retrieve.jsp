@@ -34,9 +34,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				列簇名：<!-- <input class="easyui-validatebox" type="text"
 					id="data_retrieve_column_family" style="width:60px;" value="" />  -->
 					<input id="cc_data_retrieve_column_family" > 
-				列名：<input class="easyui-validatebox" type="text"
-					id="data_retrieve_column_qualifier" style="width:60px;" value="" />
-				
+				列名：<!-- <input class="easyui-validatebox" type="text"
+					id="data_retrieve_column_qualifier" style="width:60px;" value="" /> -->
+				<input id="cc_data_retrieve_column_qualifier" > 
 				Start RowKey：<input class="easyui-validatebox" type="text"
 					id="data_retrieve_start_rowkey" style="width:60px;" value="-1" /> 
 				End RowKey：<input class="easyui-validatebox" type="text"
