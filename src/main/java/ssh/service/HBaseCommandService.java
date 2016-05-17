@@ -10,6 +10,10 @@ import org.apache.hadoop.hbase.HRegionInfo;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.ResultScanner;
+import org.apache.hadoop.hbase.client.Scan;
+import org.apache.hadoop.hbase.client.Table;
 import org.springframework.stereotype.Service;
 
 import ssh.model.HBaseTable;
@@ -49,7 +53,7 @@ public class HBaseCommandService {
 
 		return list;
 	}
-	
+
 	public List<TextValue> getTablesString() throws IOException {
 		List<TextValue> list = new ArrayList<>();
 		Admin admin = HadoopUtils.getHBaseConnection().getAdmin();
@@ -129,15 +133,28 @@ public class HBaseCommandService {
 		return true;
 	}
 
-	public List<TextValue> getTablesColumnFamily(String tableName) throws IOException {
+	public List<TextValue> getTablesColumnFamily(String tableName)
+			throws IOException {
 		List<TextValue> list = new ArrayList<>();
 		Admin admin = HadoopUtils.getHBaseConnection().getAdmin();
-		HTableDescriptor tableDescriptor=  admin.getTableDescriptor(getTableName(tableName));
-		HColumnDescriptor[] columnDescriptors = tableDescriptor.getColumnFamilies();
+		HTableDescriptor tableDescriptor = admin
+				.getTableDescriptor(getTableName(tableName));
+		HColumnDescriptor[] columnDescriptors = tableDescriptor
+				.getColumnFamilies();
 		for (HColumnDescriptor t : columnDescriptors) {
 			list.add(new TextValue(t.getNameAsString()));
 		}
 		return list;
+	}
+
+	public String getTableRowKey(String tableName) throws IOException {
+		Table table = HadoopUtils.getHBaseConnection().getTable(
+				getTableName(tableName));
+		Scan scan = new Scan();
+		ResultScanner scanner = table.getScanner(scan);
+		Result firstRow = scanner.next();
+		scanner.close();
+		return new String(firstRow.getRow());
 	}
 
 }

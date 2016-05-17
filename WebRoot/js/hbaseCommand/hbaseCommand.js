@@ -29,6 +29,11 @@ $(function(){
 	    	    	console.info("cfs:"+cfs.value);
 	    	    }
 	    	});
+	    	// 设置rowkey start end
+	    	var ret =callByAJax('hbase/hbaseCommand_getTableStartRowKey.action',
+    	    		{tableName:record.value});
+	    	console.info(ret);
+	    	$('#data_retrieve_start_rowkey').val("-2");
 	    }
 	});
 	

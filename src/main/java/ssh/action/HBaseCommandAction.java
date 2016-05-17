@@ -84,8 +84,27 @@ public class HBaseCommandAction extends ActionSupport {
 		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
 		return;
 	}
-	
-	public void getTablesJson(){
+
+	public void getTableStartRowKey() {
+		String rowkey = null;
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		try {
+			rowkey = this.hbaseCommandService.getTableRowKey(tableName);
+		} catch (IOException e) {// @TODO 前台如何处理
+			e.printStackTrace();
+			logger.info("获取HBase 表rowkey异常!");
+			jsonMap.put("flag", "false");
+			jsonMap.put("data", "-1");
+			Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+			return;
+		}
+		jsonMap.put("flag", "true");
+		jsonMap.put("data", rowkey);
+		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+		return;
+	}
+
+	public void getTablesJson() {
 		List<TextValue> tables = new ArrayList<>();
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		try {
@@ -96,14 +115,14 @@ public class HBaseCommandAction extends ActionSupport {
 			jsonMap.put("flag", "false");
 			jsonMap.put("data", null);
 			Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
-			return ;
+			return;
 		}
 		jsonMap.put("flag", "true");
 		jsonMap.put("data", tables);
 		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
 	}
-	
-	public void getTableColumnFamilyJson(){
+
+	public void getTableColumnFamilyJson() {
 		List<TextValue> tables = new ArrayList<>();
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		try {
@@ -114,7 +133,7 @@ public class HBaseCommandAction extends ActionSupport {
 			jsonMap.put("flag", "false");
 			jsonMap.put("data", null);
 			Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
-			return ;
+			return;
 		}
 		jsonMap.put("flag", "true");
 		jsonMap.put("data", tables);
