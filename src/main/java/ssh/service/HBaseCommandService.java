@@ -154,6 +154,7 @@ public class HBaseCommandService {
 		ResultScanner scanner = table.getScanner(scan);
 		Result firstRow = scanner.next();
 		scanner.close();
+		if(firstRow == null) return "-1";
 		return new String(firstRow.getRow());
 	}
 

@@ -33,6 +33,8 @@ public class HBaseCommandAction extends ActionSupport {
 
 	private String tableName;
 	private String cfs;
+	private String startRowKey;
+	private int limit;
 
 	// private Admin admin = null; // 应该放在公共的地方
 
@@ -237,5 +239,21 @@ public class HBaseCommandAction extends ActionSupport {
 
 	public void setCfs(String cfs) {
 		this.cfs = cfs;
+	}
+
+	public String getStartRowKey() {
+		return startRowKey;
+	}
+
+	public void setStartRowKey(String startRowKey) {
+		this.startRowKey = startRowKey;
+	}
+
+	public int getLimit() {
+		return limit;
+	}
+
+	public void setLimit(int limit) {
+		this.limit = limit;
 	}
 }
