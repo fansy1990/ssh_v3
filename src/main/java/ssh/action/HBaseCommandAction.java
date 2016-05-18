@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ssh.model.HBaseTable;
+import ssh.model.HBaseTableData;
 import ssh.model.TextValue;
 import ssh.service.HBaseCommandService;
 import ssh.util.Utils;
@@ -77,7 +78,7 @@ public class HBaseCommandAction extends ActionSupport {
 			e.printStackTrace();
 			logger.info("获取HBase 表异常!");
 			jsonMap.put("total", 0);
-			jsonMap.put("rows", null);
+			jsonMap.put("rows", tables);
 			Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
 			return;
 		}
@@ -122,6 +123,34 @@ public class HBaseCommandAction extends ActionSupport {
 		jsonMap.put("flag", "true");
 		jsonMap.put("data", tables);
 		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+	}
+
+	public void getTableData() {
+		List<HBaseTableData> tableDatas = new ArrayList<>();
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		if (tableName == null || cfs == null || "".equals(tableName)
+				|| "".equals(cfs)) {
+			logger.info("HBase 表名或列簇没有设置，获取数据异常!");
+			jsonMap.put("total", 0);
+			jsonMap.put("rows", tableDatas);
+			Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+			return;
+		}
+		try {
+			tableDatas = this.hbaseCommandService.getTableData(tableName, cfs,
+					startRowKey, limit);
+		} catch (IOException e) {// @TODO 前台如何处理
+			e.printStackTrace();
+			logger.info("获取HBase 表数据异常!");
+			jsonMap.put("total", 0);
+			jsonMap.put("rows", null);
+			Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+			return;
+		}
+		jsonMap.put("total", tableDatas.size());
+		jsonMap.put("rows", Utils.getProperFiles(tableDatas, page, rows));
+		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+		return;
 	}
 
 	public void getTableColumnFamilyJson() {

@@ -31,7 +31,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<a  class="easyui-linkbutton" iconCls="icon-reload" onclick="list_data()">确定</a>
 		</div>
 
-		<table id="dg_hdfsManager_list" class="easyui-datagrid"></table>
+		<table id="dg_hdfsManager_list" ></table>
 	</div>
 	<script type="text/javascript" src="js/hdfsManager/hdfsManager_utils.js"></script>
 	<script type="text/javascript" src="js/hdfsManager/folder.js" ></script>

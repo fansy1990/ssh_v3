@@ -57,7 +57,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 		</div>
 
-		<table id="dg_data_retrieve" class="easyui-datagrid"></table>
+		<table id="dg_data_retrieve" ></table>
 	</div>
 	<script type="text/javascript" src="js/hbaseCommand/hbaseCommand.js"></script>
   </body>

@@ -36,7 +36,7 @@
 				onclick="table_delete()">表删除</a>
 		</div>
 
-		<table id="dg_hbaseCommand_list" class="easyui-datagrid"></table>
+		<table id="dg_hbaseCommand_list" ></table>
 		<div id="win_table_detail"></div>
 
 		<div id="win_table_add" class="easyui-window" title="新增表"

@@ -17,6 +17,7 @@ import org.apache.hadoop.hbase.client.Table;
 import org.springframework.stereotype.Service;
 
 import ssh.model.HBaseTable;
+import ssh.model.HBaseTableData;
 import ssh.model.TextValue;
 import ssh.util.HadoopUtils;
 import ssh.util.Utils;
@@ -154,8 +155,35 @@ public class HBaseCommandService {
 		ResultScanner scanner = table.getScanner(scan);
 		Result firstRow = scanner.next();
 		scanner.close();
-		if(firstRow == null) return "-1";
+		if (firstRow == null)
+			return "-1";
 		return new String(firstRow.getRow());
+	}
+
+	public List<HBaseTableData> getTableData(String tableName, String cfs,
+			String startRowKey, int limit) throws IOException {
+		List<HBaseTableData> datas = new ArrayList<>();
+		Table table = HadoopUtils.getHBaseConnection().getTable(
+				getTableName(tableName));
+		Scan scan = new Scan();
+		if (startRowKey != "-1") {
+			scan.setStartRow(startRowKey.getBytes());
+		}
+		String[] cfsArr = cfs.split(Utils.COMMA, -1);
+		for (String cf : cfsArr) {
+			scan.addFamily(cf.getBytes());
+		}
+
+		ResultScanner scanner = table.getScanner(scan);
+
+		Result[] rows = scanner.next(limit);
+
+		for (Result row : rows) {
+
+		}
+
+		scanner.close();
+		return null;
 	}
 
 }

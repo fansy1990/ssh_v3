@@ -147,7 +147,7 @@ $(function(){
 		border : false,
 		fitColumns : false,
 		singleSelect : true,
-		width : 1100,
+		width : 600,
 		height : 420,
 		nowrap : false,
 		fit : false,
@@ -157,57 +157,52 @@ $(function(){
 		rownumbers : true,// 行号
 		pagePosition : 'top',
 		url : 'hbase/hbaseCommand_getTableData.action',
-//		queryParams: {
-//			folder: folder_
-//		},
+		queryParams: {
+			tableName: '',
+			cfs: ''
+		},
 		onLoadError:function(){
 			console.info("list load error!");
 			 $.messager.alert('信息','加载错误，请联系管理员!','info');
 		},
 		onBeforeLoad:function(param){
-//			return checkTextBoxEmpty('cc_data_retrieve_tableName','请选择表名！') 
-//			&& checkTextBoxEmpty('cc_data_retrieve_column_family','请选择列簇名！');
 			return true;
 		},
 		idField:'id',
 		columns :[[
 				{
-					field : 'nameSpace',
-					title : '数据库',
+					field : 'rowKey',
+					title : 'RowKey',
 					width : '120'
 				},{
-					field : 'tableName',
-					title : '表名',
-					width : '100'
+					field : 'column',
+					title : '列簇:列名',
+					width : '120'
 				},{
-					field : 'onlineRegions',
-					title : 'Online Regions',
-					width : '100'
+					field : 'timestamp',
+					title : '时间戳',
+					width : '150'
 				},{
-					field : 'offlineRegions',
-					title : 'Offline Regions',
-					width : '100',
-				},{
-					field : 'failedRegions',
-					title : 'Failed Regions',
-					width : '100'
-				},{
-					field : 'splitRegions',
-					title : 'Split Regions',
-					width : '100'
-				},{
-					field : 'otherRegions',
-					title : 'Other Regions',
-					width : '100'
-				},{
-					field : 'description',
-					title : '表描述',
-					width : '300'
+					field : 'value',
+					title : '值',
+					width : '150',
 				}
 				 ]]
 		    }); 
 	
 });
+
+function getFakeData(id_){
+	console.info(id_);
+	var data ='' ;
+	try{
+		data = $('#'+id_).combobox('getValue');
+	}catch (e) {
+		data='';
+	}
+	
+	return data;
+}
 
 function list(){
 	console.info("abc");
@@ -266,9 +261,14 @@ function table_delete(){
 }
 
 function retrieve_data(){
-	// 判断方式有误，应该是combo的判断方式  
-//	@TODO
-	if(checkTextBoxEmpty('cc_data_retrieve_tableName','请选择表名！')){ return ; }
-	if(checkTextBoxEmpty('cc_data_retrieve_column_family','请选择列簇名！')){ return ;}
-	console.info('aaa');
+	 
+	if(checkComboboxEmpty('cc_data_retrieve_tableName','请选择表名！')){ return ; }
+	if(checkComboboxEmpty('cc_data_retrieve_column_family','请选择列簇名！')){ return ;}
+	console.info('retrieving data...');
+	$('#dg_data_retrieve').datagrid('load',{
+		tableName: getFakeData('cc_data_retrieve_tableName'),
+		cfs: getFakeData('cc_data_retrieve_column_family'),
+		limit: getFakeData('data_retrieve_limit_records'),
+		startRowKey: $('#data_retrieve_start_rowkey').val()
+	});
 }

@@ -61,7 +61,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 		</div>
 
-		<table id="dg_hdfsManager_search" class="easyui-datagrid"></table>
+		<table id="dg_hdfsManager_search" ></table>
 	</div>
 	<script type="text/javascript" src="js/hdfsManager/hdfsManager_utils.js"></script>
 	<script type="text/javascript" src="js/hdfsManager/folder.js"></script>

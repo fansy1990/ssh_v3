@@ -127,6 +127,21 @@ function checkTextBoxEmpty(id_,msg){
 	}
 	return false;
 }
+/**
+ * check if combobox value is empty
+ * @param id_
+ * @param msg
+ * @returns {Boolean}
+ */
+function checkComboboxEmpty(id_,msg){
+	var folder_ = $('#'+id_).combobox('getValue');
+//	console.info(":"+folder_);
+	if(folder_==""|| folder_==undefined) {
+		$.messager.alert('警告',msg,'warning');
+		return true;
+	}
+	return false;
+}
 
 /**
  * 添加tab 页
