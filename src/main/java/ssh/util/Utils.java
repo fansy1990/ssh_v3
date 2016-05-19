@@ -20,6 +20,13 @@ public class Utils {
 	public static final String COMMA = ",";
 	private static PrintWriter writer = null;
 
+	public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat(
+			"yyyy/MM/dd HH:mm:ss SSS");
+
+	public static String dateLongtoString(long time) {
+		return SIMPLE_DATE_FORMAT.format(new Date(time));
+	}
+
 	/**
 	 * HDFS文件格式转换为目标格式
 	 * 

@@ -147,7 +147,7 @@ $(function(){
 		border : false,
 		fitColumns : false,
 		singleSelect : true,
-		width : 600,
+		width : 900,
 		height : 420,
 		nowrap : false,
 		fit : false,
@@ -173,19 +173,19 @@ $(function(){
 				{
 					field : 'rowKey',
 					title : 'RowKey',
-					width : '120'
+					width : '200'
 				},{
 					field : 'column',
 					title : '列簇:列名',
-					width : '120'
+					width : '300'
 				},{
 					field : 'timestamp',
 					title : '时间戳',
-					width : '150'
+					width : '200'
 				},{
 					field : 'value',
 					title : '值',
-					width : '150',
+					width : '200',
 				}
 				 ]]
 		    }); 
@@ -269,6 +269,7 @@ function retrieve_data(){
 		tableName: getFakeData('cc_data_retrieve_tableName'),
 		cfs: getFakeData('cc_data_retrieve_column_family'),
 		limit: getFakeData('data_retrieve_limit_records'),
-		startRowKey: $('#data_retrieve_start_rowkey').val()
+		startRowKey: $('#data_retrieve_start_rowkey').val(),
+		versions:getFakeData('data_retrieve_versions_records')
 	});
 }

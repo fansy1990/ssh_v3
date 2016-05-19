@@ -37,6 +37,8 @@ public class HBaseCommandAction extends ActionSupport {
 	private String startRowKey;
 	private int limit;
 
+	private int versions;
+
 	// private Admin admin = null; // 应该放在公共的地方
 
 	public HBaseCommandAction() {
@@ -138,7 +140,7 @@ public class HBaseCommandAction extends ActionSupport {
 		}
 		try {
 			tableDatas = this.hbaseCommandService.getTableData(tableName, cfs,
-					startRowKey, limit);
+					startRowKey, limit, versions);
 		} catch (IOException e) {// @TODO 前台如何处理
 			e.printStackTrace();
 			logger.info("获取HBase 表数据异常!");
@@ -284,5 +286,13 @@ public class HBaseCommandAction extends ActionSupport {
 
 	public void setLimit(int limit) {
 		this.limit = limit;
+	}
+
+	public int getVersions() {
+		return versions;
+	}
+
+	public void setVersions(int versions) {
+		this.versions = versions;
 	}
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HRegionInfo;
 import org.apache.hadoop.hbase.HTableDescriptor;
@@ -161,11 +162,12 @@ public class HBaseCommandService {
 	}
 
 	public List<HBaseTableData> getTableData(String tableName, String cfs,
-			String startRowKey, int limit) throws IOException {
+			String startRowKey, int limit, int versions) throws IOException {
 		List<HBaseTableData> datas = new ArrayList<>();
 		Table table = HadoopUtils.getHBaseConnection().getTable(
 				getTableName(tableName));
 		Scan scan = new Scan();
+		scan.setMaxVersions(versions);
 		if (startRowKey != "-1") {
 			scan.setStartRow(startRowKey.getBytes());
 		}
@@ -179,11 +181,20 @@ public class HBaseCommandService {
 		Result[] rows = scanner.next(limit);
 
 		for (Result row : rows) {
+			// Cell[] cells = row.rawCells();
 
+			datas.addAll(getFromCells(row.rawCells()));
 		}
 
 		scanner.close();
-		return null;
+		return datas;
 	}
 
+	private List<HBaseTableData> getFromCells(Cell[] rawCells) {
+		List<HBaseTableData> list = new ArrayList<>();
+		for (Cell cell : rawCells) {
+			list.add(new HBaseTableData(cell));
+		}
+		return list;
+	}
 }

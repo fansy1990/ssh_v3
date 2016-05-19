@@ -45,10 +45,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				记录数： <select
 					id="data_retrieve_limit_records" class="easyui-combobox"
 					style="width:85px;">
-					<option value="10">10</option>
+					<option value="10" selected="selected">10</option>
 					<option value="50">50</option>
 					<option value="100">100</option>
 					<option value="300">300</option>
+				</select>
+				
+				版本数： <select
+					id="data_retrieve_versions_records" class="easyui-combobox"
+					style="width:85px;">
+					<option value="1" selected="selected">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="5">5</option>
+					<option value="10">10</option>
+					<option value="100">100</option>
 				</select>
 				
 				
