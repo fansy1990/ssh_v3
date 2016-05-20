@@ -20,7 +20,7 @@
 			}
 		},{
 			"id":113,
-			"text":"Table数据检索",
+			"text":"Table数据管理",
 			"attributes":{
 				"folder":"0",
 				"url":"hbaseCommand/data_retrieve.jsp"

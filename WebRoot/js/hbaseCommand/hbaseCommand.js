@@ -147,8 +147,8 @@ $(function(){
 		border : false,
 		fitColumns : false,
 		singleSelect : true,
-		width : 900,
-		height : 420,
+		width : 950,
+		height : 320,
 		nowrap : false,
 		fit : false,
 		pagination : true,// 分页控件
@@ -191,12 +191,34 @@ $(function(){
 		    }); 
 	
 });
-
+/**
+ * 获取combobox的一个值
+ * @param id_
+ * @returns {String}
+ */
 function getFakeData(id_){
-	console.info(id_);
+//	console.info(id_);
 	var data ='' ;
 	try{
 		data = $('#'+id_).combobox('getValue');
+	}catch (e) {
+		data='';
+	}
+	
+	return data;
+}
+
+/**
+ * 获取combobox的多个值
+ * @param id_
+ * @returns {String}
+ */
+function getFakeData2(id_){
+//	console.info(id_);
+	var data ='' ;
+	try{
+		data = $('#'+id_).combobox('getValues');
+		data=data+'';
 	}catch (e) {
 		data='';
 	}
@@ -264,12 +286,54 @@ function retrieve_data(){
 	 
 	if(checkComboboxEmpty('cc_data_retrieve_tableName','请选择表名！')){ return ; }
 	if(checkComboboxEmpty('cc_data_retrieve_column_family','请选择列簇名！')){ return ;}
-	console.info('retrieving data...');
+//	console.info('retrieving data...');
 	$('#dg_data_retrieve').datagrid('load',{
 		tableName: getFakeData('cc_data_retrieve_tableName'),
-		cfs: getFakeData('cc_data_retrieve_column_family'),
+		cfs: getFakeData2('cc_data_retrieve_column_family'),
 		limit: getFakeData('data_retrieve_limit_records'),
 		startRowKey: $('#data_retrieve_start_rowkey').val(),
 		versions:getFakeData('data_retrieve_versions_records')
+	});
+}
+/**
+ * 数据新增
+ */
+function data_add(){
+	if(checkComboboxEmpty('cc_data_retrieve_tableName','请选择表名！')){ return ; }
+	if(checkComboboxEmpty('cc_data_retrieve_column_family','请选择列簇名！')){ return ;}
+	var cf_ = getFakeData2('cc_data_retrieve_column_family')
+//	console.info(cf_);
+	if(cf_.indexOf(",") > 0){
+		$.messager.alert('警告','只能选择一个列簇','warning');
+	}
+	console.info('adding data...');
+	// @TODO 前台弹出window
+}
+/**
+ * 数据更新
+ */
+function data_update(){
+	
+}
+/**
+ * 数据删除
+ */
+function data_delete(){
+	var slRow = $('#dg_data_retrieve').datagrid('getSelected');
+	if(slRow ==null || slRow == 'null'){
+		$.messager.alert('信息','请选择一条数据!','info');
+		return ;
+	}
+	$.messager.confirm('确认','您确认想要删除数据'+slRow.value+'吗？',function(r){    
+	    if (r){    
+	    	// @TODO 完善deleteTableData函数，参数获取修改
+	    	var ret = callByAJax('hbase/hbaseCommand_deleteTableData.action',{tableName:slRow.tableName});    
+	    	if(ret.flag=='false'){
+	    		$.messager.alert('信息','数据删除错误，请联系管理员!','info');
+	    	}else{
+	    		$.messager.alert('信息','数据:'+slRow.value+'被删除!','info');
+	    		$('#dg_data_retrieve').datagrid('load',{});
+	    	}
+	    }    
 	});
 }

@@ -27,20 +27,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div style="margin:20px 0;">
 			<!-- 先手动输入，后期考虑使用select，并从后台获取 -->
 			<span>表名：</span>
-				<input id="cc_data_retrieve_tableName" > 
+				<input id="cc_data_retrieve_tableName"  >
+				 <a class="easyui-linkbutton"
+					iconCls="icon-add" onclick="data_add()" >新增</a> 
+					<a class="easyui-linkbutton"
+					iconCls="icon-edit" onclick="data_update()">更新</a> 
+					<a class="easyui-linkbutton" iconCls="icon-remove" onclick="data_delete()">删除</a>
 				<br>
 			<p>请输入检索条件，进行检索:</p>
 			<div >
-				列簇名：<!-- <input class="easyui-validatebox" type="text"
-					id="data_retrieve_column_family" style="width:60px;" value="" />  -->
+				列簇名：
 					<input id="cc_data_retrieve_column_family" > 
-				<!-- 列名：<input class="easyui-validatebox" type="text"
-					id="data_retrieve_column_qualifier" style="width:60px;" value="" /> 
-				<input id="cc_data_retrieve_column_qualifier" >  -->
+				<input id="cc_data_retrieve_column_qualifier" > 
 				Start RowKey：<input class="easyui-validatebox" type="text"
 					id="data_retrieve_start_rowkey" style="width:60px;" value="-1" /> 
-				<!-- End RowKey：<input class="easyui-validatebox" type="text"
-					id="data_retrieve_end_rowkey" style="width:60px;" value="-1" /> -->
 				
 				记录数： <select
 					id="data_retrieve_limit_records" class="easyui-combobox"
