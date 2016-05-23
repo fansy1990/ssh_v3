@@ -1,6 +1,7 @@
 package ssh.util;
 
 import java.io.PrintWriter;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -22,9 +23,14 @@ public class Utils {
 
 	public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat(
 			"yyyy/MM/dd HH:mm:ss SSS");
+	public static final String COLON = ":";
 
 	public static String dateLongtoString(long time) {
 		return SIMPLE_DATE_FORMAT.format(new Date(time));
+	}
+	
+	public static long dateStringtoLong(String dateString) throws ParseException{
+		return SIMPLE_DATE_FORMAT.parse(dateString).getTime();
 	}
 
 	/**

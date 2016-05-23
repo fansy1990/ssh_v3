@@ -311,22 +311,20 @@ function data_add(){
 		$.messager.alert('警告','只能选择一个列簇','warning');
 		return ;
 	}
-	console.info('adding data...');
-	// @TODO 前台弹出window
 	var tableName_ = getFakeData('cc_data_retrieve_tableName');
 	var win_table_add_data_ = $('#win_table_add_data').window({    
 	    width:450,    
-	    height:290,    
+	    height:350,    
 	    modal:true,
 	    left:400,
-	    top:200,
+	    top:150,
 	    title:'数据新增',
 	    collapsible:false,
 	    minimizable:false,
 	    maximizable:false,
 //	    content: '<div style="padding:30px 20px 10px 20px;">' + "a" +'</div>'
 	    content: '<iframe id="tabIframe" src="hbaseCommand/data_add.jsp?tableName='+tableName_+'&cf='+cf_+
-	    	'" frameborder="0" style="border:0;width:100%;height:99%;">',
+	    	'" frameborder="0" style="border:0;width:100%;height:100%;">',
 //	    href:"hbaseCommand/data_add.jsp",
 	    onOpen:function(){    
 	    	// 修改对应的值；
@@ -360,12 +358,23 @@ function data_delete(){
 	$.messager.confirm('确认','您确认想要删除数据'+slRow.value+'吗？',function(r){    
 	    if (r){    
 	    	// @TODO 完善deleteTableData函数，参数获取修改
-	    	var ret = callByAJax('hbase/hbaseCommand_deleteTableData.action',{tableName:slRow.tableName});    
+	    	var ret = callByAJax('hbase/hbaseCommand_deleteTableData.action',
+	    			{tableName:getFakeData('cc_data_retrieve_tableName'),
+	    			cfs:slRow.column,
+	    			rowkey:slRow.rowKey,
+	    			timestamp:slRow.timestamp,
+	    			value:slRow.value});    
 	    	if(ret.flag=='false'){
 	    		$.messager.alert('信息','数据删除错误，请联系管理员!','info');
 	    	}else{
 	    		$.messager.alert('信息','数据:'+slRow.value+'被删除!','info');
-	    		$('#dg_data_retrieve').datagrid('load',{});
+	    		$('#dg_data_retrieve').datagrid('load',{
+	    			tableName: getFakeData('cc_data_retrieve_tableName'),
+	    			cfs: getFakeData2('cc_data_retrieve_column_family'),
+	    			limit: getFakeData('data_retrieve_limit_records'),
+	    			startRowKey: $('#data_retrieve_start_rowkey').val(),
+	    			versions:getFakeData('data_retrieve_versions_records')
+	    		});
 	    	}
 	    }    
 	});

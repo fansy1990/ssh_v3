@@ -1,6 +1,7 @@
 package ssh.action;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,9 +36,16 @@ public class HBaseCommandAction extends ActionSupport {
 	private String tableName;
 	private String cfs;
 	private String startRowKey;
+	
+	private String timestamp;
+	
 	private int limit;
 
 	private int versions;
+	
+	private String column;
+	private String value;
+	private String rowkey;
 
 	// private Admin admin = null; // 应该放在公共的地方
 
@@ -70,13 +78,29 @@ public class HBaseCommandAction extends ActionSupport {
 	// admin = null;
 	// }
 	// }
-
+	public void addTableData(){
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		boolean flag =false;
+		try {
+			flag = this.hbaseCommandService.saveTableData(tableName,cfs,rowkey,column,value);
+		} catch (IOException e) {//
+			e.printStackTrace();
+			logger.info("新增HBase 表数据异常!");
+			jsonMap.put("flag", flag?"true":"false");
+			jsonMap.put("msg", "请联系管理员");
+			Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+			return;
+		}
+		jsonMap.put("flag", flag?"true":"false");
+		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+		return;
+	}
 	public void getTables() {
 		List<HBaseTable> tables = new ArrayList<>();
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		try {
 			tables = this.hbaseCommandService.getTables();
-		} catch (IOException e) {// @TODO 前台如何处理
+		} catch (IOException e) {// 
 			e.printStackTrace();
 			logger.info("获取HBase 表异常!");
 			jsonMap.put("total", 0);
@@ -202,6 +226,22 @@ public class HBaseCommandAction extends ActionSupport {
 		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
 		return;
 	}
+	
+	public void deleteTableData() {
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		try {
+			String[] cfsArr = cfs.split(Utils.COLON, -1);
+			boolean flag = this.hbaseCommandService.deleteTableData(tableName,
+					cfsArr[0],cfsArr[1],rowkey,value,Utils.dateStringtoLong(timestamp));
+			jsonMap.put("flag", String.valueOf(flag));
+		} catch (IOException|ParseException e) {
+			e.printStackTrace();
+			logger.info("删除HBase 表数据异常!");
+			jsonMap.put("flag", "false");
+		} 
+		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+		return;
+	}
 
 	public void checkTableExists() {
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
@@ -294,5 +334,37 @@ public class HBaseCommandAction extends ActionSupport {
 
 	public void setVersions(int versions) {
 		this.versions = versions;
+	}
+
+	public String getColumn() {
+		return column;
+	}
+
+	public void setColumn(String column) {
+		this.column = column;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	public String getRowkey() {
+		return rowkey;
+	}
+
+	public void setRowkey(String rowkey) {
+		this.rowkey = rowkey;
+	}
+
+	public String getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
 	}
 }

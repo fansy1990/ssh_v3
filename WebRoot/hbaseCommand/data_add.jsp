@@ -16,7 +16,7 @@
 
 </head>
 <body>
-	<div style="padding:10px 60px 20px 60px;">
+	<div style="padding:5px">
 		<form id="data_add_ff" class="easyui-form" method="post">
 			<table cellpadding="5" align="center">
 				<tr>
@@ -30,6 +30,12 @@
 					<td><input class="easyui-textbox" type="text" name="cfs" readonly="readonly"
 						value='<%=request.getParameter("cf")%>' id="data_add_ff_family"
 						style="height:30px;width: 180px;"></input></td>
+				</tr>
+				<tr>
+					<td>Row Key:</td>
+					<td><input class="easyui-textbox" type="text" name="rowkey"
+						id="data_add_ff_rowkey" style="height:30px;width: 180px;"
+						data-options="validType:['length[1,20]'],required:true,prompt:'rk1'"></input></td>
 				</tr>
 				<tr>
 					<td>列名:</td>
@@ -49,9 +55,10 @@
 			<a href="javascript:void(0)" class="easyui-linkbutton"
 				onclick="data_add_add()" iconCls="icon-add">添加</a> <a
 				href="javascript:void(0)" iconCls="icon-clear"
-				class="easyui-linkbutton" onclick="data_add_cancle()">取消</a>
+				class="easyui-linkbutton" onclick="data_add_cancel()">取消</a>
 		</div>
 	</div>
 	<script type="text/javascript" src="js/hbaseCommand/data_add.js"></script>
+	<script type="text/javascript" src="js/utils.js"></script>
 </body>
 </html>

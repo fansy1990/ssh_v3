@@ -11,11 +11,18 @@ import org.apache.hadoop.hbase.HRegionInfo;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.Delete;
+import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.util.Bytes;
 import org.springframework.stereotype.Service;
+
+
+
+
 
 import ssh.model.HBaseTable;
 import ssh.model.HBaseTableData;
@@ -156,8 +163,10 @@ public class HBaseCommandService {
 		ResultScanner scanner = table.getScanner(scan);
 		Result firstRow = scanner.next();
 		scanner.close();
+		table.close();
 		if (firstRow == null)
 			return "-1";
+		
 		return new String(firstRow.getRow());
 	}
 
@@ -187,6 +196,7 @@ public class HBaseCommandService {
 		}
 
 		scanner.close();
+		table.close();
 		return datas;
 	}
 
@@ -196,5 +206,33 @@ public class HBaseCommandService {
 			list.add(new HBaseTableData(cell));
 		}
 		return list;
+	}
+
+	public boolean saveTableData(String tableName, String cfs, String rowkey,
+			String column, String value) throws IOException {
+		Table table = HadoopUtils.getHBaseConnection().getTable(
+				getTableName(tableName));
+		Put put = new Put(Bytes.toBytes(rowkey));
+		put.addColumn(Bytes.toBytes(cfs), Bytes.toBytes(column), Bytes.toBytes(value));
+		
+		table.put(put);
+		table.close();
+		return true;
+	}
+
+	public boolean deleteTableData(String tableName, String family,
+			String qualifier,String rowkey, 
+			String value, long timestamp) throws IOException {
+		Table table = HadoopUtils.getHBaseConnection().getTable(
+				getTableName(tableName));
+		Delete delete = new Delete(Bytes.toBytes(rowkey));
+		delete.addColumn(Bytes.toBytes(family), Bytes.toBytes(qualifier), timestamp);
+		boolean flag = table.checkAndDelete(Bytes.toBytes(rowkey),
+				Bytes.toBytes(family), Bytes.toBytes(qualifier), 
+				Bytes.toBytes(value), delete);
+		
+		table.close();
+		
+		return flag;
 	}
 }
