@@ -37,8 +37,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<p>请输入检索条件，进行检索:</p>
 			<div >
 				列簇名：
-					<input id="cc_data_retrieve_column_family" > 
-				<input id="cc_data_retrieve_column_qualifier" > 
+					<input id="cc_data_retrieve_column_family" size="10"> 
 				Start RowKey：<input class="easyui-validatebox" type="text"
 					id="data_retrieve_start_rowkey" style="width:60px;" value="-1" /> 
 				
@@ -64,6 +63,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				
 				
 				<a  class="easyui-linkbutton" iconCls="icon-filter" onclick="retrieve_data()">确定</a>
+				
+				<div id="win_table_add_data" ></div>
 				
 			</div>
 		</div>

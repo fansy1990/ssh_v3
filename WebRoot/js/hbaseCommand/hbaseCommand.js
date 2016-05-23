@@ -10,6 +10,8 @@ $(function(){
 	    multiple:false  ,
 	    valueField:'value',
 	    textField:'text',
+	    width:150,
+	    panelHeight:150,
 //	    url: 'hbase/hbaseCommand_getTablesJson.action'
 //	    data: tablesString.data
 	    data: callByAJax('hbase/hbaseCommand_getTablesJson.action', {}).data,
@@ -21,6 +23,8 @@ $(function(){
 	    	$('#cc_data_retrieve_column_family').combobox({    
 	    	    required:true,    
 	    	    multiple:true ,
+	    	    width:100,
+	    	    panelHeight:100,
 	    	    valueField:'value',
 	    	    textField:'text',
 	    	    data:callByAJax('hbase/hbaseCommand_getTableColumnFamilyJson.action',
@@ -305,9 +309,36 @@ function data_add(){
 //	console.info(cf_);
 	if(cf_.indexOf(",") > 0){
 		$.messager.alert('警告','只能选择一个列簇','warning');
+		return ;
 	}
 	console.info('adding data...');
 	// @TODO 前台弹出window
+	
+	$('#win_table_add_data').window({    
+	    width:450,    
+	    height:290,    
+	    modal:true,
+	    left:400,
+	    top:200,
+	    title:'数据新增',
+	    collapsible:false,
+	    minimizable:false,
+	    maximizable:false,
+//	    content: '<div style="padding:30px 20px 10px 20px;">' + "a" +'</div>'
+	    href:"hbaseCommand/data_add.jsp",
+	    onOpen:function(){    
+	    	// 修改对应的值；
+	    	$('#data_add_ff_tableName').val(getFakeData('cc_data_retrieve_tableName'));
+	    	$('#data_add_ff_family').val(cf_);  
+	    	$('#data_add_ff_family').textbox('setValue',cf_);  
+	    	
+//	    	console.info("a"+$('#data_add_ff_family').textbox('getValue'));
+	    }
+	});
+	
+
+	
+	
 }
 /**
  * 数据更新
@@ -336,4 +367,18 @@ function data_delete(){
 	    	}
 	    }    
 	});
+}
+
+/**
+ * 页面弹出数据新增的添加按钮
+ */
+function data_add_add(){
+	
+}
+
+/**
+ * 页面弹出数据新增的取消按钮
+ */
+function data_add_cancel(){
+	
 }
