@@ -1,21 +1,40 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://"
+			+ request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
+%>
+<html>
+<head>
+<base href="<%=basePath%>">
+<link rel="stylesheet" type="text/css" href="themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="themes/icon.css">
+<link rel="stylesheet" type="text/css" href="css/demo.css">
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.easyui.min.js"></script>
+
+</head>
+<body>
 	<div style="padding:10px 60px 20px 60px;">
 		<form id="data_add_ff" class="easyui-form" method="post">
 			<table cellpadding="5" align="center">
 				<tr>
 					<td>表名:</td>
-					<td><input class="easyui-textbox" type="text" name="tableName" id="data_add_ff_tableName"
-						style="height:30px;width: 180px;" ></input></td>
+					<td><input class="easyui-textbox" type="text" name="tableName" value='<%=request.getParameter("tableName")%>'
+						id="data_add_ff_tableName" style="height:30px;width: 180px; " readonly="readonly"></input></td>
 				</tr>
 				<tr>
+
 					<td>列簇名:</td>
-					<td><input class="easyui-textbox" type="text" name="cfs"
-						id="data_add_ff_family" style="height:30px;width: 180px;"></input></td>
+					<td><input class="easyui-textbox" type="text" name="cfs" readonly="readonly"
+						value='<%=request.getParameter("cf")%>' id="data_add_ff_family"
+						style="height:30px;width: 180px;"></input></td>
 				</tr>
 				<tr>
 					<td>列名:</td>
 					<td><input class="easyui-textbox" type="text" name="column"
-						id="data_add_ff_column" style="height:30px;width: 180px;" 
+						id="data_add_ff_column" style="height:30px;width: 180px;"
 						data-options="validType:['length[1,20]'],required:true,prompt:'col1'"></input></td>
 				</tr>
 				<tr>
@@ -33,4 +52,6 @@
 				class="easyui-linkbutton" onclick="data_add_cancle()">取消</a>
 		</div>
 	</div>
-<script type="text/javascript" src="js/hbaseCommand/hbaseCommand.js"></script>
+	<script type="text/javascript" src="js/hbaseCommand/data_add.js"></script>
+</body>
+</html>

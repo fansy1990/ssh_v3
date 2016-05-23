@@ -313,8 +313,8 @@ function data_add(){
 	}
 	console.info('adding data...');
 	// @TODO 前台弹出window
-	
-	$('#win_table_add_data').window({    
+	var tableName_ = getFakeData('cc_data_retrieve_tableName');
+	var win_table_add_data_ = $('#win_table_add_data').window({    
 	    width:450,    
 	    height:290,    
 	    modal:true,
@@ -325,15 +325,17 @@ function data_add(){
 	    minimizable:false,
 	    maximizable:false,
 //	    content: '<div style="padding:30px 20px 10px 20px;">' + "a" +'</div>'
-	    href:"hbaseCommand/data_add.jsp",
+	    content: '<iframe id="tabIframe" src="hbaseCommand/data_add.jsp?tableName='+tableName_+'&cf='+cf_+
+	    	'" frameborder="0" style="border:0;width:100%;height:99%;">',
+//	    href:"hbaseCommand/data_add.jsp",
 	    onOpen:function(){    
 	    	// 修改对应的值；
-	    	$('#data_add_ff_tableName').val(getFakeData('cc_data_retrieve_tableName'));
-	    	$('#data_add_ff_family').val(cf_);  
-	    	$('#data_add_ff_family').textbox('setValue',cf_);  
-	    	
-//	    	console.info("a"+$('#data_add_ff_family').textbox('getValue'));
+//	    	$('#data_add_ff_tableName').val(getFakeData('cc_data_retrieve_tableName'));
+//	    	$('#data_add_ff_family').val(cf_);  
+//	    	$('#data_add_ff_family').textbox('setValue',cf_);  
+	    
 	    }
+	
 	});
 	
 
@@ -369,16 +371,3 @@ function data_delete(){
 	});
 }
 
-/**
- * 页面弹出数据新增的添加按钮
- */
-function data_add_add(){
-	
-}
-
-/**
- * 页面弹出数据新增的取消按钮
- */
-function data_add_cancel(){
-	
-}
