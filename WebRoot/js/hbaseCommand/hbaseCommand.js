@@ -47,7 +47,7 @@ $(function(){
 		fitColumns : false,
 		singleSelect : true,
 		width : 1100,
-		height : 420,
+		height : 400,
 		nowrap : false,
 		fit : false,
 		pagination : true,// 分页控件

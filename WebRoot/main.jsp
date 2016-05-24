@@ -70,8 +70,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div title="HBase" data-options="selected:false"
 				style="padding:10px;">
 				<div title="HBase" style="padding:10px;">
-					<a onclick="update_project('HBase命令演示系统','json/hbase.json')"
-						class="easyui-linkbutton">HBase命令演示系统</a>
+					<a onclick="update_project('HBase表管理系统','json/hbase.json')"
+						class="easyui-linkbutton">HBase表管理系统</a>
+				</div>
+				<div title="HBase" style="padding:10px;">
+					<a onclick="update_project('冠字号查询系统','json/hbase.json')"
+						class="easyui-linkbutton">冠字号查询系统：未完成</a>
 				</div>
 			</div>
 			<div title="博客推荐系统" data-options="selected:false"

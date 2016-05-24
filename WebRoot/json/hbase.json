@@ -25,13 +25,6 @@
 				"folder":"0",
 				"url":"hbaseCommand/data_retrieve.jsp"
 			}
-		},{
-			"id":114,
-			"text":"Table数据删除",
-			"attributes":{
-				"folder":"0",
-				"url":"hbaseCommand/data_delete.jsp"
-			}
 		}]
 	},{
 		"id":15,
