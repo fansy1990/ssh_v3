@@ -20,10 +20,6 @@ import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.springframework.stereotype.Service;
 
-
-
-
-
 import ssh.model.HBaseTable;
 import ssh.model.HBaseTableData;
 import ssh.model.TextValue;
@@ -166,7 +162,7 @@ public class HBaseCommandService {
 		table.close();
 		if (firstRow == null)
 			return "-1";
-		
+
 		return new String(firstRow.getRow());
 	}
 
@@ -213,26 +209,43 @@ public class HBaseCommandService {
 		Table table = HadoopUtils.getHBaseConnection().getTable(
 				getTableName(tableName));
 		Put put = new Put(Bytes.toBytes(rowkey));
-		put.addColumn(Bytes.toBytes(cfs), Bytes.toBytes(column), Bytes.toBytes(value));
-		
+		put.addColumn(Bytes.toBytes(cfs), Bytes.toBytes(column),
+				Bytes.toBytes(value));
+
 		table.put(put);
 		table.close();
 		return true;
 	}
 
 	public boolean deleteTableData(String tableName, String family,
-			String qualifier,String rowkey, 
-			String value, long timestamp) throws IOException {
+			String qualifier, String rowkey, String value, long timestamp)
+			throws IOException {
 		Table table = HadoopUtils.getHBaseConnection().getTable(
 				getTableName(tableName));
 		Delete delete = new Delete(Bytes.toBytes(rowkey));
-		delete.addColumn(Bytes.toBytes(family), Bytes.toBytes(qualifier), timestamp);
+		delete.addColumn(Bytes.toBytes(family), Bytes.toBytes(qualifier),
+				timestamp);
 		boolean flag = table.checkAndDelete(Bytes.toBytes(rowkey),
-				Bytes.toBytes(family), Bytes.toBytes(qualifier), 
+				Bytes.toBytes(family), Bytes.toBytes(qualifier),
 				Bytes.toBytes(value), delete);
-		
+
 		table.close();
-		
+
 		return flag;
+	}
+
+	public boolean updateTableData(String tableName, String cfs, String rowkey,
+			String column, String value, long timestamp, String oldValue)
+			throws IOException {
+		Table table = HadoopUtils.getHBaseConnection().getTable(
+				getTableName(tableName));
+		Put put = new Put(Bytes.toBytes(rowkey));
+		put.addColumn(Bytes.toBytes(cfs), Bytes.toBytes(column), timestamp,
+				Bytes.toBytes(value));
+
+		table.checkAndPut(Bytes.toBytes(rowkey), Bytes.toBytes(cfs),
+				Bytes.toBytes(column), Bytes.toBytes(oldValue), put);
+		table.close();
+		return true;
 	}
 }

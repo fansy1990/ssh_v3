@@ -65,6 +65,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<a  class="easyui-linkbutton" iconCls="icon-filter" onclick="retrieve_data()">确定</a>
 				
 				<div id="win_table_add_data" ></div>
+				<div id="win_table_update_data" ></div>
 				
 			</div>
 		</div>

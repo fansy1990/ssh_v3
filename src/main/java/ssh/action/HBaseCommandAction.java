@@ -28,24 +28,25 @@ public class HBaseCommandAction extends ActionSupport {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Logger logger = LoggerFactory.getLogger(HBaseCommandAction.class);
-	private HBaseCommandService hbaseCommandService;
-	private int rows;
-	private int page;
-
-	private String tableName;
 	private String cfs;
-	private String startRowKey;
-	
-	private String timestamp;
-	
+	private String column;
+	private HBaseCommandService hbaseCommandService;
 	private int limit;
 
-	private int versions;
-	
-	private String column;
-	private String value;
+	private Logger logger = LoggerFactory.getLogger(HBaseCommandAction.class);
+	private int page;
 	private String rowkey;
+
+	private int rows;
+
+	private String startRowKey;
+
+	private String tableName;
+
+	private String timestamp;
+	private String value;
+	private int versions;
+	private String oldValue;
 
 	// private Admin admin = null; // 应该放在公共的地方
 
@@ -78,66 +79,127 @@ public class HBaseCommandAction extends ActionSupport {
 	// admin = null;
 	// }
 	// }
-	public void addTableData(){
+	public void addTableData() {
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
-		boolean flag =false;
+		boolean flag = false;
 		try {
-			flag = this.hbaseCommandService.saveTableData(tableName,cfs,rowkey,column,value);
+			flag = this.hbaseCommandService.saveTableData(tableName, cfs,
+					rowkey, column, value);
 		} catch (IOException e) {//
 			e.printStackTrace();
 			logger.info("新增HBase 表数据异常!");
-			jsonMap.put("flag", flag?"true":"false");
+			jsonMap.put("flag", flag ? "true" : "false");
 			jsonMap.put("msg", "请联系管理员");
 			Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
 			return;
 		}
-		jsonMap.put("flag", flag?"true":"false");
-		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
-		return;
-	}
-	public void getTables() {
-		List<HBaseTable> tables = new ArrayList<>();
-		Map<String, Object> jsonMap = new HashMap<String, Object>();
-		try {
-			tables = this.hbaseCommandService.getTables();
-		} catch (IOException e) {// 
-			e.printStackTrace();
-			logger.info("获取HBase 表异常!");
-			jsonMap.put("total", 0);
-			jsonMap.put("rows", tables);
-			Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
-			return;
-		}
-		jsonMap.put("total", tables.size());
-		jsonMap.put("rows", Utils.getProperFiles(tables, page, rows));
+		jsonMap.put("flag", flag ? "true" : "false");
 		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
 		return;
 	}
 
-	public void getTableStartRowKey() {
-		String rowkey = null;
+	public void updateTableData() {
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		boolean flag = false;
+		try {
+			flag = this.hbaseCommandService.updateTableData(tableName, cfs,
+					rowkey, column, value, Utils.dateStringtoLong(timestamp),
+					oldValue);
+		} catch (IOException | ParseException e) {//
+			e.printStackTrace();
+			logger.info("修改HBase 表数据异常!");
+			jsonMap.put("flag", flag ? "true" : "false");
+			jsonMap.put("msg", "请联系管理员");
+			Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+			return;
+		}
+		jsonMap.put("flag", flag ? "true" : "false");
+		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+		return;
+	}
+
+	public void checkTableExists() {
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		try {
-			rowkey = this.hbaseCommandService.getTableRowKey(tableName);
-		} catch (IOException e) {// @TODO 前台如何处理
+			boolean flag = this.hbaseCommandService.checkTableExists(tableName);
+			jsonMap.put("flag", String.valueOf(flag));
+		} catch (IOException e) {
 			e.printStackTrace();
-			logger.info("获取HBase 表rowkey异常!");
+			logger.info("检测HBase 表是否存在异常!");
 			jsonMap.put("flag", "false");
-			jsonMap.put("data", "-1");
-			Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
-			return;
 		}
-		jsonMap.put("flag", "true");
-		jsonMap.put("data", rowkey);
 		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
 		return;
 	}
 
-	public void getTablesJson() {
+	public void deleteTable() {
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		try {
+			boolean flag = this.hbaseCommandService.deleteTable(tableName);
+			jsonMap.put("flag", String.valueOf(flag));
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.info("删除HBase 表异常!");
+			jsonMap.put("flag", "false");
+		}
+		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+		return;
+	}
+
+	public void deleteTableData() {
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		try {
+			String[] cfsArr = cfs.split(Utils.COLON, -1);
+			boolean flag = this.hbaseCommandService.deleteTableData(tableName,
+					cfsArr[0], cfsArr[1], rowkey, value,
+					Utils.dateStringtoLong(timestamp));
+			jsonMap.put("flag", String.valueOf(flag));
+		} catch (IOException | ParseException e) {
+			e.printStackTrace();
+			logger.info("删除HBase 表数据异常!");
+			jsonMap.put("flag", "false");
+		}
+		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+		return;
+	}
+
+	public String getCfs() {
+		return cfs;
+	}
+
+	public String getColumn() {
+		return column;
+	}
+
+	public HBaseCommandService getHbaseCommandService() {
+		return hbaseCommandService;
+	}
+
+	public int getLimit() {
+		return limit;
+	}
+
+	public int getPage() {
+		return page;
+	}
+
+	public String getRowkey() {
+		return rowkey;
+	}
+
+	public int getRows() {
+		return rows;
+	}
+
+	public String getStartRowKey() {
+		return startRowKey;
+	}
+
+	public void getTableColumnFamilyJson() {
 		List<TextValue> tables = new ArrayList<>();
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		try {
-			tables = this.hbaseCommandService.getTablesString();
+			tables = this.hbaseCommandService.getTablesColumnFamily(tableName);
 		} catch (IOException e) {// @TODO 前台如何处理
 			e.printStackTrace();
 			logger.info("获取HBase 表异常!");
@@ -179,24 +241,6 @@ public class HBaseCommandAction extends ActionSupport {
 		return;
 	}
 
-	public void getTableColumnFamilyJson() {
-		List<TextValue> tables = new ArrayList<>();
-		Map<String, Object> jsonMap = new HashMap<String, Object>();
-		try {
-			tables = this.hbaseCommandService.getTablesColumnFamily(tableName);
-		} catch (IOException e) {// @TODO 前台如何处理
-			e.printStackTrace();
-			logger.info("获取HBase 表异常!");
-			jsonMap.put("flag", "false");
-			jsonMap.put("data", null);
-			Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
-			return;
-		}
-		jsonMap.put("flag", "true");
-		jsonMap.put("data", tables);
-		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
-	}
-
 	public void getTableDetails() {
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		String details;
@@ -213,48 +257,76 @@ public class HBaseCommandAction extends ActionSupport {
 		return;
 	}
 
-	public void deleteTable() {
-		Map<String, Object> jsonMap = new HashMap<String, Object>();
-		try {
-			boolean flag = this.hbaseCommandService.deleteTable(tableName);
-			jsonMap.put("flag", String.valueOf(flag));
-		} catch (IOException e) {
-			e.printStackTrace();
-			logger.info("删除HBase 表异常!");
-			jsonMap.put("flag", "false");
-		}
-		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
-		return;
+	public String getTableName() {
+		return tableName;
 	}
-	
-	public void deleteTableData() {
+
+	public void getTables() {
+		List<HBaseTable> tables = new ArrayList<>();
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		try {
-			String[] cfsArr = cfs.split(Utils.COLON, -1);
-			boolean flag = this.hbaseCommandService.deleteTableData(tableName,
-					cfsArr[0],cfsArr[1],rowkey,value,Utils.dateStringtoLong(timestamp));
-			jsonMap.put("flag", String.valueOf(flag));
-		} catch (IOException|ParseException e) {
+			tables = this.hbaseCommandService.getTables();
+		} catch (IOException e) {//
 			e.printStackTrace();
-			logger.info("删除HBase 表数据异常!");
-			jsonMap.put("flag", "false");
-		} 
+			logger.info("获取HBase 表异常!");
+			jsonMap.put("total", 0);
+			jsonMap.put("rows", tables);
+			Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+			return;
+		}
+		jsonMap.put("total", tables.size());
+		jsonMap.put("rows", Utils.getProperFiles(tables, page, rows));
 		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
 		return;
 	}
 
-	public void checkTableExists() {
+	public void getTablesJson() {
+		List<TextValue> tables = new ArrayList<>();
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		try {
-			boolean flag = this.hbaseCommandService.checkTableExists(tableName);
-			jsonMap.put("flag", String.valueOf(flag));
-		} catch (IOException e) {
+			tables = this.hbaseCommandService.getTablesString();
+		} catch (IOException e) {// @TODO 前台如何处理
 			e.printStackTrace();
-			logger.info("检测HBase 表是否存在异常!");
+			logger.info("获取HBase 表异常!");
 			jsonMap.put("flag", "false");
+			jsonMap.put("data", null);
+			Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+			return;
 		}
+		jsonMap.put("flag", "true");
+		jsonMap.put("data", tables);
+		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+	}
+
+	public void getTableStartRowKey() {
+		String rowkey = null;
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		try {
+			rowkey = this.hbaseCommandService.getTableRowKey(tableName);
+		} catch (IOException e) {// @TODO 前台如何处理
+			e.printStackTrace();
+			logger.info("获取HBase 表rowkey异常!");
+			jsonMap.put("flag", "false");
+			jsonMap.put("data", "-1");
+			Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+			return;
+		}
+		jsonMap.put("flag", "true");
+		jsonMap.put("data", rowkey);
 		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
 		return;
+	}
+
+	public String getTimestamp() {
+		return timestamp;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public int getVersions() {
+		return versions;
 	}
 
 	public void saveTable() {
@@ -271,8 +343,12 @@ public class HBaseCommandAction extends ActionSupport {
 		return;
 	}
 
-	public HBaseCommandService getHbaseCommandService() {
-		return hbaseCommandService;
+	public void setCfs(String cfs) {
+		this.cfs = cfs;
+	}
+
+	public void setColumn(String column) {
+		this.column = column;
 	}
 
 	@Resource
@@ -280,91 +356,47 @@ public class HBaseCommandAction extends ActionSupport {
 		this.hbaseCommandService = hbaseCommandService;
 	}
 
-	public int getRows() {
-		return rows;
-	}
-
-	public void setRows(int rows) {
-		this.rows = rows;
-	}
-
-	public int getPage() {
-		return page;
+	public void setLimit(int limit) {
+		this.limit = limit;
 	}
 
 	public void setPage(int page) {
 		this.page = page;
 	}
 
-	public String getTableName() {
-		return tableName;
+	public void setRowkey(String rowkey) {
+		this.rowkey = rowkey;
 	}
 
-	public void setTableName(String tableName) {
-		this.tableName = tableName;
-	}
-
-	public String getCfs() {
-		return cfs;
-	}
-
-	public void setCfs(String cfs) {
-		this.cfs = cfs;
-	}
-
-	public String getStartRowKey() {
-		return startRowKey;
+	public void setRows(int rows) {
+		this.rows = rows;
 	}
 
 	public void setStartRowKey(String startRowKey) {
 		this.startRowKey = startRowKey;
 	}
 
-	public int getLimit() {
-		return limit;
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
 	}
 
-	public void setLimit(int limit) {
-		this.limit = limit;
-	}
-
-	public int getVersions() {
-		return versions;
-	}
-
-	public void setVersions(int versions) {
-		this.versions = versions;
-	}
-
-	public String getColumn() {
-		return column;
-	}
-
-	public void setColumn(String column) {
-		this.column = column;
-	}
-
-	public String getValue() {
-		return value;
+	public void setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	public void setValue(String value) {
 		this.value = value;
 	}
 
-	public String getRowkey() {
-		return rowkey;
+	public void setVersions(int versions) {
+		this.versions = versions;
 	}
 
-	public void setRowkey(String rowkey) {
-		this.rowkey = rowkey;
+	public String getOldValue() {
+		return oldValue;
 	}
 
-	public String getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(String timestamp) {
-		this.timestamp = timestamp;
+	public void setOldValue(String oldValue) {
+		this.oldValue = oldValue;
 	}
 }

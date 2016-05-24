@@ -7,7 +7,7 @@ function data_add_add(){
 	if(checkTextBoxEmpty('data_add_ff_rowkey','RowKey不能为空，请重新输入!')) return ;
 	if(checkTextBoxEmpty('data_add_ff_column','列名不能为空，请重新输入!')) return ;
 	if(checkTextBoxEmpty('data_add_ff_value','值不能为空，请重新输入!')) return ;
-	popupProgressbar('数据新增','增在新增数据...',1000);
+	popupProgressbar('数据新增','正在新增数据...',1000);
 	var ret = callByAJax('hbase/hbaseCommand_addTableData.action',
 			{tableName:$('#data_add_ff_tableName').val(),
 			cfs:$('#data_add_ff_family').val(),

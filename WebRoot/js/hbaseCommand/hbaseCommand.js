@@ -344,7 +344,31 @@ function data_add(){
  * 数据更新
  */
 function data_update(){
+	var slRow = $('#dg_data_retrieve').datagrid('getSelected');
+	if(slRow ==null || slRow == 'null'){
+		$.messager.alert('信息','请选择一条数据!','info');
+		return ;
+	}
+	var cf_column = slRow.column.split(':');
+	console.info("cf:"+cf_column[0]+",column:"+cf_column[1]);
+	var win_table_update_data_ = $('#win_table_update_data').window({    
+	    width:450,    
+	    height:380,    
+	    modal:true,
+	    left:400,
+	    top:150,
+	    title:'数据修改',
+	    collapsible:false,
+	    minimizable:false,
+	    maximizable:false,
+//	    content: '<div style="padding:30px 20px 10px 20px;">' + "a" +'</div>'
+	    content: '<iframe id="tabIframe" src="hbaseCommand/data_update.jsp?tableName='
+	    	+getFakeData('cc_data_retrieve_tableName')+'&cf='+cf_column[0]+'&timestamp=' 
+	    	+slRow.timestamp+'&rowkey='+slRow.rowKey+'&value='+slRow.value+'&column='+cf_column[1]+
+	    	'" frameborder="0" style="border:0;width:100%;height:100%;">',
+//	    href:"hbaseCommand/data_add.jsp",
 	
+	});
 }
 /**
  * 数据删除
