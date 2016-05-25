@@ -30,7 +30,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</h2>
 		</p>    	
 		<div id="project_about_id">
-			HBase命令演示系统
+			基于HBase的冠字号查询系统
 		</div>
 		<s:debug></s:debug>
     

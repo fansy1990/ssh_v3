@@ -58,7 +58,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<div data-options="region:'east',split:true" title="导航"
 		style="width:180px;">
 		<ul class="easyui-tree" id="eastTree"
-			data-options="url:'json/hbase.json',method:'get',animate:true,dnd:true"></ul>
+			data-options="url:'json/identifyRMB.json',method:'get',animate:true,dnd:true"></ul>
 	</div>
 	<div data-options="region:'west',split:true,collapsed:true" title="项目"
 		style="width:100px;">
@@ -74,7 +74,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						class="easyui-linkbutton">HBase表管理系统</a>
 				</div>
 				<div title="HBase" style="padding:10px;">
-					<a onclick="update_project('冠字号查询系统','json/hbase.json')"
+					<a onclick="update_project('冠字号查询系统','json/identifyRMB.json')"
 						class="easyui-linkbutton">冠字号查询系统：未完成</a>
 				</div>
 			</div>
