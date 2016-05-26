@@ -104,6 +104,9 @@ public class HadoopUtils {
 				// String Property = props.getProperty (key);
 				confMap.put(key, props.getProperty(key));
 			}
+			
+			// TODO 打包mr程序相关mapper、reducer
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -183,6 +186,8 @@ public class HadoopUtils {
 					confMap.get("yarn.resourcemanager.scheduler.address"));// 指定资源分配器
 			conf.set("mapreduce.jobhistory.address",
 					confMap.get("mapreduce.jobhistory.address"));// 指定historyserver
+			// TODO 路径设置为初始路径
+			conf.set("mapreduce.job.jar","C:\\Users\\fansy\\Desktop\\jars\\import2hbase.jar");// 设置jar包路径
 		}
 		return conf;
 	}

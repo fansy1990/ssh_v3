@@ -16,7 +16,7 @@
 			"text":"数据加载",
 			"attributes":{
 				"folder":"0",
-				"url":"hdfsManager/folder/list.jsp"
+				"url":"identifyRMB/import2hbase.jsp"
 			}
 		},{
 			"id":112,
