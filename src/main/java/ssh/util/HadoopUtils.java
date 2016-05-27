@@ -1,6 +1,7 @@
 package ssh.util;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -104,9 +105,7 @@ public class HadoopUtils {
 				// String Property = props.getProperty (key);
 				confMap.put(key, props.getProperty(key));
 			}
-			
-			// TODO 打包mr程序相关mapper、reducer
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -186,8 +185,7 @@ public class HadoopUtils {
 					confMap.get("yarn.resourcemanager.scheduler.address"));// 指定资源分配器
 			conf.set("mapreduce.jobhistory.address",
 					confMap.get("mapreduce.jobhistory.address"));// 指定historyserver
-			// TODO 路径设置为初始路径
-			conf.set("mapreduce.job.jar","C:\\Users\\fansy\\Desktop\\jars\\import2hbase.jar");// 设置jar包路径
+			conf.set("mapreduce.job.jar", JarUtil.jar(JarUtil.class));// 设置jar包路径
 		}
 		return conf;
 	}
@@ -326,5 +324,16 @@ public class HadoopUtils {
 
 	public static void setHadoopUserName(String hadoopUserName) {
 		HadoopUtils.hadoopUserName = hadoopUserName;
+	}
+
+	public void cleanUp() {
+		try {
+			new File(JarUtil.getJarFilePath()).delete();
+		} catch (Exception e) {
+			log.info("删除" + JarUtil.getJarFilePath() + "异常!");
+			e.printStackTrace();
+			return;
+		}
+		log.info("jar 文件" + JarUtil.getJarFilePath() + "被删除！");
 	}
 }

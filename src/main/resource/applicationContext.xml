@@ -96,7 +96,7 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 
 
-	<bean id="hadoopUtils" class="ssh.util.HadoopUtils" init-method="initFs" />
+	<bean id="hadoopUtils" class="ssh.util.HadoopUtils" init-method="initFs"  destroy-method="cleanUp" />
 
 
 </beans>
