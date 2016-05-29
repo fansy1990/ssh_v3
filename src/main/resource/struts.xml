@@ -44,5 +44,9 @@
 		<action name="hbaseCommand_*" method="{1}" class="ssh.action.HBaseCommandAction"></action>
 	</package>
 	
+	<package name="hadoop" namespace="/hadoop" extends="struts-default">
+		<action name="hadoop_*" method="{1}" class="ssh.action.HadoopAction"></action>
+	</package>
+	
 	
 </struts>

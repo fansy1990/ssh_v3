@@ -69,12 +69,10 @@ public class HdfsManagerAction extends ActionSupport implements
 				.listFolder(hdfsFile.getFolder());
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		jsonMap.put("total", files.size());
-		jsonMap.put("rows", Utils.getProperFiles(files,page,rows));
+		jsonMap.put("rows", Utils.getProperFiles(files, page, rows));
 		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
 		return;
 	}
-
-	
 
 	/**
 	 * 检查目录权限或是否存在 权限由外部设定
@@ -114,6 +112,26 @@ public class HdfsManagerAction extends ActionSupport implements
 		if (map.get("flag") == null) {
 			map.put("flag", "true");
 		}
+		Utils.write2PrintWriter(JSON.toJSONString(map));
+		return;
+	}
+
+	/**
+	 * 检查目录是否存在
+	 * 
+	 * @throws IllegalArgumentException
+	 * @throws IOException
+	 */
+	public void checkExist() throws IllegalArgumentException, IOException {
+		Map<String, Object> map = new HashMap<>();
+		boolean exist = this.hdfsService.checkExist(this.hdfsFile.getFolder());
+		if (!exist) {
+			map.put("flag", "false");
+			Utils.write2PrintWriter(JSON.toJSONString(map));
+			return;
+		}
+
+		map.put("flag", "true");
 		Utils.write2PrintWriter(JSON.toJSONString(map));
 		return;
 	}
@@ -318,13 +336,14 @@ public class HdfsManagerAction extends ActionSupport implements
 		String data = null;
 
 		try {
-			data = this.hdfsService.read(hdfsFile.getFileName(),hdfsFile.getTextSeq(),hdfsFile.getRecords());
+			data = this.hdfsService.read(hdfsFile.getFileName(),
+					hdfsFile.getTextSeq(), hdfsFile.getRecords());
 		} catch (Exception e) {
 			map.put("msg", "请检查文件！");
 			data = null;
 		}
 
-		if (data!=null) {// 上传成功
+		if (data != null) {// 上传成功
 			map.put("flag", "true");
 			map.put("data", data);
 		} else {// 失败

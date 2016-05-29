@@ -40,7 +40,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</td></tr>
 		<tr><td>
 				列描述： </td><td><input id="import2hbase_columnDescription"
-				class="easyui-textbox" value="rk,ts,col1:q1,col2:q1,col2:q2" data-options="required:true"
+				class="easyui-textbox" value="rk,ts,cf1:q1,cf2:q1,cf2:q2" data-options="required:true"
 				style="width:300px"> 
 		</td></tr>
 		<tr><td>
@@ -73,6 +73,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</table>
 		</div>
 	</div>
+	<div id="progress_hdfs2hbase" style="width:400px;"></div>
 	<script type="text/javascript" src="js/identifyRMB/import2hbase.js"></script>
 	<script type="text/javascript" src="js/utils.js"></script>
 </body>

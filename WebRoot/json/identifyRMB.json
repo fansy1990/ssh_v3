@@ -7,7 +7,7 @@
 	"children":[{
 		"id":11,
 		"text":"数据预处理",
-		"state":"closed",
+		"state":"open",
 		"attributes":{
 			"folder":"1"
 		},

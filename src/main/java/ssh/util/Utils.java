@@ -1,10 +1,14 @@
 package ssh.util;
 
+import java.io.BufferedOutputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.fs.FileStatus;
@@ -16,6 +20,7 @@ import ssh.model.HdfsResponseProperties;
 import ch.ethz.ssh2.Connection;
 
 public class Utils {
+	public static int justfortest = 0;
 	private static final Logger log = LoggerFactory.getLogger(Utils.class);
 	public static final String TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 	public static final String COMMA = ",";
@@ -28,8 +33,9 @@ public class Utils {
 	public static String dateLongtoString(long time) {
 		return SIMPLE_DATE_FORMAT.format(new Date(time));
 	}
-	
-	public static long dateStringtoLong(String dateString) throws ParseException{
+
+	public static long dateStringtoLong(String dateString)
+			throws ParseException {
 		return SIMPLE_DATE_FORMAT.parse(dateString).getTime();
 	}
 
@@ -105,6 +111,36 @@ public class Utils {
 			writer.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * HTML5 支持 服务器发送事件
+	 * 
+	 * @param info
+	 */
+	public static void write2PrintWriter5(String info) {
+		log.info("data:{}", info);
+		OutputStream outputStream = null;
+		try {
+
+			HttpServletResponse response = ServletActionContext.getResponse();
+			response.setCharacterEncoding("UTF-8");
+			response.setContentType("text/event-stream");
+			outputStream = new BufferedOutputStream(response.getOutputStream());
+
+			outputStream.write(("data:" + info + "\n\n").getBytes());// 响应输出
+			// 释放资源，关闭流
+			outputStream.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				outputStream.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

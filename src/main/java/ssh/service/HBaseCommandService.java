@@ -2,7 +2,9 @@ package ssh.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.hbase.Cell;
@@ -247,5 +249,47 @@ public class HBaseCommandService {
 				Bytes.toBytes(column), Bytes.toBytes(oldValue), put);
 		table.close();
 		return true;
+	}
+
+	public Map<String, Object> checkTableExistsAndFamily(String tableName,
+			String colDescription) throws IOException {
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		Admin admin = HadoopUtils.getHBaseConnection().getAdmin();
+		TableName[] tables = admin.listTableNames();
+		boolean flag = false;
+		for (TableName t : tables) {
+			if (t.getNameAsString().equals(tableName)) {
+				flag = true;
+			}
+		}
+		if (!flag) {// 表不存在
+			jsonMap.put("flag", "false");
+			jsonMap.put("msg", "表不存在，请重新输入!");
+			return jsonMap;
+		}
+		// 检查列描述
+		HTableDescriptor tableDescriptor = admin
+				.getTableDescriptor(getTableName(tableName));
+		HColumnDescriptor[] columnDescriptors = tableDescriptor
+				.getColumnFamilies();
+		List<String> familyList = new ArrayList<>();
+		for (HColumnDescriptor t : columnDescriptors) {
+			familyList.add(t.getNameAsString());
+		}
+		String[] cfs = colDescription.split(Utils.COMMA, -1);
+		// flag = true ;
+		String family = null;
+		for (String cf : cfs) {
+			if (cf.contains(Utils.COLON)) {// 包含：，则说明非rk或ts，则是列簇，需要判断
+				family = cf.split(Utils.COLON, -1)[0];
+				if (!familyList.contains(family)) {// 不包含，则改列簇描述有问题
+					jsonMap.put("msg", "列簇描述：" + family + "在表中没有此列簇！");
+					jsonMap.put("flag", "flag");
+					return jsonMap;
+				}
+			}
+		}
+		jsonMap.put("flag", "true");
+		return jsonMap;
 	}
 }

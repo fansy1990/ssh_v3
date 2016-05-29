@@ -98,6 +98,20 @@ public class HBaseCommandAction extends ActionSupport {
 		return;
 	}
 
+	public void checkExistAndFamily() {
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		try {
+			jsonMap = this.hbaseCommandService.checkTableExistsAndFamily(
+					tableName, cfs);
+		} catch (Exception e) {
+			logger.info("检查HBase 表存在以及表与输入的列描述 异常!");
+			jsonMap.put("flag", "false");
+			jsonMap.put("msg", "请联系管理员");
+		}
+		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+		return;
+	}
+
 	public void updateTableData() {
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		boolean flag = false;
