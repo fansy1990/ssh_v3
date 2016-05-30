@@ -31,17 +31,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</td>
 			<td> <input id="import2hbase_input"
 				class="easyui-textbox" value="/user/root/uid_details.txt" data-options="required:true"
-				style="width:300px"> 
+				style="width:350px"> 
 		</td></tr>
 		<tr><td>
 			HBase表名：</td><td> <input id="import2hbase_table"
 				class="easyui-textbox" value="user" data-options="required:true"
-				style="width:300px">
+				style="width:350px">
 		</td></tr>
 		<tr><td>
 				列描述： </td><td><input id="import2hbase_columnDescription"
 				class="easyui-textbox" value="rk,info:name,info:birthday,info:gender,info:address,info:phone,info:bank" data-options="required:true"
-				style="width:300px"> 
+				style="width:350px"> 
 		</td></tr>
 		<tr><td>
 			 字段分隔符：</td><td> <select

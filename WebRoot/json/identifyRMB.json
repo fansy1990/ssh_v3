@@ -18,13 +18,6 @@
 				"folder":"0",
 				"url":"identifyRMB/import2hbase.jsp"
 			}
-		},{
-			"id":112,
-			"text":"ttt",
-			"attributes":{
-				"folder":"0",
-				"url":"hdfsManager/folder/search.jsp"
-			}
 		}]
 	},{
 		"id":12,
