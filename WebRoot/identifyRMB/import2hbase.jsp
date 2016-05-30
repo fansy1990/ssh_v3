@@ -69,7 +69,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				class="easyui-linkbutton" data-options="iconCls:'icon-save'">导入</a>
 				</td><td>
 				<a id="import2hbase_cancel_btn" onclick="init_import2hbase()"
-				class="easyui-linkbutton" data-options="iconCls:'icon-save'">清空</a>
+				class="easyui-linkbutton" data-options="iconCls:'icon-clear'">清空</a>
 			</td></tr>
 				</table>
 		</div>

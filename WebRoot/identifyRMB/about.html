@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>about.html</title>
+
+<meta name="keywords" content="keyword1,keyword2,keyword3">
+<meta name="description" content="this is my page">
+<meta name="content-type" content="text/html; charset=UTF-8">
+
+<!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+
+</head>
+
+<body>
+	<div style="padding: 15px;">
+		<h2>基于HBase的冠字号系统</h2>
+		<p>
+			基于HBase的冠字号系统包含下面几个模块：<br>
+		<ul>
+			<li>数据加载： 指定HDFS路径、指定HBase表，指定原始数据列描述字符串
+			（必须包含rk，也就是rowkey；时间列ts可包含可不包含，如果包含，还需要指定时间列格式），
+			需指定原始数据字段分隔符；</li>
+				
+			<br>
+			<li>冠字号查询&存取款</li>
+			<ul>
+				<li>冠字号查询：提供冠字号，查询是否在HBase表中存在</li>
+				<li>存款：往HBase表中插入数据，代表存款成功</li>
+				<li>取款：往HBase中插入数据，代表取款成功</li>
+			</ul>
+		</ul>
+		</p>
+	</div>
+</body>
+</html>

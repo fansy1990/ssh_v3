@@ -120,3 +120,7 @@
 .icon-application_view_detail
   {    background: url('icons/application_view_detail.png') no-repeat scroll center center transparent;
 }
+
+.icon-shading
+  {    background: url('icons/shading.png') no-repeat scroll center center transparent;
+}

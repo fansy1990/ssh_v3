@@ -91,5 +91,6 @@ function import2hbase(){
 }
 
 function init_import2hbase(){
-	console.info("init import to hbase")
+	console.info("init import to hbase");
+	
 }

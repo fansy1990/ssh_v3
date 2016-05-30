@@ -31,21 +31,21 @@
 			"text":"查询冠字号",
 			"attributes":{
 				"folder":"0",
-				"url":"hdfsManager/file/read.jsp"
+				"url":"identifyRMB/check.jsp"
 			}
 		},{
 			"id":122,
 			"text":"存款",
 			"attributes":{
 				"folder":"0",
-				"url":"hdfsManager/file/upload.jsp"
+				"url":"identifyRMB/save.jsp"
 			}
 		},{
 			"id":123,
 			"text":"取款",
 			"attributes":{
 				"folder":"0",
-				"url":"hdfsManager/file/download.jsp"
+				"url":"identifyRMB/retrieve.jsp"
 			}
 		}]
 	},{
@@ -53,7 +53,7 @@
 		"text":"简介",
 		"attributes":{
 			"folder":"0",
-			"url":"hdfsManager/about.html"
+			"url":"identifyRMB/about.html"
 		}
 	}]
 }]
