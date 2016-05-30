@@ -3,6 +3,7 @@ package ssh.thread;
 import org.apache.hadoop.util.ToolRunner;
 
 import ssh.eum.MRInfo;
+import ssh.eum.MRLock;
 import ssh.mr.ImportToHBase;
 import ssh.util.HadoopUtils;
 
@@ -49,6 +50,8 @@ public class Hdfs2HBaseRunnable implements Runnable {
 			return;
 		}
 		HadoopUtils.addMrError(MRInfo.JOBRETURNCODE, String.valueOf(ret));
+		// no matter what ,unlock MRLock
+		HadoopUtils.setMrLock(MRLock.NOTLOCKED);
 	}
 
 	public String getTableName() {

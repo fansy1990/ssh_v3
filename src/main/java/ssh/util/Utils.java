@@ -3,6 +3,7 @@ package ssh.util;
 import java.io.BufferedOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,10 +25,13 @@ public class Utils {
 	private static final Logger log = LoggerFactory.getLogger(Utils.class);
 	public static final String TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 	public static final String COMMA = ",";
+	public static final String UNDERLINE = "_";
 	private static PrintWriter writer = null;
 
 	public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat(
 			"yyyy/MM/dd HH:mm:ss SSS");
+	public static final DecimalFormat twoPlaceDecimal = new DecimalFormat(
+			"#.00");
 	public static final String COLON = ":";
 
 	public static String dateLongtoString(long time) {

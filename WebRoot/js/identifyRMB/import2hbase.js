@@ -50,22 +50,26 @@ function import2hbase(){
 	// hadoop_submitJob.action 返回的ret中包含jobId , ret.jobId
 	if(typeof(EventSource)!=="undefined")
 	  {
+		console.info("jobId:"+ret.jobId);
 	  var source=new EventSource("hadoop/hadoop_getMRProgress.action"+"?jobId="+ ret.jobId );
 	  source.onmessage=function(event)
 	    {
 		  console.info(event.data);
 		  
 		  // TODO 判断event.data indexOf error ,解析：后面的值，显示，同时提示任务错误
-		  
-		  // TODO 判断 event.data 为success ，则提示任务成功， 其他清空则任务进度即可
-		  
-		  var bar = $.messager.progress('bar');
-		  bar.progressbar('setValue',  event.data);
-		  
-		  if(event.data=="100"){
+		  if(event.data.indexOf( "error")> -1){
 			  source.close();
 			  $.messager.progress('close');
+			  $.messager.alert('提示',"任务运行失败!",'warn');
 		  }
+		  // TODO 判断 event.data 为success ，则提示任务成功， 其他清空则任务进度即可
+		  if(event.data == "success"){
+			  source.close();
+			  $.messager.progress('close');
+			  $.messager.alert('提示',"任务运行成功!",'warn');
+		  }
+		  var bar = $.messager.progress('bar');
+		  bar.progressbar('setValue',  event.data);
 		  
 	    };
 	    /*source.onopen=function(event){

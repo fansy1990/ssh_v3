@@ -30,17 +30,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			HDFS文件路径：
 			</td>
 			<td> <input id="import2hbase_input"
-				class="easyui-textbox" value="/" data-options="required:true"
+				class="easyui-textbox" value="/user/root/uid_details.txt" data-options="required:true"
 				style="width:300px"> 
 		</td></tr>
 		<tr><td>
 			HBase表名：</td><td> <input id="import2hbase_table"
-				class="easyui-textbox" value="t1" data-options="required:true"
+				class="easyui-textbox" value="user" data-options="required:true"
 				style="width:300px">
 		</td></tr>
 		<tr><td>
 				列描述： </td><td><input id="import2hbase_columnDescription"
-				class="easyui-textbox" value="rk,ts,cf1:q1,cf2:q1,cf2:q2" data-options="required:true"
+				class="easyui-textbox" value="rk,info:name,info:birthday,info:gender,info:address,info:phone,info:bank" data-options="required:true"
 				style="width:300px"> 
 		</td></tr>
 		<tr><td>
@@ -59,7 +59,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			时间格式：</td><td> <select id="import2hbase_dateFormat"
 				class="easyui-combobox" style="width:280px;">
 				<option value="yyyy-MM-dd HH:mm:ss SSS">yyyy-MM-dd HH:mm:ss SSS</option>
-				<option value="yyyy-MM-dd HH:mm:ss" selected="selected">yyyy-MM-dd HH:mm:ss</option>
+				<option value="yyyy-MM-dd HH:mm:ss" >yyyy-MM-dd HH:mm:ss</option>
+				<option value="yyyy-MM-dd HH:mm" selected="selected">yyyy-MM-dd HH:mm</option>
 				
 			</select> 
 			</td></tr>
