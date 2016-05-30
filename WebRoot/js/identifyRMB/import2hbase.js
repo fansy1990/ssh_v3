@@ -27,29 +27,40 @@ function import2hbase(){
 		$.messager.alert('提示',"列描述为空，请重新输入!",'info');
 		return ;
 	}
-	ret = callByAJax("hbase/hbaseCommand_checkExistAndFamily.action", {tableName:table,cfs:colDescription})
+	ret = callByAJax("hbase/hbaseCommand_checkExistAndFamily.action",
+			{tableName:table,cfs:colDescription})
 	if(ret.flag == "false"){
 		$.messager.alert('提示',ret.msg,'info');
 		return ;
 	}
 	// 提交导入任务，返回正常后，弹出进度条，进度条使用真实MR进度条  
-	
+	var splitter = $('#import2hbase_splitter').combobox('getValue');
+	var dateFormat = $('#import2hbase_dateFormat').combobox('getValue');
+	ret = callByAJax("hadoop/hadoop_submitJob.action", 
+			{hdfsFile:hdfs,tableName:table,colDescription:colDescription,splitter:splitter,dateFormat:dateFormat})
+	if(ret.flag=="false"){// 提交任务失败
+		$.messager.alert('提示',ret.msg,'warn');
+		return ;
+	}
 	 $.messager.progress({
 	     title:'提示',
 	     msg:'导入数据中...',
 	     interval:0    //disable auto update progress value
 	 });
-	
-	var jobId="abcdefg";
+	// hadoop_submitJob.action 返回的ret中包含jobId , ret.jobId
 	if(typeof(EventSource)!=="undefined")
 	  {
-	  var source=new EventSource("hadoop/hadoop_getMRProgress.action"+"?jobId="+ jobId );
+	  var source=new EventSource("hadoop/hadoop_getMRProgress.action"+"?jobId="+ ret.jobId );
 	  source.onmessage=function(event)
 	    {
 		  console.info(event.data);
+		  
+		  // TODO 判断event.data indexOf error ,解析：后面的值，显示，同时提示任务错误
+		  
+		  // TODO 判断 event.data 为success ，则提示任务成功， 其他清空则任务进度即可
+		  
 		  var bar = $.messager.progress('bar');
 		  bar.progressbar('setValue',  event.data);
-		  
 		  
 		  if(event.data=="100"){
 			  source.close();
@@ -70,7 +81,8 @@ function import2hbase(){
 	  }
 	else
 	  {
-	  console.info("Sorry, your browser does not support server-sent events...");
+		console.info("Sorry, your browser does not support server-sent events...");
+		$.messager.alert('提示',"Sorry, your browser does not support server-sent events...",'warn');
 	  }
 }
 

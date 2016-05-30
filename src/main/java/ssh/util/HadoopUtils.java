@@ -32,6 +32,9 @@ import org.apache.hadoop.util.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ssh.eum.MRInfo;
+import ssh.eum.MRLock;
+
 public class HadoopUtils {
 	public static final Logger log = LoggerFactory.getLogger(HadoopUtils.class);
 
@@ -42,6 +45,9 @@ public class HadoopUtils {
 
 	private static String hadoopUserName = "root";// 初始值，root字符串
 	private static String hadoopPassword = "null";
+
+	private static MRLock mrLock = MRLock.NOTLOCKED;
+	private static Map<MRInfo, String> mrInfo = new HashMap<>();
 
 	/**
 	 * 更新 绑定的hadoop用户密码
@@ -335,5 +341,74 @@ public class HadoopUtils {
 			return;
 		}
 		log.info("jar 文件" + JarUtil.getJarFilePath() + "被删除！");
+	}
+
+	public static MRLock getMrLock() {
+		return mrLock;
+	}
+
+	/**
+	 * 设置同步方法
+	 * 
+	 * @param mrLock
+	 */
+	public static synchronized void setMrLock(MRLock mrLock) {
+		HadoopUtils.mrLock = mrLock;
+	}
+
+	private static String jobId;
+
+	public static void getAndSetJobId() {
+		// 通过获取hadoop集群最近jobId，并生成新jobId;
+
+		String lastJobId = "job_1464309897118_0001";
+
+		setJobId(lastJobId);// TODO 这里还需要经过处理
+	}
+
+	public static String getJobId() {
+		return jobId;
+	}
+
+	public static void setJobId(String jobId) {
+		HadoopUtils.jobId = jobId;
+	}
+
+	public static Map<MRInfo, String> getMrInfo() {
+		return mrInfo;
+	}
+
+	/**
+	 * 在修改的时候加上同步
+	 * 
+	 * @param mrError
+	 */
+	public static synchronized void addMrError(MRInfo key, String mrError) {
+		HadoopUtils.mrInfo.put(key, mrError);
+	}
+
+	/**
+	 * 清空
+	 */
+	public static synchronized void clearMrInfo() {
+		HadoopUtils.mrInfo.clear();
+	}
+
+	/**
+	 * MR任务缓存包括 jobId 和 mrInfo
+	 */
+	public static void initMRCache() {
+		HadoopUtils.jobId = null;
+		clearMrInfo();
+	}
+
+	/**
+	 * 根据JobID 获得进度
+	 * 
+	 * @param jobId
+	 * @return
+	 */
+	public static String getMRProgress(String jobId) {
+		return null;
 	}
 }

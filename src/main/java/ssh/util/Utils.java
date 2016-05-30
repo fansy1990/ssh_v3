@@ -20,7 +20,7 @@ import ssh.model.HdfsResponseProperties;
 import ch.ethz.ssh2.Connection;
 
 public class Utils {
-	public static int justfortest = 0;
+	// public static int justfortest = 0;
 	private static final Logger log = LoggerFactory.getLogger(Utils.class);
 	public static final String TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 	public static final String COMMA = ",";
