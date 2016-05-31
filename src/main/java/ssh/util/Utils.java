@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -196,6 +197,29 @@ public class Utils {
 			return false;
 		}
 
+	}
+
+	private static Random random = new Random();
+
+	public static String getRandomRecordsRowKey() {
+		int rp = random.nextInt(crownSizePrefixes.length);
+		int rs = random.nextInt(9999);
+		return crownSizePrefixes[rp] + formatCrownSizeSuffix(rs);
+	}
+
+	public static String[] crownSizePrefixes = null;
+
+	static {
+		crownSizePrefixes = new String[26 * 2];
+		for (int i = 0; i < crownSizePrefixes.length / 2; i++) {
+			crownSizePrefixes[i] = "AAA" + (char) (65 + i);
+			crownSizePrefixes[i + 26] = "AAB" + (char) (65 + i);
+		}
+	}
+	private static DecimalFormat df = new DecimalFormat("0000");
+
+	public static String formatCrownSizeSuffix(int num) {
+		return df.format(num);
 	}
 
 }

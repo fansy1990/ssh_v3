@@ -21,6 +21,9 @@ import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp;
+import org.apache.hadoop.hbase.filter.Filter;
+import org.apache.hadoop.hbase.filter.SingleColumnValueExcludeFilter;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -181,6 +184,167 @@ public class HBaseCommandService {
 						notExistStr.substring(0, notExistStr.length() - 1));
 			} else {
 				map.put("notExist", "nodata");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return map;
+	}
+
+	/**
+	 * 取钱，随机输出冠字号，并更新冠字号对应的exist字段值； 只有在exist为true时，才进行上面的操作
+	 * 
+	 * @param num
+	 * @throws IOException
+	 */
+	public List<String> retrieve(String numStr) throws IOException {
+		Connection connection = HadoopUtils.getHBaseConnection();
+		Table table = connection.getTable(TableName
+				.valueOf(Utils.IDENTIFY_RMB_RECORDS));
+		List<String> list = new ArrayList<>();
+		int num = Integer.parseInt(numStr);
+		try {
+
+			Scan scan = new Scan();
+			scan.setStartRow(Utils.getRandomRecordsRowKey().getBytes());
+			// 设置只查询exist为1的数据（不使用SingleColumnValueFilter,为什么？）
+			Filter filter = new SingleColumnValueExcludeFilter(Utils.FAMILY,
+					Utils.COL_EXIST, CompareOp.EQUAL, Bytes.toBytes("1"));
+			scan.setFilter(filter);
+
+			ResultScanner resultScanner = table.getScanner(scan);
+			Result[] results = resultScanner.next(num * 3);// 取出的记录数是num的3倍(效率高)，因为数据可能被其他值更新
+			Put put = null;
+			for (int i = 0; i < results.length; i++) {
+				put = generatePutFromRow(results[i].getRow(), "0");
+				if (table.checkAndPut(results[i].getRow(), Utils.FAMILY,
+						Utils.COL_EXIST, Bytes.toBytes("1"), put)) {
+					list.add(new String(results[i].getRow()));
+				}
+				if (list.size() >= num) {// 如果已经找到所有数据，则返回
+					break;
+				}
+			}
+			byte[] row;
+			while (list.size() < num) {// 没有没有找到所有数据，则接着直接查找
+				row = resultScanner.next().getRow();
+				put = generatePutFromRow(row, "0");
+				if (table.checkAndPut(row, Utils.FAMILY, Utils.COL_EXIST,
+						Bytes.toBytes("1"), put)) {
+					list.add(new String(row));
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+
+	}
+
+	/**
+	 * 根据row获取特定put对象
+	 * 
+	 * @param row
+	 * @return
+	 */
+	private Put generatePutFromRow(byte[] row, String exist) {
+		Put put = null;
+		try {
+			put = new Put(row);
+			put.addColumn(Utils.FAMILY, Utils.COL_EXIST, Bytes.toBytes(exist));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return put;
+	}
+
+	/**
+	 * 根据rowkey和版本个数查询数据
+	 * 
+	 * @param stumbers
+	 * @param num
+	 * @return
+	 * @throws IOException
+	 */
+	public List<HBaseTableData> read(String stumbers, int num)
+			throws IOException {
+		String[] stumbersArr = StringUtils.split(stumbers, Utils.COMMA);
+		Connection connection = HadoopUtils.getHBaseConnection();
+		Table table = connection.getTable(TableName
+				.valueOf(Utils.IDENTIFY_RMB_RECORDS));
+		List<HBaseTableData> list = new ArrayList<>();
+		Get get = null;
+		try {
+			List<Get> gets = new ArrayList<>();
+			for (String stumber : stumbersArr) {
+				get = new Get(stumber.trim().getBytes());
+				get.setMaxVersions(num);
+				gets.add(get);
+			}
+			Result[] results = table.get(gets);
+			Cell[] cells;
+			for (int i = 0; i < results.length; i++) {
+				cells = results[i].rawCells();
+
+				list.addAll(getHBaseTableDataListFromCells(cells));
+
+			}
+
+			return list;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	private List<HBaseTableData> getHBaseTableDataListFromCells(Cell[] cells) {
+		List<HBaseTableData> list = new ArrayList<>();
+		for (Cell cell : cells) {
+			list.add(new HBaseTableData(cell));
+		}
+		return list;
+	}
+
+	/**
+	 * 在exist为false（也就是0）时，才进行下面的操作 更新op_www:exist为true（也即是1），即进行存储操作；
+	 * 否则，存储失败，并返回疑似伪钞冠字号
+	 * 
+	 * @param stumbers
+	 * @return
+	 * @throws IOException
+	 */
+	public Map<String, String> save(String stumbers) throws IOException {
+		String[] stumbersArr = StringUtils.split(stumbers, Utils.COMMA);
+		Connection connection = HadoopUtils.getHBaseConnection();
+		Table table = connection.getTable(TableName
+				.valueOf(Utils.IDENTIFY_RMB_RECORDS));
+		Map<String, String> map = new HashMap<>();
+		StringBuffer saved = new StringBuffer();
+		StringBuffer notSaved = new StringBuffer();
+		try {
+			Put put = null;
+			for (int i = 0; i < stumbersArr.length; i++) {
+				put = generatePutFromRow(stumbersArr[i].trim().getBytes(), "1");
+				if (table.checkAndPut(stumbersArr[i].trim().getBytes(),
+						Utils.FAMILY, Utils.COL_EXIST, Bytes.toBytes("0"), put)) {
+					saved.append((stumbersArr[i].trim())).append(",");
+				} else {// 数据库中已存在冠字号，且op_www:exist为0，所以插入会有问题（伪钞）
+					notSaved.append((stumbersArr[i].trim())).append(",");
+				}
+			}
+			if (saved.length() > 0) {
+				map.put("saved", saved.substring(0, saved.length() - 1));
+			} else {
+				map.put("saved", "nodata");
+			}
+			if (notSaved.length() > 0) {
+				map.put("notSaved",
+						notSaved.substring(0, notSaved.length() - 1));
+			} else {
+				map.put("notSaved", "nodata");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
