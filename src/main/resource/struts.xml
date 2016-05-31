@@ -48,5 +48,8 @@
 		<action name="hadoop_*" method="{1}" class="ssh.action.HadoopAction"></action>
 	</package>
 	
+	<package name="identify" namespace="/identify" extends="struts-default">
+		<action name="identify_*" method="{1}" class="ssh.action.IdentifyRMBAction"></action>
+	</package>
 	
 </struts>

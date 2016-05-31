@@ -33,6 +33,9 @@ public class Utils {
 	public static final DecimalFormat twoPlaceDecimal = new DecimalFormat(
 			"#0.00");
 	public static final String COLON = ":";
+	public static final byte[] IDENTIFY_RMB_RECORDS = "records".getBytes();
+	public static final byte[] FAMILY = "info".getBytes();
+	public static final byte[] COL_EXIST = "exist".getBytes();
 
 	public static String dateLongtoString(long time) {
 		return SIMPLE_DATE_FORMAT.format(new Date(time));

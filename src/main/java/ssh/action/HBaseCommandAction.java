@@ -34,7 +34,9 @@ public class HBaseCommandAction extends ActionSupport {
 	private int limit;
 
 	private Logger logger = LoggerFactory.getLogger(HBaseCommandAction.class);
+	private String oldValue;
 	private int page;
+
 	private String rowkey;
 
 	private int rows;
@@ -42,11 +44,9 @@ public class HBaseCommandAction extends ActionSupport {
 	private String startRowKey;
 
 	private String tableName;
-
 	private String timestamp;
 	private String value;
 	private int versions;
-	private String oldValue;
 
 	// private Admin admin = null; // 应该放在公共的地方
 
@@ -112,26 +112,6 @@ public class HBaseCommandAction extends ActionSupport {
 		return;
 	}
 
-	public void updateTableData() {
-		Map<String, Object> jsonMap = new HashMap<String, Object>();
-		boolean flag = false;
-		try {
-			flag = this.hbaseCommandService.updateTableData(tableName, cfs,
-					rowkey, column, value, Utils.dateStringtoLong(timestamp),
-					oldValue);
-		} catch (IOException | ParseException e) {//
-			e.printStackTrace();
-			logger.info("修改HBase 表数据异常!");
-			jsonMap.put("flag", flag ? "true" : "false");
-			jsonMap.put("msg", "请联系管理员");
-			Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
-			return;
-		}
-		jsonMap.put("flag", flag ? "true" : "false");
-		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
-		return;
-	}
-
 	public void checkTableExists() {
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		try {
@@ -191,6 +171,10 @@ public class HBaseCommandAction extends ActionSupport {
 
 	public int getLimit() {
 		return limit;
+	}
+
+	public String getOldValue() {
+		return oldValue;
 	}
 
 	public int getPage() {
@@ -374,6 +358,10 @@ public class HBaseCommandAction extends ActionSupport {
 		this.limit = limit;
 	}
 
+	public void setOldValue(String oldValue) {
+		this.oldValue = oldValue;
+	}
+
 	public void setPage(int page) {
 		this.page = page;
 	}
@@ -406,11 +394,23 @@ public class HBaseCommandAction extends ActionSupport {
 		this.versions = versions;
 	}
 
-	public String getOldValue() {
-		return oldValue;
-	}
-
-	public void setOldValue(String oldValue) {
-		this.oldValue = oldValue;
+	public void updateTableData() {
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		boolean flag = false;
+		try {
+			flag = this.hbaseCommandService.updateTableData(tableName, cfs,
+					rowkey, column, value, Utils.dateStringtoLong(timestamp),
+					oldValue);
+		} catch (IOException | ParseException e) {//
+			e.printStackTrace();
+			logger.info("修改HBase 表数据异常!");
+			jsonMap.put("flag", flag ? "true" : "false");
+			jsonMap.put("msg", "请联系管理员");
+			Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+			return;
+		}
+		jsonMap.put("flag", flag ? "true" : "false");
+		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+		return;
 	}
 }

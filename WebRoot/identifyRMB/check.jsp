@@ -53,18 +53,18 @@
 				</tr>
 				
 				<tr>
-					<td><a id="check_random_btn" onclick="generateRandom()"
+					<td><a id="check_random_btn" onclick="generateRandomStumber()"
 						class="easyui-linkbutton" data-options="iconCls:'icon-shading'">随机生成</a>
 					</td>
 					<td><a id="check_check_btn"
-						onclick="check_rmb()" class="easyui-linkbutton"
+						onclick="check_stumbers()" class="easyui-linkbutton"
 						data-options="iconCls:'icon-page_white_magnify'">查询</a></td>
 				</tr> 
 			</table>
 		</div>
 	</div>
-	<div id="progress_hdfs2hbase" style="width:400px;"></div>
-	<!-- <script type="text/javascript" src="js/identifyRMB/check.js"></script> -->
+	<div id="check_result_id" ></div>
+	 <script type="text/javascript" src="js/identifyRMB/check.js"></script> 
 	<script type="text/javascript" src="js/utils.js"></script>
 </body>
 </html>

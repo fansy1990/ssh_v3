@@ -13,13 +13,17 @@ import org.apache.hadoop.hbase.HRegionInfo;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.Delete;
+import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.Bytes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import ssh.model.HBaseTable;
@@ -30,6 +34,8 @@ import ssh.util.Utils;
 
 @Service
 public class HBaseCommandService {
+
+	private Logger log = LoggerFactory.getLogger(HBaseCommandService.class);
 
 	/**
 	 * 获取所有表
@@ -48,10 +54,10 @@ public class HBaseCommandService {
 			hTable.setNameSpace(t.getNamespaceAsString());
 			hTable.setTableName(t.getNameAsString());
 			// HTableDescriptor htableDes = admin.getTableDescriptor(t);
-			// System.out.println(htableDes.toString());
-			// System.out.println(htableDes.toStringTableAttributes());
-			// System.out.println(htableDes.getFamilies().toString());
-			// System.out.println(htableDes.toStringCustomizedValues());
+			// log.info(htableDes.toString());
+			// log.info(htableDes.toStringTableAttributes());
+			// log.info(htableDes.getFamilies().toString());
+			// log.info(htableDes.toStringCustomizedValues());
 			hTable.setDescription(admin.getTableDescriptor(t)
 					.toStringCustomizedValues());
 			setRegions(hTable, admin.getTableRegions(t));
@@ -100,8 +106,8 @@ public class HBaseCommandService {
 		Admin admin = HadoopUtils.getHBaseConnection().getAdmin();
 		HTableDescriptor tableDescriptors = admin
 				.getTableDescriptor(getTableName(tableName));
-		System.out.println(tableDescriptors.toStringCustomizedValues());
-		System.out.println(tableDescriptors.toString());
+		log.info(tableDescriptors.toStringCustomizedValues());
+		log.info(tableDescriptors.toString());
 		return admin.getTableDescriptor(getTableName(tableName)).toString();
 	}
 
@@ -126,6 +132,60 @@ public class HBaseCommandService {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * 检查给定的冠字号是否存在疑似伪钞冠字号
+	 * 
+	 * @param stumbers
+	 * @return
+	 * @throws IllegalArgumentException
+	 * @throws IOException
+	 */
+	public Map<String, String> checkStumbersExist(String stumbers)
+			throws IllegalArgumentException, IOException {
+		String[] stumbersArr = StringUtils.split(stumbers, Utils.COMMA);
+		Connection connection = HadoopUtils.getHBaseConnection();
+		Table table = connection.getTable(TableName
+				.valueOf(Utils.IDENTIFY_RMB_RECORDS));
+		Map<String, String> map = new HashMap<>();
+		Get get = null;
+		try {
+			List<Get> gets = new ArrayList<>();
+			for (String stumber : stumbersArr) {
+				get = new Get(stumber.trim().getBytes());
+				gets.add(get);
+			}
+			Result[] results = table.get(gets);
+			String exist;
+			StringBuffer existStr = new StringBuffer();
+			StringBuffer notExistStr = new StringBuffer();
+			for (int i = 0; i < results.length; i++) {
+				exist = new String(results[i].getValue(Utils.FAMILY,
+						Utils.COL_EXIST));
+				if ("1".equals(exist)) {
+					existStr.append(stumbersArr[i]).append(Utils.COMMA);
+				} else if ("0".equals(exist)) {
+					notExistStr.append(stumbersArr[i]).append(Utils.COMMA);
+				} else {
+					log.info("冠字号：" + stumbersArr[i] + "值 exist字段值异常！");
+				}
+			}
+			if (existStr.length() > 0) {
+				map.put("exist", existStr.substring(0, existStr.length() - 1));
+			} else {
+				map.put("exist", "nodata");
+			}
+			if (notExistStr.length() > 0) {
+				map.put("notExist",
+						notExistStr.substring(0, notExistStr.length() - 1));
+			} else {
+				map.put("notExist", "nodata");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return map;
 	}
 
 	public boolean saveTable(String tableName, String cfs) throws IOException {
