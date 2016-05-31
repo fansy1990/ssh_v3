@@ -37,6 +37,8 @@ public class Utils {
 	public static final byte[] IDENTIFY_RMB_RECORDS = "records".getBytes();
 	public static final byte[] FAMILY = "info".getBytes();
 	public static final byte[] COL_EXIST = "exist".getBytes();
+	public static final byte[] COL_UID = "uid".getBytes();
+	public static final byte[] COL_BANK = "bank".getBytes();
 
 	public static String dateLongtoString(long time) {
 		return SIMPLE_DATE_FORMAT.format(new Date(time));

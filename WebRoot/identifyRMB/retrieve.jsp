@@ -54,17 +54,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</tr>
 
 				<tr>
-					<td><a id="check_random_btn" onclick="generateRandomRetrieve()"
+					<td><a id="retrieve_random_btn" onclick="generateRandomRetrieve()"
 						class="easyui-linkbutton" data-options="iconCls:'icon-shading'">随机生成</a>
 					</td>
-					<td><a id="check_check_btn" onclick="retrieve_RMB()"
+					<td><a id="retrieve_retrieve_btn" onclick="retrieve_RMB()"
 						class="easyui-linkbutton"
 						data-options="iconCls:'icon-page_white_magnify'">取款</a></td>
 				</tr>
 			</table>
 		</div>
 	</div>
-	<div id="check_result_id"></div>
+	<div id="retrieve_result_id"></div>
 	<script type="text/javascript" src="js/identifyRMB/check.js"></script>
 	<script type="text/javascript" src="js/utils.js"></script>
 </body>

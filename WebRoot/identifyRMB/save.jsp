@@ -28,22 +28,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<table style="font-size: 12px;text-align: left;">
 				<tr>
 					<td>存款用户：</td>
-					<td><input id="retrieve_user" class="easyui-textbox" value=""
+					<td><input id="save_user" class="easyui-textbox" value=""
 						data-options="required:true" style="width:350px"></td>
 				</tr>
 				<tr>
 					<td>存款银行：</td>
-					<td><input id="retrieve_bank" class="easyui-textbox" value=""
+					<td><input id="save_bank" class="easyui-textbox" value=""
 						data-options="required:true" style="width:350px"></td>
 				</tr>
 				<tr>
 					<td>存款冠字号：</td>
-					<td><input id="retrieve_stumbers" class="easyui-textbox" value=""
+					<td><input id="save_stumbers" class="easyui-textbox" value=""
 						data-options="required:true" style="width:350px"></td>
 				</tr>
 				<tr>
 					<td>随机冠字号个数：</td>
-					<td><select id="retrieve_num" class="easyui-combobox"
+					<td><select id="save_num" class="easyui-combobox"
 						style="width:180px;">
 							<option value="1" selected="selected">1</option>
 							<option value="2">2</option>
@@ -59,17 +59,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</tr>
 
 				<tr>
-					<td><a id="check_random_btn" onclick="generateRandomSave()"
+					<td><a id="save_random_btn" onclick="generateRandomSave()"
 						class="easyui-linkbutton" data-options="iconCls:'icon-shading'">随机生成</a>
 					</td>
-					<td><a id="check_check_btn" onclick="retrieve_RMB()"
+					<td><a id="save_save_btn" onclick="save_RMB()"
 						class="easyui-linkbutton"
-						data-options="iconCls:'icon-page_white_magnify'">存款</a></td>
+						data-options="iconCls:'icon-save'">存款</a></td>
 				</tr>
 			</table>
 		</div>
 	</div>
-	<div id="check_result_id"></div>
+	<div id="save_result_id"></div>
 	<script type="text/javascript" src="js/identifyRMB/check.js"></script>
 	<script type="text/javascript" src="js/utils.js"></script>
   </body>
