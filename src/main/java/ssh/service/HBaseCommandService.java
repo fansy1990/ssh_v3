@@ -189,19 +189,6 @@ public class HBaseCommandService {
 		}
 		return put;
 	}
-	
-	private Put generatePutFromRow(byte[] row, String exist) {
-		Put put = null;
-		try {
-			put = new Put(row);
-			put.addColumn(Utils.FAMILY, Utils.COL_EXIST, Bytes.toBytes(exist));
-//			put.addColumn(Utils.FAMILY, Utils.COL_UID, Bytes.toBytes(uId));
-//			put.addColumn(Utils.FAMILY, Utils.COL_BANK, Bytes.toBytes(bank));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return put;
-	}
 
 	private List<HBaseTableData> getFromCells(Cell[] rawCells) {
 		List<HBaseTableData> list = new ArrayList<>();
@@ -217,6 +204,47 @@ public class HBaseCommandService {
 			list.add(new HBaseTableData(cell));
 		}
 		return list;
+	}
+/**
+ * 根据rowkey和版本个数查询数据
+ * @param tableName
+ * @param cfs
+ * @param rowkeys
+ * @param versions
+ * @return
+ * @throws IOException
+ */
+	public List<HBaseTableData> getTableCertainRowKeyData(String tableName,
+			String cfs, String rowkeys, int versions) throws IOException {
+		String[] stumbersArr = StringUtils.split(rowkeys, Utils.COMMA);
+		Connection connection = HadoopUtils.getHBaseConnection();
+		Table table = connection.getTable(TableName
+				.valueOf(tableName));
+		List<HBaseTableData> list = new ArrayList<>();
+		Get get = null;
+		try {
+			List<Get> gets = new ArrayList<>();
+			for (String stumber : stumbersArr) {
+				get = new Get(stumber.trim().getBytes());
+				get.setMaxVersions(versions);
+				gets.add(get);
+			}
+			Result[] results = table.get(gets);
+			Cell[] cells;
+			for (int i = 0; i < results.length; i++) {
+				cells = results[i].rawCells();
+
+				list.addAll(getHBaseTableDataListFromCells(cells));
+
+			}
+
+			return list;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 
 	public List<HBaseTableData> getTableData(String tableName, String cfs,
@@ -346,7 +374,7 @@ public class HBaseCommandService {
 	 * @return
 	 * @throws IOException
 	 */
-	public List<HBaseTableData> read(String stumbers, int num)
+	/*public List<HBaseTableData> read(String stumbers, int num)
 			throws IOException {
 		String[] stumbersArr = StringUtils.split(stumbers, Utils.COMMA);
 		Connection connection = HadoopUtils.getHBaseConnection();
@@ -377,7 +405,7 @@ public class HBaseCommandService {
 		}
 
 		return null;
-	}
+	}*/
 
 	/**
 	 * 取钱，随机输出冠字号，并更新冠字号对应的exist字段值； 只有在exist为true时，才进行上面的操作

@@ -239,6 +239,36 @@ public class HBaseCommandAction extends ActionSupport {
 		return;
 	}
 
+	/**
+	 * 根据特定rowkey和版本数查询数据
+	 */
+	public void getTableCertainRowKeyData() {
+		List<HBaseTableData> tableDatas = new ArrayList<>();
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		if (tableName == null || cfs == null || "".equals(tableName)
+				|| "".equals(cfs)) {
+			logger.info("HBase 表名或列簇没有设置，获取数据异常!");
+			jsonMap.put("total", 0);
+			jsonMap.put("rows", tableDatas);
+			Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+			return;
+		}
+		try {
+			tableDatas = this.hbaseCommandService.getTableCertainRowKeyData(tableName, cfs,
+					rowkey, versions);
+		} catch (IOException e) {// @TODO 前台如何处理
+			e.printStackTrace();
+			logger.info("获取HBase 表数据异常!");
+			jsonMap.put("total", 0);
+			jsonMap.put("rows", null);
+			Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+			return;
+		}
+		jsonMap.put("total", tableDatas.size());
+		jsonMap.put("rows", Utils.getProperFiles(tableDatas, page, rows));
+		Utils.write2PrintWriter(JSON.toJSONString(jsonMap));
+		return;
+	}
 	public void getTableDetails() {
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		String details;

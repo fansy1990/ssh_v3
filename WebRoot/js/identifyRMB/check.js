@@ -1,4 +1,61 @@
 
+$(function(){
+	// check dg :
+	$('#check_detail_dg').datagrid({
+		border : false,
+		fitColumns : false,
+		singleSelect : true,
+		width : 950,
+		height : 220,
+		nowrap : false,
+		fit : false,
+		pagination : true,// 分页控件
+		pageSize : 4, // 每页记录数，需要和pageList保持倍数关系
+		pageList : [ 4,8 ,12],
+		rownumbers : true,// 行号
+		pagePosition : 'top',
+		url : 'hbase/hbaseCommand_getTableCertainRowKeyData.action',
+		queryParams: {
+			tableName: '',
+			cfs: ''
+		},
+		onLoadError:function(){
+			console.info("list load error!");
+			 $.messager.alert('信息','加载错误，请联系管理员!','info');
+		},
+		onBeforeLoad:function(param){
+			return true;
+		},
+		idField:'id',
+		columns :[[
+				{
+					field : 'rowKey',
+					title : 'RowKey',
+					width : '200'
+				},{
+					field : 'column',
+					title : '列簇:列名',
+					width : '300'
+				},{
+					field : 'timestamp',
+					title : '时间戳',
+					width : '200'
+				},{
+					field : 'value',
+					title : '值',
+					width : '200',
+				}
+				 ]]
+		    }); 
+	
+	// == check dg 
+	
+	
+	
+});
+
+
+
 var prefix=new Array()
 
 for (var i = 0; i < 26; i++) {
@@ -113,12 +170,25 @@ function check_stumbers(){
 	
 	if(ret.flag == "false"){
 		$.messager.alert('提示',ret.msg,'info');
+		$("#check_show_or_not_id").hide();
 		document.getElementById("check_result_id").innerHTML = "";
 		return ;
 	}
-	
+	$("#check_show_or_not_id").show();
 	document.getElementById("check_result_id").innerHTML = "存在的冠字号为:"+"<br>"+
 	ret.exist+"<br>"+"疑似伪钞冠字号为:"+"<br>"+ret.notExist;
+}
+/**
+ * 读取给定rowkey以及版本的表数据
+ */
+function check_detail(){
+	
+	$('#check_detail_dg').datagrid('load',{
+		tableName: 'records',
+		cfs: 'info',
+		rowkey: $('#check_input').val(),
+		versions:$('#check_versions_num').combobox("getValue")
+	});
 }
 
 /**
@@ -146,7 +216,7 @@ function save_RMB(){
 	if(checkTextBoxEmpty('save_stumbers','冠字号不能为空，请重新输入，每个冠字号使用逗号结尾!')) return ;
 	
 	var ret = callByAJax("identify/identify_save.action", 
-			{stumbers:$('#save_stumbers').val(),uId:$('#save_user').val(),
+			{stumbers:$('#save_stumbers').val(),userId:$('#save_user').val(),
 			bank:$('#save_bank').val()})
 	
 	if(ret.flag == "false"){
@@ -174,8 +244,8 @@ function retrieve_RMB(){
 	if(checkTextBoxEmpty('retrieve_bank','银行不能为空，请重新输入!')) return ;
 	
 	var ret = callByAJax("identify/identify_retrieve.action", 
-			{num:$('#retrieve_num').combobox("getValue"),uId:$('#retrieve_user').val(),
-			bank:$('#retrieve_user').val()})
+			{num:$('#retrieve_num').combobox("getValue"),userId:$('#retrieve_user').val(),
+			bank:$('#retrieve_bank').val()})
 	
 	if(ret.flag == "false"){
 		$.messager.alert('提示',ret.msg,'info');

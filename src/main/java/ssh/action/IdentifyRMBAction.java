@@ -25,7 +25,7 @@ public class IdentifyRMBAction extends ActionSupport {
 	private static final long serialVersionUID = 1L;
 	private String stumbers;
 	private String bank;
-	private String uId;
+	private String userId;
 	private String num;
 	private HBaseCommandService hbaseCommandService;
 	private Logger log = LoggerFactory.getLogger(IdentifyRMBAction.class);
@@ -57,7 +57,7 @@ public class IdentifyRMBAction extends ActionSupport {
 
 		try {
 			Map<String, String> savedMap = this.hbaseCommandService
-					.save(stumbers, uId, bank);
+					.save(stumbers, userId, bank);
 			jsonMap.put("saved", savedMap.get("saved"));
 			jsonMap.put("notSaved", savedMap.get("notSaved"));
 		} catch (IOException e) {//
@@ -78,7 +78,7 @@ public class IdentifyRMBAction extends ActionSupport {
 
 		try {
 			List<String> retrievedList = this.hbaseCommandService
-					.retrieve(num, uId, bank);
+					.retrieve(num, userId, bank);
 			jsonMap.put("retrieved",retrievedList );
 		} catch (IOException e) {//
 			e.printStackTrace();
@@ -121,16 +121,6 @@ public class IdentifyRMBAction extends ActionSupport {
 	}
 
 
-	public String getuId() {
-		return uId;
-	}
-
-
-	public void setuId(String uId) {
-		this.uId = uId;
-	}
-
-
 	public String getNum() {
 		return num;
 	}
@@ -138,5 +128,15 @@ public class IdentifyRMBAction extends ActionSupport {
 
 	public void setNum(String num) {
 		this.num = num;
+	}
+
+
+	public String getUserId() {
+		return userId;
+	}
+
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 }
