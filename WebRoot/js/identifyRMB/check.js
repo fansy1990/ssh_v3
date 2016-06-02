@@ -51,6 +51,105 @@ $(function(){
 	// == check dg 
 	
 	
+	// save dg :
+	$('#save_detail_dg').datagrid({
+		border : false,
+		fitColumns : false,
+		singleSelect : true,
+		width : 950,
+		height : 200,
+		nowrap : false,
+		fit : false,
+		pagination : true,// 分页控件
+		pageSize : 4, // 每页记录数，需要和pageList保持倍数关系
+		pageList : [ 4,8 ,12],
+		rownumbers : true,// 行号
+		pagePosition : 'top',
+		url : 'hbase/hbaseCommand_getTableCertainRowKeyData.action',
+		queryParams: {
+			tableName: '',
+			cfs: ''
+		},
+		onLoadError:function(){
+			console.info("list load error!");
+			 $.messager.alert('信息','加载错误，请联系管理员!','info');
+		},
+		onBeforeLoad:function(param){
+			return true;
+		},
+		idField:'id',
+		columns :[[
+				{
+					field : 'rowKey',
+					title : 'RowKey',
+					width : '200'
+				},{
+					field : 'column',
+					title : '列簇:列名',
+					width : '300'
+				},{
+					field : 'timestamp',
+					title : '时间戳',
+					width : '200'
+				},{
+					field : 'value',
+					title : '值',
+					width : '200',
+				}
+				 ]]
+		    }); 
+	
+	// == save dg 
+	
+	// retrieve dg :
+	$('#retrieve_detail_dg').datagrid({
+		border : false,
+		fitColumns : false,
+		singleSelect : true,
+		width : 950,
+		height : 220,
+		nowrap : false,
+		fit : false,
+		pagination : true,// 分页控件
+		pageSize : 4, // 每页记录数，需要和pageList保持倍数关系
+		pageList : [ 4,8 ,12],
+		rownumbers : true,// 行号
+		pagePosition : 'top',
+		url : 'hbase/hbaseCommand_getTableCertainRowKeyData.action',
+		queryParams: {
+			tableName: '',
+			cfs: ''
+		},
+		onLoadError:function(){
+			console.info("list load error!");
+			 $.messager.alert('信息','加载错误，请联系管理员!','info');
+		},
+		onBeforeLoad:function(param){
+			return true;
+		},
+		idField:'id',
+		columns :[[
+				{
+					field : 'rowKey',
+					title : 'RowKey',
+					width : '200'
+				},{
+					field : 'column',
+					title : '列簇:列名',
+					width : '300'
+				},{
+					field : 'timestamp',
+					title : '时间戳',
+					width : '200'
+				},{
+					field : 'value',
+					title : '值',
+					width : '200',
+				}
+				 ]]
+		    }); 
+	
+	// == retrieve dg 
 	
 });
 
@@ -193,6 +292,39 @@ function check_detail(){
 
 /**
  * save.jsp
+ * 读取给定rowkey以及版本的表数据
+ */
+function save_detail(){
+	
+	$('#save_detail_dg').datagrid('load',{
+		tableName: 'records',
+		cfs: 'info',
+		rowkey: $('#save_stumbers').val(),
+		versions:$('#save_versions_num').combobox("getValue")
+	});
+}
+
+/**
+ * retrieve.jsp
+ * 读取给定rowkey以及版本的表数据
+ */
+function retrieve_detail(){
+	// 获取 retrieve_result_id的值，并截取对应的stumbers,
+	// 以第一个> 开始，以第二个<结束
+	//var t = document.getElementById("retrieve_result_id").innerHTML;
+	var str = $('#retrieve_result_id').html();
+	var start = str.indexOf(">");
+	var end = str.indexOf("<",start);
+	$('#retrieve_detail_dg').datagrid('load',{
+		tableName: 'records',
+		cfs: 'info',
+		rowkey: str.substring(start+1,end),
+		versions:$('#retrieve_versions_num').combobox("getValue")
+	});
+}
+
+/**
+ * save.jsp
  * 随机生成用户id，银行id，冠字号id
  */
 function generateRandomSave(){
@@ -221,9 +353,11 @@ function save_RMB(){
 	
 	if(ret.flag == "false"){
 		$.messager.alert('提示',ret.msg,'info');
+		$("#save_show_or_not_id").hide();
 		document.getElementById("save_result_id").innerHTML = "";
 		return ;
 	}
+	$("#save_show_or_not_id").show();
 	document.getElementById("save_result_id").innerHTML = "已存储的冠字号为:"+"<br>"+
 	ret.saved+"<br>"+"疑似伪钞冠字号为:"+"<br>"+ret.notSaved;
 }
@@ -249,9 +383,11 @@ function retrieve_RMB(){
 	
 	if(ret.flag == "false"){
 		$.messager.alert('提示',ret.msg,'info');
+		$("#retrieve_show_or_not_id").hide();
 		document.getElementById("retrieve_result_id").innerHTML = "";
 		return ;
 	}
+	$("#retrieve_show_or_not_id").show();
 	document.getElementById("retrieve_result_id").innerHTML = "取款的冠字号为:"+"<br>"+
 	ret.retrieved+"<br>";
 }

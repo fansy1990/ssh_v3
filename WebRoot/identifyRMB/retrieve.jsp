@@ -62,9 +62,35 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						data-options="iconCls:'icon-page_white_magnify'">取款</a></td>
 				</tr>
 			</table>
+		<br>
+			<hr>
+			<div id="retrieve_show_or_not_id" style="display: none;">
+				<div id="retrieve_result_id" ></div>
+				<br>
+				版本数： <select id="retrieve_versions_num" class="easyui-combobox"
+						style="width:180px;">
+							<option value="1" selected="selected">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+							<option value="10">10</option>
+							<option value="20">20</option>
+							<option value="100">100</option>
+							<option value="1000">1000</option>
+					</select>
+				<a id="retrieve_detail_btn"
+						onclick="retrieve_detail()" class="easyui-linkbutton"
+						data-options="iconCls:'icon-page_white_magnify'">详细查询</a>
+				<br>
+				<div id="retrieve_detail_dg"></div>
+			</div>
 		</div>
 	</div>
-	<div id="retrieve_result_id"></div>
 	<script type="text/javascript" src="js/identifyRMB/check.js"></script>
 	<script type="text/javascript" src="js/utils.js"></script>
 </body>
