@@ -16,3 +16,9 @@ HDFS文件管理系统
 HBase表管理系统：
 包含HBase基本表查询、表详细信息查询、表删除、表新建功能；以及HBase表数据综合查询、表数据删除、更新、新增等功能；
 参考：http://blog.csdn.net/fansy1990/article/details/51494095
+
+
+基于HBase冠字号查询系统：
+包含数据从HDFS导入到HBase通用接口功能、冠字号实时查询、存取款功能；
+参考： http://blog.csdn.net/fansy1990/article/details/51583080 
+http://blog.csdn.net/fansy1990/article/details/51583401  
