@@ -1,5 +1,4 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@ taglib uri="/struts-tags" prefix="s"%>	
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -10,7 +9,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <head>
     <base href="<%=basePath%>">
     
-    <title>My JSP 'about.jsp' starting page</title>
+    <title>My JSP 'movieQuery.jsp' starting page</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -20,20 +19,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<!--
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
-	<script type="text/javascript" src="js/utils.js"></script>
+
   </head>
   
   <body>
-    <div style="padding: 15px">
-		<p><h2>
-			Hadoop EcoSystem 大杂烩！
-			</h2>
-		</p>    	
-		<div id="project_about_id">
-			电影推荐系统
-		</div>
-		<s:debug></s:debug>
-    
-    </div> <br>
+    电影推荐
   </body>
 </html>

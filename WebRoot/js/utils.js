@@ -164,7 +164,7 @@ function layout_center_addTabFun(opts) {
 			}
 			t.tabs('add', opts);
 		}
-		console.info("打开页面："+opts.title);
+//		console.info("打开页面："+opts.title);
 }
 /**
  * 移除所有tab页，除了第一个
@@ -183,7 +183,7 @@ function removePanel(){
 	    	
 	    	var elTitle = $('.tabs-title', v);
 		    var title = elTitle.html();
-	    	console.info('Tab: ' + title + ' ,index: ' + index+' closing');
+//	    	console.info('Tab: ' + title + ' ,index: ' + index+' closing');
 	    	$("#centerTab").tabs("close", title);
 	    }
 	});
@@ -214,18 +214,18 @@ $(function(){
 	$('#eastTree').tree({
 		onClick: function(node){
 //			alert(node.text+","+node.url);  // alert node text property when clicked
-			console.info("click:"+node.text);
+//			console.info("click:"+node.text);
 			if(node.attributes.folder=='1'){// 父节点
 				return ;
 			}
-			console.info("open url:"+node.attributes.url)	
+//			console.info("open url:"+node.attributes.url)	;
 			var url;
 			if (node.attributes.url) {
 				url = node.attributes.url;
 			} else {
 				url = '404.jsp';
 			}
-			console.info("open "+url);
+//			console.info("open "+url);
 			layout_center_addTabFun({
 				title : node.text,
 				closable : true,
